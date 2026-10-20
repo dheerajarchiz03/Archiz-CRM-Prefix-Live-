@@ -1,25 +1,25 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:archiz_prefix_crm/common/components/app-bar/action_button_icon_widget.dart';
-import 'package:archiz_prefix_crm/common/components/circle_image_button.dart';
-import 'package:archiz_prefix_crm/common/components/custom_loader/custom_loader.dart';
-import 'package:archiz_prefix_crm/common/components/divider/custom_divider.dart';
-import 'package:archiz_prefix_crm/common/components/will_pop_widget.dart';
-import 'package:archiz_prefix_crm/core/route/route.dart';
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/images.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
-import 'package:archiz_prefix_crm/features/dashboard/controller/dashboard_controller.dart';
-import 'package:archiz_prefix_crm/features/dashboard/model/dashboard_model.dart';
-import 'package:archiz_prefix_crm/features/dashboard/repo/dashboard_repo.dart';
-import 'package:archiz_prefix_crm/features/dashboard/widget/dashboard_card.dart';
-import 'package:archiz_prefix_crm/features/dashboard/widget/drawer.dart';
-import 'package:archiz_prefix_crm/features/dashboard/widget/home_estimates_card.dart';
-import 'package:archiz_prefix_crm/features/dashboard/widget/home_invoices_card.dart';
-import 'package:archiz_prefix_crm/features/dashboard/widget/home_proposals_card.dart';
+import 'package:archiz_cxm360/common/components/app-bar/action_button_icon_widget.dart';
+import 'package:archiz_cxm360/common/components/circle_image_button.dart';
+import 'package:archiz_cxm360/common/components/custom_loader/custom_loader.dart';
+import 'package:archiz_cxm360/common/components/divider/custom_divider.dart';
+import 'package:archiz_cxm360/common/components/will_pop_widget.dart';
+import 'package:archiz_cxm360/core/route/route.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/images.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
+import 'package:archiz_cxm360/features/dashboard/controller/dashboard_controller.dart';
+import 'package:archiz_cxm360/features/dashboard/model/dashboard_model.dart';
+import 'package:archiz_cxm360/features/dashboard/repo/dashboard_repo.dart';
+import 'package:archiz_cxm360/features/dashboard/widget/dashboard_card.dart';
+import 'package:archiz_cxm360/features/dashboard/widget/drawer.dart';
+import 'package:archiz_cxm360/features/dashboard/widget/home_estimates_card.dart';
+import 'package:archiz_cxm360/features/dashboard/widget/home_invoices_card.dart';
+import 'package:archiz_cxm360/features/dashboard/widget/home_proposals_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -87,11 +87,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 }),
             actions: [
               ActionButtonIconWidget(
-                pressed: () => Get.toNamed(RouteHelper.settingsScreen),
-                icon: Icons.settings,
+                pressed: () => Get.toNamed(RouteHelper.notificationsScreen),
+                icon: Icons.notifications,
                 size: 35,
                 iconColor: Colors.white,
               ),
+              //ActionButtonIconWidget(
+              //  pressed: () => Get.toNamed(RouteHelper.settingsScreen),
+              //  icon: Icons.settings,
+              //  size: 35,
+              //  iconColor: Colors.white,
+              //),
             ],
           ),
           drawer: HomeDrawer(homeModel: controller.homeModel),
@@ -126,36 +132,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 ),
                               ),
                               const SizedBox(width: Dimensions.space20),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  RichText(
-                                      text: TextSpan(children: [
-                                    TextSpan(
-                                      text: '${LocalStrings.welcome.tr} ',
-                                      style: regularLarge.copyWith(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .color),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          '${controller.homeModel.staff?.firstName ?? ''} ${controller.homeModel.staff?.lastName ?? ''}',
-                                      style: regularLarge.copyWith(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .color),
-                                    ),
-                                  ])),
-                                  const SizedBox(height: Dimensions.space5),
-                                  Text(
-                                    controller.homeModel.staff?.email ?? '',
-                                    style: regularSmall.copyWith(
-                                        color: ColorResources.blueGreyColor),
-                                  )
-                                ],
+                              SizedBox(
+                                width: MediaQuery.sizeOf(context).width * 0.65,
+                                child: Column(
+                                  spacing: Dimensions.space5,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    RichText(
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        text: TextSpan(children: [
+                                          TextSpan(
+                                            text: '${LocalStrings.welcome.tr} ',
+                                            style: regularLarge.copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium!
+                                                    .color),
+                                          ),
+                                          TextSpan(
+                                            text:
+                                                '${controller.homeModel.staff?.firstName ?? ''} ${controller.homeModel.staff?.lastName ?? ''}',
+                                            style: regularLarge.copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium!
+                                                    .color),
+                                          ),
+                                        ])),
+                                    Text(
+                                      controller.homeModel.staff?.email ?? '',
+                                      style: regularSmall.copyWith(
+                                          color: ColorResources.blueGreyColor),
+                                    )
+                                  ],
+                                ),
                               )
                             ],
                           ),
@@ -221,92 +232,117 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                           ],
                         ),
-                        Stack(
-                          children: [
-                            CarouselSlider(
-                              options: CarouselOptions(
-                                height: 440.0,
-                                aspectRatio: 16 / 9,
-                                viewportFraction: 1,
-                                initialPage: 0,
-                                enableInfiniteScroll: true,
-                                enlargeCenterPage: false,
-                                onPageChanged: (index, i) {
-                                  controller.currentPageIndex = index;
-                                  setState(() {});
-                                },
+                        if ((controller.homeModel.menuItems?.invoices ??
+                                false) ||
+                            (controller.homeModel.menuItems?.estimates ??
+                                false) ||
+                            (controller.homeModel.menuItems?.proposals ??
+                                false))
+                          Stack(
+                            children: [
+                              CarouselSlider(
+                                options: CarouselOptions(
+                                  height: 440.0,
+                                  aspectRatio: 16 / 9,
+                                  viewportFraction: 1,
+                                  initialPage: 0,
+                                  enableInfiniteScroll: true,
+                                  enlargeCenterPage: false,
+                                  onPageChanged: (index, i) {
+                                    controller.currentPageIndex = index;
+                                    controller.update();
+                                  },
+                                ),
+                                items: [
+                                  if (controller
+                                          .homeModel.menuItems?.invoices ??
+                                      false)
+                                    HomeInvoicesCard(
+                                        invoices: controller
+                                            .homeModel.data?.invoices),
+                                  if (controller
+                                          .homeModel.menuItems?.estimates ??
+                                      false)
+                                    HomeEstimatesCard(
+                                        estimates: controller
+                                            .homeModel.data?.estimates),
+                                  if (controller
+                                          .homeModel.menuItems?.proposals ??
+                                      false)
+                                    HomeProposalsCard(
+                                        proposals: controller
+                                            .homeModel.data?.proposals),
+                                ],
                               ),
-                              items: [
-                                HomeInvoicesCard(
-                                    invoices: controller.homeModel.data?.invoices),
-                                HomeEstimatesCard(
-                                    estimates: controller.homeModel.data?.estimates),
-                                HomeProposalsCard(
-                                    proposals: controller.homeModel.data?.proposals),
-                              ],
-                            ),
-                            PositionedDirectional(
-                              bottom: 18,
-                              start: MediaQuery.sizeOf(context).width / 2.5,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: List.generate(
-                                  3,
-                                  (index) => Container(
-                                    margin: const EdgeInsets.all(3),
-                                    padding: const EdgeInsets.all(4),
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color:
-                                            index == controller.currentPageIndex
-                                                ? ColorResources.secondaryColor
-                                                : Colors.transparent,
-                                        border: Border.all(
-                                            color: ColorResources.colorGrey,
-                                            width: 1)),
+                              PositionedDirectional(
+                                bottom: 18,
+                                start: MediaQuery.sizeOf(context).width / 2.5,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: List.generate(
+                                    3,
+                                    (index) => Container(
+                                      margin: const EdgeInsets.all(3),
+                                      padding: const EdgeInsets.all(4),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: index ==
+                                                  controller.currentPageIndex
+                                              ? ColorResources.secondaryColor
+                                              : Colors.transparent,
+                                          border: Border.all(
+                                              color: ColorResources.colorGrey,
+                                              width: 1)),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: Dimensions.space15),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: Dimensions.space15),
-                          child: Row(
-                            children: [
-                              Icon(Icons.menu_open_rounded,
-                                  size: 20,
-                                  color: Theme.of(context).primaryColor),
-                              const SizedBox(width: Dimensions.space10),
-                              Text(
-                                LocalStrings.projectStatistics.tr,
-                                style: regularLarge.copyWith(
-                                    color: Theme.of(context).primaryColor),
-                              ),
                             ],
                           ),
-                        ),
-                        const CustomDivider(
-                          space: Dimensions.space5,
-                          padding: Dimensions.space15,
-                        ),
-                        SfCircularChart(
-                            tooltipBehavior: TooltipBehavior(enable: true),
-                            legend: const Legend(
-                                isVisible: true,
-                                position: LegendPosition.bottom,
-                                textStyle: lightDefault),
-                            series: <CircularSeries>[
-                              DoughnutSeries<DataField, String>(
-                                  dataSource:
-                                      controller.homeModel.data?.projects,
-                                  xValueMapper: (DataField data, _) =>
-                                      data.status?.tr ?? '',
-                                  yValueMapper: (DataField data, _) =>
-                                      int.parse(data.total ?? ''))
-                            ]),
+                        const SizedBox(height: Dimensions.space15),
+                        if (controller.homeModel.menuItems?.projects ?? false)
+                          Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: Dimensions.space15),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.menu_open_rounded,
+                                        size: 20,
+                                        color: Theme.of(context).primaryColor),
+                                    const SizedBox(width: Dimensions.space10),
+                                    Text(
+                                      LocalStrings.projectStatistics.tr,
+                                      style: regularLarge.copyWith(
+                                          color:
+                                              Theme.of(context).primaryColor),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const CustomDivider(
+                                space: Dimensions.space5,
+                                padding: Dimensions.space15,
+                              ),
+                              SfCircularChart(
+                                  tooltipBehavior:
+                                      TooltipBehavior(enable: true),
+                                  legend: const Legend(
+                                      isVisible: true,
+                                      position: LegendPosition.bottom,
+                                      textStyle: lightDefault),
+                                  series: <CircularSeries>[
+                                    DoughnutSeries<DataField, String>(
+                                        dataSource:
+                                            controller.homeModel.data?.projects,
+                                        xValueMapper: (DataField data, _) =>
+                                            data.status?.tr ?? '',
+                                        yValueMapper: (DataField data, _) =>
+                                            int.parse(data.total ?? ''))
+                                  ]),
+                            ],
+                          ),
                       ],
                     ),
                   ),

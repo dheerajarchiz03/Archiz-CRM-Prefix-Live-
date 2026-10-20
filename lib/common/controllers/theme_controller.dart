@@ -1,7 +1,7 @@
-import 'package:archiz_prefix_crm/core/utils/themes.dart';
+import 'package:archiz_cxm360/core/utils/themes.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:archiz_prefix_crm/core/helper/shared_preference_helper.dart';
+import 'package:archiz_cxm360/core/helper/shared_preference_helper.dart';
 
 class ThemeController extends GetxController implements GetxService {
   final SharedPreferences sharedPreferences;

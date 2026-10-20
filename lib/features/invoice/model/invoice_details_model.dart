@@ -1,9 +1,7 @@
+import 'package:archiz_cxm360/common/models/items_model.dart';
+
 class InvoiceDetailsModel {
-  InvoiceDetailsModel({
-    bool? status,
-    String? message,
-    InvoiceDetails? data,
-  }) {
+  InvoiceDetailsModel({bool? status, String? message, InvoiceDetails? data}) {
     _status = status;
     _message = message;
     _data = data;
@@ -510,12 +508,7 @@ class InvoiceDetails {
 }
 
 class ProjectData {
-  ProjectData({
-    String? id,
-    String? name,
-    String? description,
-    String? status,
-  }) {
+  ProjectData({String? id, String? name, String? description, String? status}) {
     _id = id;
     _name = name;
     _description = description;
@@ -627,76 +620,6 @@ class ClientData {
     map['website'] = _website;
     map['datecreated'] = _dateCreated;
     map['active'] = _active;
-    return map;
-  }
-}
-
-class Item {
-  Item({
-    String? id,
-    String? relId,
-    String? relType,
-    String? description,
-    String? longDescription,
-    String? qty,
-    String? rate,
-    String? unit,
-    String? itemOrder,
-  }) {
-    _id = id;
-    _relId = relId;
-    _relType = relType;
-    _description = description;
-    _longDescription = longDescription;
-    _qty = qty;
-    _rate = rate;
-    _unit = unit;
-    _itemOrder = itemOrder;
-  }
-
-  Item.fromJson(dynamic json) {
-    _id = json['id'];
-    _relId = json['rel_id'];
-    _relType = json['rel_type'];
-    _description = json['description'];
-    _longDescription = json['long_description'];
-    _qty = json['qty'];
-    _rate = json['rate'];
-    _unit = json['unit'];
-    _itemOrder = json['item_order'];
-  }
-
-  String? _id;
-  String? _relId;
-  String? _relType;
-  String? _description;
-  String? _longDescription;
-  String? _qty;
-  String? _rate;
-  String? _unit;
-  String? _itemOrder;
-
-  String? get id => _id;
-  String? get relId => _relId;
-  String? get relType => _relType;
-  String? get description => _description;
-  String? get longDescription => _longDescription;
-  String? get qty => _qty;
-  String? get rate => _rate;
-  String? get unit => _unit;
-  String? get itemOrder => _itemOrder;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['id'] = _id;
-    map['rel_id'] = _relId;
-    map['rel_type'] = _relType;
-    map['description'] = _description;
-    map['long_description'] = _longDescription;
-    map['qty'] = _qty;
-    map['rate'] = _rate;
-    map['unit'] = _unit;
-    map['item_order'] = _itemOrder;
     return map;
   }
 }

@@ -1,10 +1,10 @@
-import 'package:archiz_prefix_crm/common/components/custom_loader/custom_loader.dart';
-import 'package:archiz_prefix_crm/common/components/no_data.dart';
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/features/estimate/widget/estimate_card.dart';
-import 'package:archiz_prefix_crm/features/project/controller/project_controller.dart';
-import 'package:archiz_prefix_crm/features/project/repo/project_repo.dart';
+import 'package:archiz_cxm360/common/components/custom_loader/custom_loader.dart';
+import 'package:archiz_cxm360/common/components/no_data.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/features/estimate/widget/estimate_card.dart';
+import 'package:archiz_cxm360/features/project/controller/project_controller.dart';
+import 'package:archiz_cxm360/features/project/repo/project_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -37,29 +37,31 @@ class _ProjectEstimatesState extends State<ProjectEstimates> {
         return Scaffold(
           body: controller.isLoading
               ? const CustomLoader()
-              : controller.estimatesModel.data?.isNotEmpty ?? false
-                  ? RefreshIndicator(
-                      color: Theme.of(context).primaryColor,
-                      backgroundColor: Theme.of(context).cardColor,
-                      onRefresh: () async {
-                        controller.loadProjectGroup(widget.id, 'estimates');
-                      },
-                      child: ListView.separated(
-                          shrinkWrap: true,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: Dimensions.space15),
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return EstimateCard(
-                              index: index,
-                              estimateModel: controller.estimatesModel,
-                            );
-                          },
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(height: Dimensions.space10),
-                          itemCount: controller.estimatesModel.data!.length),
-                    )
-                  : const Center(child: NoDataWidget()),
+              : controller.estimatesModel.status ?? false
+              ? RefreshIndicator(
+                  color: Theme.of(context).primaryColor,
+                  backgroundColor: Theme.of(context).cardColor,
+                  onRefresh: () async {
+                    controller.loadProjectGroup(widget.id, 'estimates');
+                  },
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Dimensions.space15,
+                    ),
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return EstimateCard(
+                        index: index,
+                        estimateModel: controller.estimatesModel,
+                      );
+                    },
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: Dimensions.space10),
+                    itemCount: controller.estimatesModel.data!.length,
+                  ),
+                )
+              : const Center(child: NoDataWidget()),
         );
       },
     );

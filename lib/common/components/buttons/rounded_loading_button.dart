@@ -1,5 +1,6 @@
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
 import 'package:flutter/material.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
 
 class RoundedLoadingBtn extends StatelessWidget {
   final Color? textColor;
@@ -16,34 +17,44 @@ class RoundedLoadingBtn extends StatelessWidget {
     this.horizontalPadding = 35,
     this.verticalPadding = 18,
     this.textColor = ColorResources.colorWhite,
-    this.color = ColorResources.primaryColor,
+    this.color = ColorResources.secondaryColor,
   });
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SizedBox(
-      width: size.width * width,
-      child: ClipRRect(
+    return Padding(
+      padding: const EdgeInsets.all(Dimensions.space10),
+      child: SizedBox(
+        width: size.width * width,
+        child: ClipRRect(
           borderRadius: BorderRadius.circular(cornerRadius),
           child: ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
-                backgroundColor: color,
-                shadowColor: ColorResources.transparentColor,
-                padding: EdgeInsets.symmetric(
-                    horizontal: horizontalPadding,
-                    vertical: verticalPadding - 3),
-                textStyle: TextStyle(
-                    color: textColor,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500)),
+              backgroundColor: color,
+              shadowColor: ColorResources.transparentColor,
+              padding: EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
+                vertical: verticalPadding - 3,
+              ),
+              textStyle: TextStyle(
+                color: textColor,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
             child: SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(
-                    color: textColor, strokeWidth: 2)),
-          )),
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                color: textColor,
+                strokeWidth: 2,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

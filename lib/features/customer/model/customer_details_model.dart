@@ -1,9 +1,5 @@
 class CustomerDetailsModel {
-  CustomerDetailsModel({
-    bool? status,
-    String? message,
-    Customer? data,
-  }) {
+  CustomerDetailsModel({bool? status, String? message, Customer? data}) {
     _status = status;
     _message = message;
     _data = data;
@@ -250,10 +246,7 @@ class Customer {
 }
 
 class CustomField {
-  CustomField({
-    String? label,
-    String? value,
-  }) {
+  CustomField({String? label, String? value}) {
     _label = label;
     _value = value;
   }

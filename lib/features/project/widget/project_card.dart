@@ -1,11 +1,11 @@
-import 'package:archiz_prefix_crm/common/components/divider/custom_divider.dart';
-import 'package:archiz_prefix_crm/common/components/text/text_icon.dart';
-import 'package:archiz_prefix_crm/core/helper/string_format_helper.dart';
-import 'package:archiz_prefix_crm/core/route/route.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
-import 'package:archiz_prefix_crm/features/project/model/project_model.dart';
+import 'package:archiz_cxm360/common/components/divider/custom_divider.dart';
+import 'package:archiz_cxm360/common/components/text/text_icon.dart';
+import 'package:archiz_cxm360/core/helper/string_format_helper.dart';
+import 'package:archiz_cxm360/core/route/route.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
+import 'package:archiz_cxm360/features/project/model/project_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -50,28 +50,36 @@ class ProjectCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          projectModel.data![index].name ?? '',
-                          style: regularDefault,
+                        SizedBox(
+                          width: MediaQuery.sizeOf(context).width * 0.65,
+                          child: Text(
+                            projectModel.data![index].name ?? '',
+                            overflow: TextOverflow.ellipsis,
+                            style: regularDefault,
+                          ),
                         ),
                         Container(
-                            padding: const EdgeInsets.all(Dimensions.space5),
-                            decoration: ShapeDecoration(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    Dimensions.cardRadius),
-                                side: BorderSide(
-                                    color: ColorResources.projectStatusColor(
-                                        projectModel.data![index].status!)),
-                              ),
-                            ),
-                            child: Text(
-                              Converter.projectStatusString(
-                                  projectModel.data![index].status ?? ''),
-                              style: lightSmall.copyWith(
+                          padding: const EdgeInsets.all(Dimensions.space5),
+                          decoration: ShapeDecoration(
+                            color: ColorResources.projectStatusColor(
+                                    projectModel.data![index].status!)
+                                .withValues(alpha: 0.05),
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(Dimensions.cardRadius),
+                              side: BorderSide(
                                   color: ColorResources.projectStatusColor(
-                                      projectModel.data![index].status ?? '')),
-                            ))
+                                      projectModel.data![index].status!)),
+                            ),
+                          ),
+                          child: Text(
+                            Converter.projectStatusString(
+                                projectModel.data![index].status ?? ''),
+                            style: lightSmall.copyWith(
+                                color: ColorResources.projectStatusColor(
+                                    projectModel.data![index].status ?? '')),
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: Dimensions.space5),
@@ -84,16 +92,14 @@ class ProjectCard extends StatelessWidget {
                             Converter.parseHtmlString(
                                 projectModel.data![index].description ?? ''),
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontSize: Dimensions.fontDefault,
+                            style: lightSmall.copyWith(
                                 color: ColorResources.blueGreyColor),
                           ),
                         ),
                         if (projectModel.data![index].deadline != null)
                           Text(
                             '${projectModel.data![index].progress!}%',
-                            style: const TextStyle(
-                                fontSize: Dimensions.fontDefault,
+                            style: regularSmall.copyWith(
                                 color: ColorResources.blueGreyColor),
                           ),
                       ],

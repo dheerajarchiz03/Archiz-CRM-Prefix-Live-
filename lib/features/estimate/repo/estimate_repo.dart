@@ -1,8 +1,8 @@
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
-import 'package:archiz_prefix_crm/core/utils/method.dart';
-import 'package:archiz_prefix_crm/core/utils/url_container.dart';
-import 'package:archiz_prefix_crm/common/models/response_model.dart';
-import 'package:archiz_prefix_crm/features/estimate/model/estimate_post_model.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
+import 'package:archiz_cxm360/core/utils/method.dart';
+import 'package:archiz_cxm360/core/utils/url_container.dart';
+import 'package:archiz_cxm360/common/models/response_model.dart';
+import 'package:archiz_cxm360/features/estimate/model/estimate_post_model.dart';
 
 class EstimateRepo {
   ApiClient apiClient;
@@ -10,43 +10,78 @@ class EstimateRepo {
 
   Future<ResponseModel> getAllEstimates() async {
     String url = "${UrlContainer.baseUrl}${UrlContainer.estimatesUrl}";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> getEstimateDetails(estimateId) async {
     String url =
         "${UrlContainer.baseUrl}${UrlContainer.estimatesUrl}/id/$estimateId";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
+    return responseModel;
+  }
+
+  Future<ResponseModel> getSettingsData() async {
+    String url =
+        "${UrlContainer.baseUrl}${UrlContainer.miscellaneousUrl}/general";
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> getAllCustomers() async {
     String url = "${UrlContainer.baseUrl}${UrlContainer.customersUrl}";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> getCurrencies() async {
     String url =
         "${UrlContainer.baseUrl}${UrlContainer.miscellaneousUrl}/currencies";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> getItems() async {
     String url = "${UrlContainer.baseUrl}${UrlContainer.itemsUrl}";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
-  Future<ResponseModel> createEstimate(EstimatePostModel estimateModel,
-      {String? estimateId, bool isUpdate = false}) async {
+  Future<ResponseModel> createEstimate(
+    EstimatePostModel estimateModel, {
+    String? estimateId,
+    bool isUpdate = false,
+  }) async {
     String url = "${UrlContainer.baseUrl}${UrlContainer.estimatesUrl}";
 
     Map<String, dynamic> params = {
@@ -59,11 +94,6 @@ class EstimateRepo {
       "status": estimateModel.status,
       "clientnote": estimateModel.clientNote,
       "terms": estimateModel.terms,
-      "newitems[0][description]": estimateModel.firstItemName,
-      "newitems[0][long_description]": estimateModel.firstItemDescription,
-      "newitems[0][qty]": estimateModel.firstItemQty,
-      "newitems[0][rate]": estimateModel.firstItemRate,
-      "newitems[0][unit]": estimateModel.firstItemUnit,
       "subtotal": estimateModel.subtotal,
       "total": estimateModel.total,
     };
@@ -77,7 +107,6 @@ class EstimateRepo {
       String estimateItemUnit = estimate.unitController.text;
 
       if (estimateItemName.isNotEmpty && estimateItemRate.isNotEmpty) {
-        i = i + 1;
         params['newitems[$i][description]'] = estimateItemName;
         params['newitems[$i][long_description]'] = estimateItemDescription;
         params['newitems[$i][qty]'] = estimateItemQty;
@@ -86,6 +115,7 @@ class EstimateRepo {
         //params['newitems[$i][order]'] = '1';
         //params['newitems[0][taxname][]'] = 'CGST|9.00';
         //params['newitems[0][taxname][]'] = 'SGST|9.00';
+        i++;
       }
     }
 
@@ -98,26 +128,35 @@ class EstimateRepo {
     }
 
     ResponseModel responseModel = await apiClient.request(
-        isUpdate ? '$url/id/$estimateId' : url,
-        isUpdate ? Method.putMethod : Method.postMethod,
-        params,
-        passHeader: true);
+      isUpdate ? '$url/id/$estimateId' : url,
+      isUpdate ? Method.putMethod : Method.postMethod,
+      params,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> deleteEstimate(estimateId) async {
     String url =
         "${UrlContainer.baseUrl}${UrlContainer.estimatesUrl}/id/$estimateId";
-    ResponseModel responseModel = await apiClient
-        .request(url, Method.deleteMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.deleteMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> searchEstimate(keysearch) async {
     String url =
         "${UrlContainer.baseUrl}${UrlContainer.estimatesUrl}/search/$keysearch";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 }

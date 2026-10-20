@@ -1,9 +1,7 @@
+import 'package:archiz_cxm360/common/models/items_model.dart';
+
 class ProposalDetailsModel {
-  ProposalDetailsModel({
-    bool? status,
-    String? message,
-    ProposalDetails? data,
-  }) {
+  ProposalDetailsModel({bool? status, String? message, ProposalDetails? data}) {
     _status = status;
     _message = message;
     _data = data;
@@ -12,8 +10,9 @@ class ProposalDetailsModel {
   ProposalDetailsModel.fromJson(dynamic json) {
     _status = json['status'];
     _message = json['message'];
-    _data =
-        json['data'] != null ? ProposalDetails.fromJson(json['data']) : null;
+    _data = json['data'] != null
+        ? ProposalDetails.fromJson(json['data'])
+        : null;
   }
 
   bool? _status;
@@ -92,7 +91,7 @@ class ProposalDetails {
     String? statusName,
     bool? visibleAttachmentsToCustomerFound,
     List<Attachments>? attachments,
-    List<Items>? items,
+    List<Item>? items,
     List<Comments>? comments,
   }) {
     _id = id;
@@ -213,7 +212,7 @@ class ProposalDetails {
     if (json['items'] != null) {
       _items = [];
       json['items'].forEach((v) {
-        _items?.add(Items.fromJson(v));
+        _items?.add(Item.fromJson(v));
       });
     }
     if (json['attachments'] != null) {
@@ -284,7 +283,7 @@ class ProposalDetails {
   String? _addedFromName;
   String? _statusName;
   bool? _visibleAttachmentsToCustomerFound;
-  List<Items>? _items;
+  List<Item>? _items;
   List<Attachments>? _attachments;
   List<Comments>? _comments;
 
@@ -343,7 +342,7 @@ class ProposalDetails {
   String? get statusName => _statusName;
   bool? get visibleAttachmentsToCustomerFound =>
       _visibleAttachmentsToCustomerFound;
-  List<Items>? get items => _items;
+  List<Item>? get items => _items;
   List<Attachments>? get attachments => _attachments;
   List<Comments>? get comments => _comments;
 
@@ -556,76 +555,6 @@ class Attachments {
     map['contact_id'] = _contactId;
     map['task_comment_id'] = _taskCommentId;
     map['dateadded'] = _dateAdded;
-    return map;
-  }
-}
-
-class Items {
-  Items({
-    String? id,
-    String? relId,
-    String? relType,
-    String? description,
-    String? longDescription,
-    String? qty,
-    String? rate,
-    String? unit,
-    String? itemOrder,
-  }) {
-    _id = id;
-    _relId = relId;
-    _relType = relType;
-    _description = description;
-    _longDescription = longDescription;
-    _qty = qty;
-    _rate = rate;
-    _unit = unit;
-    _itemOrder = itemOrder;
-  }
-
-  Items.fromJson(dynamic json) {
-    _id = json['id'];
-    _relId = json['rel_id'];
-    _relType = json['rel_type'];
-    _description = json['description'];
-    _longDescription = json['long_description'];
-    _qty = json['qty'];
-    _rate = json['rate'];
-    _unit = json['unit'];
-    _itemOrder = json['item_order'];
-  }
-
-  String? _id;
-  String? _relId;
-  String? _relType;
-  String? _description;
-  String? _longDescription;
-  String? _qty;
-  String? _rate;
-  String? _unit;
-  String? _itemOrder;
-
-  String? get id => _id;
-  String? get relId => _relId;
-  String? get relType => _relType;
-  String? get description => _description;
-  String? get longDescription => _longDescription;
-  String? get qty => _qty;
-  String? get rate => _rate;
-  String? get unit => _unit;
-  String? get itemOrder => _itemOrder;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['id'] = _id;
-    map['rel_id'] = _relId;
-    map['rel_type'] = _relType;
-    map['description'] = _description;
-    map['long_description'] = _longDescription;
-    map['qty'] = _qty;
-    map['rate'] = _rate;
-    map['unit'] = _unit;
-    map['item_order'] = _itemOrder;
     return map;
   }
 }

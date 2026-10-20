@@ -1,30 +1,27 @@
-import 'package:archiz_prefix_crm/common/components/divider/custom_divider.dart';
-import 'package:archiz_prefix_crm/common/components/text/text_icon.dart';
-import 'package:archiz_prefix_crm/core/helper/date_converter.dart';
-import 'package:archiz_prefix_crm/core/helper/string_format_helper.dart';
-import 'package:archiz_prefix_crm/core/route/route.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
-import 'package:archiz_prefix_crm/features/lead/model/lead_model.dart';
+import 'package:archiz_cxm360/common/components/divider/custom_divider.dart';
+import 'package:archiz_cxm360/common/components/text/text_icon.dart';
+import 'package:archiz_cxm360/core/helper/date_converter.dart';
+import 'package:archiz_cxm360/core/helper/string_format_helper.dart';
+import 'package:archiz_cxm360/core/route/route.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
+import 'package:archiz_cxm360/features/lead/model/lead_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LeadCard extends StatelessWidget {
   const LeadCard({
     super.key,
-    required this.index,
-    required this.leadModel,
+    required this.lead,
   });
-  final int index;
-  final LeadsModel leadModel;
+  final Lead lead;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(RouteHelper.leadDetailsScreen,
-            arguments: leadModel.data![index].id!);
+        Get.toNamed(RouteHelper.leadDetailsScreen, arguments: lead.id!);
       },
       child: Card(
         margin: EdgeInsets.zero,
@@ -36,8 +33,7 @@ class LeadCard extends StatelessWidget {
               border: Border(
                 left: BorderSide(
                   width: 5.0,
-                  color: Converter.hexStringToColor(
-                      leadModel.data![index].color ?? ''),
+                  color: Converter.hexStringToColor(lead.color ?? ''),
                 ),
               ),
             ),
@@ -55,13 +51,13 @@ class LeadCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '${leadModel.data![index].name}',
+                                '${lead.name}',
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 2,
-                                style: Theme.of(context).textTheme.bodyLarge,
+                                style: regularLarge,
                               ),
                               Text(
-                                '${leadModel.data![index].title} - ${leadModel.data![index].company}',
+                                '${lead.title} - ${lead.company}',
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: lightSmall.copyWith(
@@ -74,11 +70,11 @@ class LeadCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              leadModel.data![index].leadValue ?? '-',
+                              lead.leadValue ?? '-',
                               style: regularDefault,
                             ),
                             Text(
-                              leadModel.data![index].sourceName ?? '-',
+                              lead.sourceName ?? '-',
                               style: lightSmall,
                             ),
                           ],
@@ -90,14 +86,14 @@ class LeadCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TextIcon(
-                          text: leadModel.data![index].statusName ?? '',
+                          text: lead.statusName ?? '',
                           icon: Icons.check_circle_outline_rounded,
-                          iconColor: Converter.hexStringToColor(
-                              leadModel.data![index].color ?? ''),
+                          iconColor:
+                              Converter.hexStringToColor(lead.color ?? ''),
                         ),
                         TextIcon(
                           text: DateConverter.formatValidityDate(
-                              leadModel.data![index].dateAdded ?? ''),
+                              lead.dateAdded ?? ''),
                           icon: Icons.calendar_month,
                         ),
                       ],

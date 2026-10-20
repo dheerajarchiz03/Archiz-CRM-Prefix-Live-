@@ -1,23 +1,12 @@
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
+import 'package:archiz_cxm360/common/models/items_model.dart';
 import 'package:flutter/material.dart';
 
 class TableItem extends StatelessWidget {
-  const TableItem({
-    super.key,
-    required this.title,
-    required this.qty,
-    required this.unit,
-    required this.rate,
-    required this.total,
-    this.currency,
-  });
-  final String title;
-  final String qty;
-  final String unit;
-  final String rate;
-  final String total;
+  const TableItem({super.key, required this.item, this.currency});
+  final Item item;
   final String? currency;
 
   @override
@@ -32,16 +21,17 @@ class TableItem extends StatelessWidget {
             SizedBox(
               width: MediaQuery.sizeOf(context).width / 1.5,
               child: Text(
-                title,
+                item.description ?? '',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: regularDefault,
               ),
             ),
             Text(
-              '${currency ?? ''}$rate x ${qty.replaceAll('.00', '')} $unit',
-              style:
-                  regularDefault.copyWith(color: ColorResources.blueGreyColor),
+              '${currency ?? ''}${item.rate} x ${item.qty?.replaceAll('.00', '')} ${item.unit}',
+              style: regularDefault.copyWith(
+                color: ColorResources.blueGreyColor,
+              ),
             ),
           ],
         ),
@@ -50,7 +40,7 @@ class TableItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '${currency ?? ''}$total',
+              '${currency ?? ''}${double.parse(item.rate ?? '0') * double.parse(item.qty ?? '0')}',
               style: regularLarge,
             ),
           ],

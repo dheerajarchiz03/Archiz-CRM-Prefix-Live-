@@ -1,4 +1,4 @@
-import 'package:archiz_prefix_crm/common/components/image/custom_svg_picture.dart';
+import 'package:archiz_cxm360/common/components/image/custom_svg_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 

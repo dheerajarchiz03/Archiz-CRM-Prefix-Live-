@@ -1,18 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:archiz_prefix_crm/common/components/snack_bar/show_custom_snackbar.dart';
-import 'package:archiz_prefix_crm/common/models/taxes_model.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/common/models/currencies_model.dart';
-import 'package:archiz_prefix_crm/common/models/payment_modes_model.dart';
-import 'package:archiz_prefix_crm/common/models/response_model.dart';
-import 'package:archiz_prefix_crm/features/customer/model/customer_model.dart';
-import 'package:archiz_prefix_crm/features/invoice/model/invoice_details_model.dart';
-import 'package:archiz_prefix_crm/features/invoice/model/invoice_item_model.dart';
-import 'package:archiz_prefix_crm/features/invoice/model/invoice_model.dart';
-import 'package:archiz_prefix_crm/features/invoice/model/invoice_post_model.dart';
-import 'package:archiz_prefix_crm/features/invoice/repo/invoice_repo.dart';
-import 'package:archiz_prefix_crm/features/item/model/item_model.dart';
+import 'package:archiz_cxm360/common/components/snack_bar/show_custom_snackbar.dart';
+import 'package:archiz_cxm360/common/models/taxes_model.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/common/models/currencies_model.dart';
+import 'package:archiz_cxm360/common/models/payment_modes_model.dart';
+import 'package:archiz_cxm360/common/models/response_model.dart';
+import 'package:archiz_cxm360/features/customer/model/customer_model.dart';
+import 'package:archiz_cxm360/common/models/settings_model.dart';
+import 'package:archiz_cxm360/features/invoice/model/invoice_details_model.dart';
+import 'package:archiz_cxm360/features/invoice/model/invoice_item_model.dart';
+import 'package:archiz_cxm360/features/invoice/model/invoice_model.dart';
+import 'package:archiz_cxm360/features/invoice/model/invoice_post_model.dart';
+import 'package:archiz_cxm360/features/invoice/model/payment_post_model.dart';
+import 'package:archiz_cxm360/features/invoice/repo/invoice_repo.dart';
+import 'package:archiz_cxm360/features/item/model/item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
@@ -25,6 +27,7 @@ class InvoiceController extends GetxController {
   bool isSubmitLoading = false;
   InvoicesModel invoicesModel = InvoicesModel();
   InvoiceDetailsModel invoiceDetailsModel = InvoiceDetailsModel();
+  SettingsModel settingsModel = SettingsModel();
   CustomersModel customersModel = CustomersModel();
   CurrenciesModel currenciesModel = CurrenciesModel();
   TaxesModel taxesModel = TaxesModel();
@@ -45,66 +48,85 @@ class InvoiceController extends GetxController {
 
   Future<void> loadInvoices() async {
     ResponseModel responseModel = await invoiceRepo.getAllInvoices();
-    if (responseModel.status) {
-      invoicesModel =
-          InvoicesModel.fromJson(jsonDecode(responseModel.responseJson));
-    } else {
-      CustomSnackBar.error(errorList: [responseModel.message.tr]);
-    }
+    invoicesModel = InvoicesModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
     isLoading = false;
     update();
   }
 
   Future<void> loadInvoiceDetails(invoiceId) async {
-    ResponseModel responseModel =
-        await invoiceRepo.getInvoiceDetails(invoiceId);
-    if (responseModel.status) {
-      invoiceDetailsModel =
-          InvoiceDetailsModel.fromJson(jsonDecode(responseModel.responseJson));
-    } else {
-      CustomSnackBar.error(errorList: [responseModel.message.tr]);
-    }
+    ResponseModel responseModel = await invoiceRepo.getInvoiceDetails(
+      invoiceId,
+    );
+    invoiceDetailsModel = InvoiceDetailsModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
 
+    isLoading = false;
+    update();
+  }
+
+  Future<void> loadInvoiceCreateData() async {
+    ResponseModel responseModel = await invoiceRepo.getSettingsData();
+    settingsModel = SettingsModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
+    numberController.text = settingsModel.data?.nextInvoiceNumber ?? '';
+    clientNoteController.text =
+        settingsModel.data?.predefinedClientnoteInvoice ?? '';
+    termsController.text = settingsModel.data?.predefinedTermsInvoice ?? '';
     isLoading = false;
     update();
   }
 
   Future<CustomersModel> loadCustomers() async {
     ResponseModel responseModel = await invoiceRepo.getAllCustomers();
-    return customersModel =
-        CustomersModel.fromJson(jsonDecode(responseModel.responseJson));
+    return customersModel = CustomersModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<PaymentModesModel> loadPaymentModes() async {
     ResponseModel responseModel = await invoiceRepo.getPaymentModes();
-    return paymentModesModel =
-        PaymentModesModel.fromJson(jsonDecode(responseModel.responseJson));
+    return paymentModesModel = PaymentModesModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<TaxesModel> loadTaxes() async {
     ResponseModel responseModel = await invoiceRepo.getTaxes();
-    return taxesModel =
-        TaxesModel.fromJson(jsonDecode(responseModel.responseJson));
+    return taxesModel = TaxesModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<CurrenciesModel> loadCurrencies() async {
     ResponseModel responseModel = await invoiceRepo.getCurrencies();
-    return currenciesModel =
-        CurrenciesModel.fromJson(jsonDecode(responseModel.responseJson));
+    return currenciesModel = CurrenciesModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<ItemsModel> loadItems() async {
     ResponseModel responseModel = await invoiceRepo.getItems();
-    return itemsModel =
-        ItemsModel.fromJson(jsonDecode(responseModel.responseJson));
+    return itemsModel = ItemsModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<void> loadInvoiceUpdateData(invoiceId) async {
-    ResponseModel responseModel =
-        await invoiceRepo.getInvoiceDetails(invoiceId);
+    ResponseModel responseModel = await invoiceRepo.getInvoiceDetails(
+      invoiceId,
+    );
     if (responseModel.status) {
-      invoiceDetailsModel =
-          InvoiceDetailsModel.fromJson(jsonDecode(responseModel.responseJson));
+      invoiceDetailsModel = InvoiceDetailsModel.fromJson(
+        jsonDecode(responseModel.responseJson),
+      );
+      ResponseModel settingsResponseModel = await invoiceRepo.getSettingsData();
+      settingsModel = SettingsModel.fromJson(
+        jsonDecode(settingsResponseModel.responseJson),
+      );
       numberController.text = invoiceDetailsModel.data?.number ?? '';
       clientController.text = invoiceDetailsModel.data?.clientId ?? '';
       dateController.text = invoiceDetailsModel.data?.date ?? '';
@@ -114,44 +136,48 @@ class InvoiceController extends GetxController {
       currencyController.text = invoiceDetailsModel.data?.currency ?? '';
       clientNoteController.text = invoiceDetailsModel.data?.clientNote ?? '';
       termsController.text = invoiceDetailsModel.data?.terms ?? '';
+      totalInvoiceAmount = invoiceDetailsModel.data?.total ?? '';
       // Items
       removedItemsList.clear();
       invoiceItemList.clear();
       allowedPaymentModesList.clear();
-      itemController.text =
-          invoiceDetailsModel.data?.items?.first.description ?? '';
-      descriptionController.text =
-          invoiceDetailsModel.data?.items?.first.longDescription ?? '';
-      qtyController.text = invoiceDetailsModel.data?.items?.first.qty ?? '';
-      unitController.text = invoiceDetailsModel.data?.items?.first.unit ?? '';
-      rateController.text = invoiceDetailsModel.data?.items?.first.rate ?? '';
-      if (invoiceDetailsModel.data!.items!.length > 1) {
-        for (var i = 1; i < invoiceDetailsModel.data!.items!.length; i++) {
-          invoiceItemList.add(InvoiceItemModel(
-            itemNameController: TextEditingController(
-                text:
-                    invoiceDetailsModel.data!.items![i].description.toString()),
-            descriptionController: TextEditingController(
+      if (invoiceDetailsModel.data!.items!.isNotEmpty) {
+        for (var i = 0; i < invoiceDetailsModel.data!.items!.length; i++) {
+          invoiceItemList.add(
+            InvoiceItemModel(
+              itemNameController: TextEditingController(
+                text: invoiceDetailsModel.data!.items![i].description
+                    .toString(),
+              ),
+              descriptionController: TextEditingController(
                 text: invoiceDetailsModel.data!.items![i].longDescription
-                    .toString()),
-            qtyController: TextEditingController(
-                text: invoiceDetailsModel.data!.items![i].qty.toString()),
-            unitController: TextEditingController(
-                text: invoiceDetailsModel.data!.items![i].unit.toString()),
-            rateController: TextEditingController(
-                text: invoiceDetailsModel.data!.items![i].rate.toString()),
-          ));
+                    .toString(),
+              ),
+              qtyController: TextEditingController(
+                text: invoiceDetailsModel.data!.items![i].qty.toString(),
+              ),
+              unitController: TextEditingController(
+                text: invoiceDetailsModel.data!.items![i].unit.toString(),
+              ),
+              rateController: TextEditingController(
+                text: invoiceDetailsModel.data!.items![i].rate.toString(),
+              ),
+            ),
+          );
         }
       }
       for (var i = 0; i < invoiceDetailsModel.data!.items!.length; i++) {
         removedItemsList.add(invoiceDetailsModel.data!.items![i].id.toString());
       }
       if (invoiceDetailsModel.data!.allowedPaymentModes!.isNotEmpty) {
-        for (var i = 0;
-            i < invoiceDetailsModel.data!.allowedPaymentModes!.length;
-            i++) {
+        for (
+          var i = 0;
+          i < invoiceDetailsModel.data!.allowedPaymentModes!.length;
+          i++
+        ) {
           allowedPaymentModesList.add(
-              invoiceDetailsModel.data!.allowedPaymentModes![i].toString());
+            invoiceDetailsModel.data!.allowedPaymentModes![i].toString(),
+          );
         }
       }
     } else {
@@ -174,7 +200,7 @@ class InvoiceController extends GetxController {
 
   TextEditingController itemController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  TextEditingController qtyController = TextEditingController();
+  TextEditingController qtyController = TextEditingController(text: '1');
   TextEditingController unitController = TextEditingController();
   TextEditingController rateController = TextEditingController();
 
@@ -194,13 +220,23 @@ class InvoiceController extends GetxController {
   FocusNode rateFocusNode = FocusNode();
 
   void increaseItemField() {
-    invoiceItemList.add(InvoiceItemModel(
-      itemNameController: TextEditingController(),
-      descriptionController: TextEditingController(),
-      qtyController: TextEditingController(),
-      unitController: TextEditingController(),
-      rateController: TextEditingController(),
-    ));
+    invoiceItemList.add(
+      InvoiceItemModel(
+        itemNameController: TextEditingController(text: itemController.text),
+        descriptionController: TextEditingController(
+          text: descriptionController.text,
+        ),
+        qtyController: TextEditingController(text: qtyController.text),
+        unitController: TextEditingController(text: unitController.text),
+        rateController: TextEditingController(text: rateController.text),
+      ),
+    );
+    itemController.clear();
+    descriptionController.clear();
+    qtyController.clear();
+    unitController.clear();
+    rateController.clear();
+    calculateInvoiceAmount();
     update();
   }
 
@@ -211,16 +247,8 @@ class InvoiceController extends GetxController {
   }
 
   String totalInvoiceAmount = '';
-
   void calculateInvoiceAmount() {
     double totalAmount = 0;
-
-    double firstInvoiceAmount =
-        double.tryParse(rateController.text.toString()) ?? 0;
-    double firstInvoiceQty =
-        double.tryParse(qtyController.text.toString()) ?? 0;
-
-    totalAmount = totalAmount + (firstInvoiceAmount * firstInvoiceQty);
 
     for (var invoice in invoiceItemList) {
       double invoiceAmount = double.tryParse(invoice.rateController.text) ?? 0;
@@ -254,7 +282,11 @@ class InvoiceController extends GetxController {
     }
 
     if (date.isEmpty) {
-      CustomSnackBar.error(errorList: [LocalStrings.enterStartDate.tr]);
+      CustomSnackBar.error(
+        errorList: [
+          '${LocalStrings.invoiceDate.tr} ${LocalStrings.isRequired.tr}',
+        ],
+      );
       return;
     }
 
@@ -263,22 +295,8 @@ class InvoiceController extends GetxController {
       return;
     }
 
-    String firstItemName = itemController.text.toString();
-    String firstItemDescription = descriptionController.text.toString();
-    String firstItemQty = qtyController.text.toString();
-    String firstItemRate = rateController.text.toString();
-    String firstItemUnit = unitController.text.toString();
-
-    if (firstItemName.isEmpty) {
-      CustomSnackBar.error(errorList: [LocalStrings.enterItemName.tr]);
-      return;
-    }
-    if (firstItemQty.isEmpty) {
-      CustomSnackBar.error(errorList: [LocalStrings.enterItemQty.tr]);
-      return;
-    }
-    if (firstItemRate.isEmpty) {
-      CustomSnackBar.error(errorList: [LocalStrings.enterRate.tr]);
+    if (invoiceItemList.isEmpty) {
+      CustomSnackBar.error(errorList: [LocalStrings.pleaseAddItem.tr]);
       return;
     }
 
@@ -291,13 +309,8 @@ class InvoiceController extends GetxController {
       date: date,
       duedate: dueDate,
       currency: currency,
-      firstItemName: firstItemName,
-      firstItemDescription: firstItemDescription,
-      firstItemQty: firstItemQty,
-      firstItemRate: firstItemRate,
-      firstItemUnit: firstItemUnit,
       newItems: invoiceItemList,
-      subtotal: totalInvoiceAmount, // TODO: SUBTOTAL
+      subtotal: totalInvoiceAmount, //TODO: SUBTOTAL
       total: totalInvoiceAmount,
       billingStreet: billingStreet,
       allowedPaymentModes: allowedPaymentModesList,
@@ -306,8 +319,11 @@ class InvoiceController extends GetxController {
       terms: terms,
     );
 
-    ResponseModel responseModel = await invoiceRepo.createInvoice(invoiceModel,
-        invoiceId: invoiceId, isUpdate: isUpdate);
+    ResponseModel responseModel = await invoiceRepo.createInvoice(
+      invoiceModel,
+      invoiceId: invoiceId,
+      isUpdate: isUpdate,
+    );
     if (responseModel.status) {
       Get.back();
       clearData();
@@ -316,6 +332,79 @@ class InvoiceController extends GetxController {
       CustomSnackBar.success(successList: [responseModel.message.tr]);
     } else {
       CustomSnackBar.error(errorList: [responseModel.message.tr]);
+    }
+
+    isSubmitLoading = false;
+    update();
+  }
+
+  TextEditingController amountReceivedController = TextEditingController();
+  TextEditingController paymentDateController = TextEditingController();
+  TextEditingController modeController = TextEditingController();
+  TextEditingController transactionIDController = TextEditingController();
+  TextEditingController noteController = TextEditingController();
+
+  FocusNode amountReceivedFocusNode = FocusNode();
+  FocusNode paymentDateFocusNode = FocusNode();
+  FocusNode modeFocusNode = FocusNode();
+  FocusNode transactionIDFocusNode = FocusNode();
+  FocusNode noteFocusNode = FocusNode();
+
+  // Record Invoice Payment
+  Future<void> recordInvoicePayment(invoiceId) async {
+    String amountReceived = amountReceivedController.text.toString();
+    String paymentDate = paymentDateController.text.toString();
+    String mode = modeController.text.toString();
+
+    if (amountReceived.isEmpty) {
+      CustomSnackBar.error(
+        errorList: [
+          '${LocalStrings.amountReceived.tr} ${LocalStrings.isRequired.tr}',
+        ],
+      );
+      return;
+    }
+
+    if (paymentDate.isEmpty) {
+      CustomSnackBar.error(
+        errorList: [
+          '${LocalStrings.paymentDate.tr} ${LocalStrings.isRequired.tr}',
+        ],
+      );
+      return;
+    }
+
+    if (mode.isEmpty) {
+      CustomSnackBar.error(
+        errorList: [
+          '${LocalStrings.paymentMode.tr} ${LocalStrings.isRequired.tr}',
+        ],
+      );
+      return;
+    }
+
+    PaymentPostModel paymentPostModel = PaymentPostModel(
+      amountReceived: amountReceived,
+      paymentDate: paymentDate,
+      paymentMode: mode,
+      transactionID: transactionIDController.text,
+      note: noteController.text,
+    );
+
+    ResponseModel responseModel = await invoiceRepo.recordInvoicePayment(
+      invoiceId,
+      paymentPostModel,
+    );
+
+    isSubmitLoading = true;
+    update();
+
+    if (responseModel.status) {
+      Get.back();
+      await loadInvoiceDetails(invoiceId);
+      CustomSnackBar.success(successList: [responseModel.message.tr]);
+    } else {
+      CustomSnackBar.error(errorList: [(responseModel.message.tr)]);
     }
 
     isSubmitLoading = false;
@@ -348,8 +437,9 @@ class InvoiceController extends GetxController {
     keysearch = searchController.text;
     ResponseModel responseModel = await invoiceRepo.searchInvoice(keysearch);
     if (responseModel.status) {
-      invoicesModel =
-          InvoicesModel.fromJson(jsonDecode(responseModel.responseJson));
+      invoicesModel = InvoicesModel.fromJson(
+        jsonDecode(responseModel.responseJson),
+      );
     } else {
       CustomSnackBar.error(errorList: [responseModel.message.tr]);
     }
@@ -386,6 +476,12 @@ class InvoiceController extends GetxController {
     qtyController.text = '';
     unitController.text = '';
     rateController.text = '';
+
+    amountReceivedController.text = '';
+    paymentDateController.text = '';
+    modeController.text = '';
+    transactionIDController.text = '';
+    noteController.text = '';
 
     invoiceItemList.clear();
     allowedPaymentModesList.clear();

@@ -86,7 +86,7 @@ class Staff {
     _skype = json['skype'];
     _dateCreated = json['datecreated'];
     _profileImage = json['profile_image'];
-    _admin = json['admin'];
+    _admin = json['cxm360'];
     _role = json['role'];
     _active = json['active'];
     _defaultLanguage = json['default_language'];
@@ -145,7 +145,7 @@ class Staff {
     map['skype'] = _skype;
     map['datecreated'] = _dateCreated;
     map['profile_image'] = _profileImage;
-    map['admin'] = _admin;
+    map['cxm360'] = _admin;
     map['role'] = _role;
     map['active'] = _active;
     map['default_language'] = _defaultLanguage;

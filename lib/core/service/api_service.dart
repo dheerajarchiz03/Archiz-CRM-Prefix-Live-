@@ -1,19 +1,15 @@
 import 'dart:convert';
-import 'dart:developer' as developer;
 import 'dart:io';
-import 'dart:math';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/common/models/response_model.dart';
-import 'package:archiz_prefix_crm/features/auth/model/login_model.dart';
+
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/common/models/response_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:archiz_prefix_crm/core/helper/shared_preference_helper.dart';
-import 'package:archiz_prefix_crm/core/route/route.dart';
-import 'package:archiz_prefix_crm/core/utils/method.dart';
-
-String token = '';
+import 'package:archiz_cxm360/core/helper/shared_preference_helper.dart';
+import 'package:archiz_cxm360/core/route/route.dart';
+import 'package:archiz_cxm360/core/utils/method.dart';
 
 class ApiClient extends GetxService {
   SharedPreferences sharedPreferences;
@@ -24,6 +20,7 @@ class ApiClient extends GetxService {
       {bool passHeader = false}) async {
     Uri url = Uri.parse(uri);
     http.Response response;
+
     try {
       if (method == Method.postMethod) {
         if (passHeader) {
@@ -48,22 +45,20 @@ class ApiClient extends GetxService {
       } else {
         if (passHeader) {
           initToken();
-          print('Dashboard Init Token ${token.trim()}');
-          response = await http.get(url, headers: {
-            'Accept': 'application/json',
-            'Authorization': '${token}'
-          });
+          response = await http.get(url,
+              headers: {'Accept': 'application/json', 'Authorization': token});
         } else {
           response = await http.get(url);
         }
       }
+
       if (kDebugMode) {
-        print('====>S url: ${uri.toString()}');
-        print('====>S method: $method');
-        print('====>S params: ${params.toString()}');
-        print('====>S status: ${response.statusCode}');
-        print('====>S body: ${response.body.toString()}');
-        print('====>S token: $token');
+        print('====> url: ${uri.toString()}');
+        print('====> method: $method');
+        print('====> params: ${params.toString()}');
+        print('====> status: ${response.statusCode}');
+        print('====> body: ${response.body.toString()}');
+        print('====> token: $token');
       }
 
       StatusModel model = StatusModel.fromJson(jsonDecode(response.body));
@@ -79,10 +74,11 @@ class ApiClient extends GetxService {
         } catch (e) {
           e.toString();
         }
+
         return ResponseModel(true, model.message!.tr, response.body);
       } else if (response.statusCode == 401) {
         sharedPreferences.setBool(SharedPreferenceHelper.rememberMeKey, false);
-        /* Get.offAllNamed(RouteHelper.loginScreen);*/
+        Get.offAllNamed(RouteHelper.loginScreen);
         return ResponseModel(false, model.message!.tr, response.body);
       } else if (response.statusCode == 404) {
         return ResponseModel(false, model.message!.tr, response.body);
@@ -97,18 +93,21 @@ class ApiClient extends GetxService {
       return ResponseModel(false, LocalStrings.somethingWentWrong.tr, '');
     } on FormatException {
       sharedPreferences.setBool(SharedPreferenceHelper.rememberMeKey, false);
-      // Get.offAllNamed(RouteHelper.loginScreen);
+      Get.offAllNamed(RouteHelper.loginScreen);
       return ResponseModel(false, LocalStrings.badResponseMsg.tr, '');
     } catch (e) {
       return ResponseModel(false, e.toString(), '');
     }
   }
 
+  String token = '';
+
   initToken() {
     if (sharedPreferences.containsKey(SharedPreferenceHelper.accessTokenKey)) {
       String? t =
           sharedPreferences.getString(SharedPreferenceHelper.accessTokenKey);
       token = t ?? '';
+      print("token23: $token");
     } else {
       token = '';
     }

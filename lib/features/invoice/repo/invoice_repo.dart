@@ -1,8 +1,9 @@
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
-import 'package:archiz_prefix_crm/core/utils/method.dart';
-import 'package:archiz_prefix_crm/core/utils/url_container.dart';
-import 'package:archiz_prefix_crm/common/models/response_model.dart';
-import 'package:archiz_prefix_crm/features/invoice/model/invoice_post_model.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
+import 'package:archiz_cxm360/core/utils/method.dart';
+import 'package:archiz_cxm360/core/utils/url_container.dart';
+import 'package:archiz_cxm360/common/models/response_model.dart';
+import 'package:archiz_cxm360/features/invoice/model/invoice_post_model.dart';
+import 'package:archiz_cxm360/features/invoice/model/payment_post_model.dart';
 
 class InvoiceRepo {
   ApiClient apiClient;
@@ -10,59 +11,102 @@ class InvoiceRepo {
 
   Future<ResponseModel> getAllInvoices() async {
     String url = "${UrlContainer.baseUrl}${UrlContainer.invoicesUrl}";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> getInvoiceDetails(invoiceId) async {
     String url =
         "${UrlContainer.baseUrl}${UrlContainer.invoicesUrl}/id/$invoiceId";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
+    return responseModel;
+  }
+
+  Future<ResponseModel> getSettingsData() async {
+    String url =
+        "${UrlContainer.baseUrl}${UrlContainer.miscellaneousUrl}/general";
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> getAllCustomers() async {
     String url = "${UrlContainer.baseUrl}${UrlContainer.customersUrl}";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> getCurrencies() async {
     String url =
         "${UrlContainer.baseUrl}${UrlContainer.miscellaneousUrl}/currencies";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> getTaxes() async {
     String url =
         "${UrlContainer.baseUrl}${UrlContainer.miscellaneousUrl}/tax_data";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> getPaymentModes() async {
     String url =
         "${UrlContainer.baseUrl}${UrlContainer.miscellaneousUrl}/payment_modes";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> getItems() async {
     String url = "${UrlContainer.baseUrl}${UrlContainer.itemsUrl}";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
-  Future<ResponseModel> createInvoice(InvoicePostModel invoiceModel,
-      {String? invoiceId, bool isUpdate = false}) async {
+  Future<ResponseModel> createInvoice(
+    InvoicePostModel invoiceModel, {
+    String? invoiceId,
+    bool isUpdate = false,
+  }) async {
     String url = "${UrlContainer.baseUrl}${UrlContainer.invoicesUrl}";
 
     Map<String, dynamic> params = {
@@ -71,11 +115,6 @@ class InvoiceRepo {
       "date": invoiceModel.date,
       "duedate": invoiceModel.duedate,
       "currency": invoiceModel.currency,
-      "newitems[0][description]": invoiceModel.firstItemName,
-      "newitems[0][long_description]": invoiceModel.firstItemDescription,
-      "newitems[0][qty]": invoiceModel.firstItemQty,
-      "newitems[0][rate]": invoiceModel.firstItemRate,
-      "newitems[0][unit]": invoiceModel.firstItemUnit,
       "subtotal": invoiceModel.subtotal,
       "total": invoiceModel.total,
       "billing_street": invoiceModel.billingStreet,
@@ -106,18 +145,16 @@ class InvoiceRepo {
     int i = 0;
     for (var invoice in invoiceModel.newItems) {
       String invoiceItemName = invoice.itemNameController.text;
-      String invoiceItemDescription = invoice.descriptionController.text;
-      String invoiceItemQty = invoice.qtyController.text;
       String invoiceItemRate = invoice.rateController.text;
-      String invoiceItemUnit = invoice.unitController.text;
 
       if (invoiceItemName.isNotEmpty && invoiceItemRate.isNotEmpty) {
-        i = i + 1;
         params['newitems[$i][description]'] = invoiceItemName;
-        params['newitems[$i][long_description]'] = invoiceItemDescription;
-        params['newitems[$i][qty]'] = invoiceItemQty;
+        params['newitems[$i][long_description]'] =
+            invoice.descriptionController.text;
+        params['newitems[$i][qty]'] = invoice.qtyController.text;
         params['newitems[$i][rate]'] = invoiceItemRate;
-        params['newitems[$i][unit]'] = invoiceItemUnit;
+        params['newitems[$i][unit]'] = invoice.unitController.text;
+        i++;
         //params['newitems[$i][order]'] = '1';
         //params['newitems[0][taxname][]'] = 'CGST|9.00';
         //params['newitems[0][taxname][]'] = 'SGST|9.00';
@@ -139,26 +176,59 @@ class InvoiceRepo {
     }
 
     ResponseModel responseModel = await apiClient.request(
-        isUpdate ? '$url/id/$invoiceId' : url,
-        isUpdate ? Method.putMethod : Method.postMethod,
-        params,
-        passHeader: true);
+      isUpdate ? '$url/id/$invoiceId' : url,
+      isUpdate ? Method.putMethod : Method.postMethod,
+      params,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> deleteInvoice(invoiceId) async {
     String url =
         "${UrlContainer.baseUrl}${UrlContainer.invoicesUrl}/id/$invoiceId";
-    ResponseModel responseModel = await apiClient
-        .request(url, Method.deleteMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.deleteMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> searchInvoice(keysearch) async {
     String url =
         "${UrlContainer.baseUrl}${UrlContainer.invoicesUrl}/search/$keysearch";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
+    return responseModel;
+  }
+
+  Future<ResponseModel> recordInvoicePayment(
+    String invoiceId,
+    PaymentPostModel paymentPostModel,
+  ) async {
+    String url = "${UrlContainer.baseUrl}${UrlContainer.invoicesUrl}/payment";
+
+    Map<String, dynamic> params = {
+      "invoiceid": invoiceId,
+      "amount": paymentPostModel.amountReceived,
+      "date": paymentPostModel.paymentDate,
+      "paymentmode": paymentPostModel.paymentMode,
+      "transactionid": paymentPostModel.transactionID,
+      "note": paymentPostModel.note,
+    };
+
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.postMethod,
+      params,
+      passHeader: true,
+    );
     return responseModel;
   }
 }

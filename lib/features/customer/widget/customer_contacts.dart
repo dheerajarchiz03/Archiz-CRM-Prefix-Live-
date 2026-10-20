@@ -1,14 +1,14 @@
-import 'package:archiz_prefix_crm/common/components/custom_fab.dart';
-import 'package:archiz_prefix_crm/common/components/custom_loader/custom_loader.dart';
-import 'package:archiz_prefix_crm/common/components/no_data.dart';
-import 'package:archiz_prefix_crm/core/route/route.dart';
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/features/customer/controller/customer_controller.dart';
-import 'package:archiz_prefix_crm/features/customer/model/contact_model.dart';
-import 'package:archiz_prefix_crm/features/customer/repo/customer_repo.dart';
-import 'package:archiz_prefix_crm/features/customer/widget/contact_card.dart';
+import 'package:archiz_cxm360/common/components/custom_fab.dart';
+import 'package:archiz_cxm360/common/components/custom_loader/custom_loader.dart';
+import 'package:archiz_cxm360/common/components/no_data.dart';
+import 'package:archiz_cxm360/core/route/route.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/features/customer/controller/customer_controller.dart';
+import 'package:archiz_cxm360/features/customer/model/contact_model.dart';
+import 'package:archiz_cxm360/features/customer/repo/customer_repo.dart';
+import 'package:archiz_cxm360/features/customer/widget/contact_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -71,37 +71,40 @@ class _CustomerContactsState extends State<CustomerContacts> {
               opacity: showFab ? 1 : 0,
               duration: const Duration(milliseconds: 300),
               child: CustomFAB(
-                  isShowIcon: true,
-                  isShowText: false,
-                  press: () {
-                    Get.toNamed(RouteHelper.addContactScreen,
-                        arguments: widget.id);
-                  }),
+                isShowIcon: true,
+                isShowText: false,
+                press: () {
+                  Get.toNamed(
+                    RouteHelper.addContactScreen,
+                    arguments: widget.id,
+                  );
+                },
+              ),
             ),
           ),
           body: controller.isLoading
               ? const CustomLoader()
-              : controller.customerContactsModel.data != null
-                  ? RefreshIndicator(
-                      color: ColorResources.primaryColor,
-                      onRefresh: () async {
-                        await controller.loadCustomerContacts(widget.id);
+              : controller.customerContactsModel.status ?? false
+              ? RefreshIndicator(
+                  color: ColorResources.primaryColor,
+                  onRefresh: () async {
+                    await controller.loadCustomerContacts(widget.id);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(Dimensions.space10),
+                    child: ListView.builder(
+                      controller: scrollController,
+                      itemBuilder: (context, index) {
+                        return ContactCard(
+                          index: index,
+                          contactModel: controller.customerContactsModel,
+                        );
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.all(Dimensions.space10),
-                        child: ListView.builder(
-                            controller: scrollController,
-                            itemBuilder: (context, index) {
-                              return ContactCard(
-                                index: index,
-                                contactModel: controller.customerContactsModel,
-                              );
-                            },
-                            itemCount:
-                                controller.customerContactsModel.data!.length),
-                      ),
-                    )
-                  : const Center(child: NoDataWidget()),
+                      itemCount: controller.customerContactsModel.data!.length,
+                    ),
+                  ),
+                )
+              : const Center(child: NoDataWidget()),
         );
       },
     );

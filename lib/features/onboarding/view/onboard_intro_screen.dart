@@ -1,14 +1,14 @@
-import 'package:archiz_prefix_crm/common/components/buttons/rounded_button.dart';
-import 'package:archiz_prefix_crm/common/components/divider/custom_divider.dart';
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/common/components/buttons/rounded_button.dart';
+import 'package:archiz_cxm360/common/components/divider/custom_divider.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:archiz_prefix_crm/core/route/route.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/images.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
+import 'package:archiz_cxm360/core/route/route.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/images.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
 import 'package:get/get.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:lottie/lottie.dart';
@@ -42,14 +42,9 @@ class _OnBoardIntroScreenState extends State<OnBoardIntroScreen> {
       skip: const Icon(Icons.skip_next),
       globalHeader: Align(
         alignment: Alignment.topCenter,
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsetsDirectional.only(top: Dimensions.space50),
-            child: Image.asset(
-              MyImages.appLogo,
-              height: Dimensions.space60,
-            ),
-          ),
+        child: Padding(
+          padding: const EdgeInsetsDirectional.only(top: Dimensions.space100),
+          child: Image.asset(MyImages.appLogo, height: Dimensions.space60),
         ),
       ),
       showSkipButton: false,
@@ -63,11 +58,16 @@ class _OnBoardIntroScreenState extends State<OnBoardIntroScreen> {
       controlsMargin: const EdgeInsets.all(Dimensions.space15),
       controlsPadding: kIsWeb
           ? const EdgeInsets.all(Dimensions.space12)
-          : const EdgeInsets.fromLTRB(Dimensions.space8, Dimensions.space3,
-              Dimensions.space8, Dimensions.space10),
+          : const EdgeInsets.fromLTRB(
+              Dimensions.space8,
+              Dimensions.space3,
+              Dimensions.space8,
+              Dimensions.space10,
+            ),
       dotsDecorator: const DotsDecorator(
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(Dimensions.space3))),
+          borderRadius: BorderRadius.all(Radius.circular(Dimensions.space3)),
+        ),
         activeColor: ColorResources.primaryColor,
         size: Size(10.0, 5.0),
         color: ColorResources.hintColor,
@@ -86,49 +86,59 @@ class _OnBoardIntroScreenState extends State<OnBoardIntroScreen> {
         PageViewModel(
           title: LocalStrings.onboardTitle1.tr,
           body: LocalStrings.onboardSubTitle1.tr,
-          image: Lottie.asset(
-            MyImages.onboardingOne,
-          ),
+          image: Lottie.asset(MyImages.onboardingOne),
           decoration: PageDecoration(
             titleTextStyle: semiBoldExtraLarge.copyWith(
-                color: ColorResources.secondaryColor),
+              color: ColorResources.secondaryColor,
+            ),
             titlePadding: const EdgeInsets.symmetric(
-                vertical: Dimensions.space5, horizontal: Dimensions.space15),
+              vertical: Dimensions.space5,
+              horizontal: Dimensions.space15,
+            ),
             bodyPadding: const EdgeInsets.symmetric(
-                vertical: Dimensions.space5, horizontal: Dimensions.space15),
+              vertical: Dimensions.space5,
+              horizontal: Dimensions.space15,
+            ),
             bodyTextStyle: regularDefault.copyWith(
-                color: Theme.of(context).textTheme.bodyMedium!.color),
+              color: Theme.of(context).textTheme.bodyMedium!.color,
+            ),
           ),
         ),
         PageViewModel(
           title: LocalStrings.onboardTitle2.tr,
           body: LocalStrings.onboardSubTitle2.tr,
-          image: Lottie.asset(
-            MyImages.onboardingTwo,
-          ),
+          image: Lottie.asset(MyImages.onboardingTwo),
           decoration: PageDecoration(
             titleTextStyle: semiBoldExtraLarge.copyWith(
-                color: ColorResources.secondaryColor),
+              color: ColorResources.secondaryColor,
+            ),
             titlePadding: const EdgeInsets.symmetric(
-                vertical: Dimensions.space5, horizontal: Dimensions.space15),
+              vertical: Dimensions.space5,
+              horizontal: Dimensions.space15,
+            ),
             bodyPadding: const EdgeInsets.symmetric(
-                vertical: Dimensions.space5, horizontal: Dimensions.space15),
+              vertical: Dimensions.space5,
+              horizontal: Dimensions.space15,
+            ),
             bodyTextStyle: regularDefault,
           ),
         ),
         PageViewModel(
           title: LocalStrings.onboardTitle3.tr,
           body: LocalStrings.onboardSubTitle3.tr,
-          image: Lottie.asset(
-            MyImages.onboardingThree,
-          ),
+          image: Lottie.asset(MyImages.onboardingThree),
           decoration: PageDecoration(
             titleTextStyle: semiBoldExtraLarge.copyWith(
-                color: ColorResources.secondaryColor),
+              color: ColorResources.secondaryColor,
+            ),
             titlePadding: const EdgeInsets.symmetric(
-                vertical: Dimensions.space5, horizontal: Dimensions.space15),
+              vertical: Dimensions.space5,
+              horizontal: Dimensions.space15,
+            ),
             bodyPadding: const EdgeInsets.symmetric(
-                vertical: Dimensions.space5, horizontal: Dimensions.space15),
+              vertical: Dimensions.space5,
+              horizontal: Dimensions.space15,
+            ),
             bodyTextStyle: regularDefault,
           ),
         ),
@@ -138,27 +148,27 @@ class _OnBoardIntroScreenState extends State<OnBoardIntroScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: Dimensions.space25),
             child: RoundedButton(
-                text: (currentPageID + 1) ==
-                        introKey.currentState?.getPagesLength()
-                    ? LocalStrings.getStarted.tr
-                    : LocalStrings.next.tr,
-                cornerRadius: Dimensions.space10,
-                press: () async {
-                  if (introKey.currentState!.getCurrentPage() + 1 ==
-                      introKey.currentState!.getPagesLength()) {
-                    await Get.find<ApiClient>()
-                        .sharedPreferences
-                        .setBool(SharedPreferenceHelper.onboardKey, true)
-                        .whenComplete(() {
-                      Get.offAllNamed(RouteHelper.loginScreen);
-                    });
-                  } else {
-                    introKey.currentState!.next();
-                  }
-                }),
+              text:
+                  (currentPageID + 1) == introKey.currentState?.getPagesLength()
+                  ? LocalStrings.getStarted.tr
+                  : LocalStrings.next.tr,
+              cornerRadius: Dimensions.space10,
+              press: () async {
+                if (introKey.currentState!.getCurrentPage() + 1 ==
+                    introKey.currentState!.getPagesLength()) {
+                  await Get.find<ApiClient>().sharedPreferences
+                      .setBool(SharedPreferenceHelper.onboardKey, true)
+                      .whenComplete(() {
+                        Get.offAllNamed(RouteHelper.loginScreen);
+                      });
+                } else {
+                  introKey.currentState!.next();
+                }
+              },
+            ),
           ),
           const SizedBox(height: Dimensions.space5),
-          const CustomDivider()
+          const CustomDivider(),
         ],
       ),
     );

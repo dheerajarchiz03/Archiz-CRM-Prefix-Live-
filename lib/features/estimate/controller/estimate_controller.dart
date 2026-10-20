@@ -1,16 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:archiz_prefix_crm/common/components/snack_bar/show_custom_snackbar.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/common/models/currencies_model.dart';
-import 'package:archiz_prefix_crm/common/models/response_model.dart';
-import 'package:archiz_prefix_crm/features/customer/model/customer_model.dart';
-import 'package:archiz_prefix_crm/features/estimate/model/estimate_details_model.dart';
-import 'package:archiz_prefix_crm/features/estimate/model/estimate_item_model.dart';
-import 'package:archiz_prefix_crm/features/estimate/model/estimate_model.dart';
-import 'package:archiz_prefix_crm/features/estimate/model/estimate_post_model.dart';
-import 'package:archiz_prefix_crm/features/estimate/repo/estimate_repo.dart';
-import 'package:archiz_prefix_crm/features/item/model/item_model.dart';
+import 'package:archiz_cxm360/common/components/snack_bar/show_custom_snackbar.dart';
+import 'package:archiz_cxm360/common/models/settings_model.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/common/models/currencies_model.dart';
+import 'package:archiz_cxm360/common/models/response_model.dart';
+import 'package:archiz_cxm360/features/customer/model/customer_model.dart';
+import 'package:archiz_cxm360/features/estimate/model/estimate_details_model.dart';
+import 'package:archiz_cxm360/features/estimate/model/estimate_item_model.dart';
+import 'package:archiz_cxm360/features/estimate/model/estimate_model.dart';
+import 'package:archiz_cxm360/features/estimate/model/estimate_post_model.dart';
+import 'package:archiz_cxm360/features/estimate/repo/estimate_repo.dart';
+import 'package:archiz_cxm360/features/item/model/item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,6 +23,7 @@ class EstimateController extends GetxController {
   bool isSubmitLoading = false;
   EstimatesModel estimatesModel = EstimatesModel();
   EstimateDetailsModel estimateDetailsModel = EstimateDetailsModel();
+  SettingsModel settingsModel = SettingsModel();
   CustomersModel customersModel = CustomersModel();
   CurrenciesModel currenciesModel = CurrenciesModel();
   ItemsModel itemsModel = ItemsModel();
@@ -48,8 +50,9 @@ class EstimateController extends GetxController {
   Future<void> loadEstimates() async {
     ResponseModel responseModel = await estimateRepo.getAllEstimates();
     if (responseModel.status) {
-      estimatesModel =
-          EstimatesModel.fromJson(jsonDecode(responseModel.responseJson));
+      estimatesModel = EstimatesModel.fromJson(
+        jsonDecode(responseModel.responseJson),
+      );
     } else {
       CustomSnackBar.error(errorList: [responseModel.message.tr]);
     }
@@ -58,43 +61,64 @@ class EstimateController extends GetxController {
   }
 
   Future<void> loadEstimateDetails(estimateId) async {
-    ResponseModel responseModel =
-        await estimateRepo.getEstimateDetails(estimateId);
-    if (responseModel.status) {
-      estimateDetailsModel =
-          EstimateDetailsModel.fromJson(jsonDecode(responseModel.responseJson));
-    } else {
-      CustomSnackBar.error(errorList: [responseModel.message.tr]);
-    }
+    ResponseModel responseModel = await estimateRepo.getEstimateDetails(
+      estimateId,
+    );
+    estimateDetailsModel = EstimateDetailsModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
 
+    isLoading = false;
+    update();
+  }
+
+  Future<void> loadEstimateCreateData() async {
+    ResponseModel responseModel = await estimateRepo.getSettingsData();
+    settingsModel = SettingsModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
+    numberController.text = settingsModel.data?.nextEstimateNumber ?? '';
+    clientNoteController.text =
+        settingsModel.data?.predefinedClientnoteEstimate ?? '';
+    termsController.text = settingsModel.data?.predefinedTermsEstimate ?? '';
     isLoading = false;
     update();
   }
 
   Future<CustomersModel> loadCustomers() async {
     ResponseModel responseModel = await estimateRepo.getAllCustomers();
-    return customersModel =
-        CustomersModel.fromJson(jsonDecode(responseModel.responseJson));
+    return customersModel = CustomersModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<CurrenciesModel> loadCurrencies() async {
     ResponseModel responseModel = await estimateRepo.getCurrencies();
-    return currenciesModel =
-        CurrenciesModel.fromJson(jsonDecode(responseModel.responseJson));
+    return currenciesModel = CurrenciesModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<ItemsModel> loadItems() async {
     ResponseModel responseModel = await estimateRepo.getItems();
-    return itemsModel =
-        ItemsModel.fromJson(jsonDecode(responseModel.responseJson));
+    return itemsModel = ItemsModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<void> loadEstimateUpdateData(estimateId) async {
-    ResponseModel responseModel =
-        await estimateRepo.getEstimateDetails(estimateId);
+    ResponseModel responseModel = await estimateRepo.getEstimateDetails(
+      estimateId,
+    );
     if (responseModel.status) {
-      estimateDetailsModel =
-          EstimateDetailsModel.fromJson(jsonDecode(responseModel.responseJson));
+      estimateDetailsModel = EstimateDetailsModel.fromJson(
+        jsonDecode(responseModel.responseJson),
+      );
+      ResponseModel settingsResponseModel = await estimateRepo
+          .getSettingsData();
+      settingsModel = SettingsModel.fromJson(
+        jsonDecode(settingsResponseModel.responseJson),
+      );
       numberController.text = estimateDetailsModel.data?.number ?? '';
       clientController.text = estimateDetailsModel.data?.clientId ?? '';
       dateController.text = estimateDetailsModel.data?.date ?? '';
@@ -105,37 +129,39 @@ class EstimateController extends GetxController {
       statusController.text = estimateDetailsModel.data?.status ?? '';
       clientNoteController.text = estimateDetailsModel.data?.clientNote ?? '';
       termsController.text = estimateDetailsModel.data?.terms ?? '';
+      totalEstimateAmount = estimateDetailsModel.data?.total ?? '';
       // Items
       removedItemsList.clear();
       estimateItemList.clear();
-      itemController.text =
-          estimateDetailsModel.data?.items?.first.description ?? '';
-      descriptionController.text =
-          estimateDetailsModel.data?.items?.first.longDescription ?? '';
-      qtyController.text = estimateDetailsModel.data?.items?.first.qty ?? '';
-      unitController.text = estimateDetailsModel.data?.items?.first.unit ?? '';
-      rateController.text = estimateDetailsModel.data?.items?.first.rate ?? '';
-      if (estimateDetailsModel.data!.items!.length > 1) {
-        for (var i = 1; i < estimateDetailsModel.data!.items!.length; i++) {
-          estimateItemList.add(EstimateItemsModel(
-            itemNameController: TextEditingController(
+      if (estimateDetailsModel.data!.items!.isNotEmpty) {
+        for (var i = 0; i < estimateDetailsModel.data!.items!.length; i++) {
+          estimateItemList.add(
+            EstimateItemsModel(
+              itemNameController: TextEditingController(
                 text: estimateDetailsModel.data!.items![i].description
-                    .toString()),
-            descriptionController: TextEditingController(
+                    .toString(),
+              ),
+              descriptionController: TextEditingController(
                 text: estimateDetailsModel.data!.items![i].longDescription
-                    .toString()),
-            qtyController: TextEditingController(
-                text: estimateDetailsModel.data!.items![i].qty.toString()),
-            unitController: TextEditingController(
-                text: estimateDetailsModel.data!.items![i].unit.toString()),
-            rateController: TextEditingController(
-                text: estimateDetailsModel.data!.items![i].rate.toString()),
-          ));
+                    .toString(),
+              ),
+              qtyController: TextEditingController(
+                text: estimateDetailsModel.data!.items![i].qty.toString(),
+              ),
+              unitController: TextEditingController(
+                text: estimateDetailsModel.data!.items![i].unit.toString(),
+              ),
+              rateController: TextEditingController(
+                text: estimateDetailsModel.data!.items![i].rate.toString(),
+              ),
+            ),
+          );
         }
       }
       for (var i = 0; i < estimateDetailsModel.data!.items!.length; i++) {
-        removedItemsList
-            .add(estimateDetailsModel.data!.items![i].id.toString());
+        removedItemsList.add(
+          estimateDetailsModel.data!.items![i].id.toString(),
+        );
       }
     } else {
       CustomSnackBar.error(errorList: [responseModel.message.tr]);
@@ -157,7 +183,7 @@ class EstimateController extends GetxController {
 
   TextEditingController itemController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  TextEditingController qtyController = TextEditingController();
+  TextEditingController qtyController = TextEditingController(text: '1');
   TextEditingController unitController = TextEditingController();
   TextEditingController rateController = TextEditingController();
 
@@ -175,13 +201,24 @@ class EstimateController extends GetxController {
   FocusNode rateFocusNode = FocusNode();
 
   void increaseItemField() {
-    estimateItemList.add(EstimateItemsModel(
-      itemNameController: TextEditingController(),
-      descriptionController: TextEditingController(),
-      qtyController: TextEditingController(),
-      unitController: TextEditingController(),
-      rateController: TextEditingController(),
-    ));
+    estimateItemList.add(
+      EstimateItemsModel(
+        itemNameController: TextEditingController(text: itemController.text),
+        descriptionController: TextEditingController(
+          text: descriptionController.text,
+        ),
+        qtyController: TextEditingController(text: qtyController.text),
+        unitController: TextEditingController(text: unitController.text),
+        rateController: TextEditingController(text: rateController.text),
+      ),
+    );
+
+    itemController.clear();
+    descriptionController.clear();
+    qtyController.clear();
+    unitController.clear();
+    rateController.clear();
+    calculateEstimateAmount();
     update();
   }
 
@@ -192,16 +229,8 @@ class EstimateController extends GetxController {
   }
 
   String totalEstimateAmount = '';
-
   void calculateEstimateAmount() {
     double totalAmount = 0;
-
-    double firstEstimateAmount =
-        double.tryParse(rateController.text.toString()) ?? 0;
-    double firstEstimateQty =
-        double.tryParse(qtyController.text.toString()) ?? 0;
-
-    totalAmount = totalAmount + (firstEstimateAmount * firstEstimateQty);
 
     for (var estimate in estimateItemList) {
       double estimateAmount =
@@ -212,11 +241,13 @@ class EstimateController extends GetxController {
 
     totalEstimateAmount = totalAmount.toString();
 
-    //update();
+    update();
   }
 
-  Future<void> submitEstimate(
-      {String? estimateId, bool isUpdate = false}) async {
+  Future<void> submitEstimate({
+    String? estimateId,
+    bool isUpdate = false,
+  }) async {
     String number = numberController.text.toString();
     String client = clientController.text.toString();
     String date = dateController.text.toString();
@@ -240,22 +271,8 @@ class EstimateController extends GetxController {
       return;
     }
 
-    String firstItemName = itemController.text.toString();
-    String firstItemDescription = descriptionController.text.toString();
-    String firstItemQty = qtyController.text.toString();
-    String firstItemRate = rateController.text.toString();
-    String firstItemUnit = unitController.text.toString();
-
-    if (firstItemName.isEmpty) {
-      CustomSnackBar.error(errorList: [LocalStrings.enterItemName.tr]);
-      return;
-    }
-    if (firstItemQty.isEmpty) {
-      CustomSnackBar.error(errorList: [LocalStrings.enterItemQty.tr]);
-      return;
-    }
-    if (firstItemRate.isEmpty) {
-      CustomSnackBar.error(errorList: [LocalStrings.enterRate.tr]);
+    if (estimateItemList.isEmpty) {
+      CustomSnackBar.error(errorList: [LocalStrings.pleaseAddItem.tr]);
       return;
     }
 
@@ -268,11 +285,6 @@ class EstimateController extends GetxController {
       date: date,
       duedate: dueDate,
       currency: currency,
-      firstItemName: firstItemName,
-      firstItemDescription: firstItemDescription,
-      firstItemQty: firstItemQty,
-      firstItemRate: firstItemRate,
-      firstItemUnit: firstItemUnit,
       newItems: estimateItemList,
       subtotal: totalEstimateAmount, // TODO: Subtotal
       total: totalEstimateAmount,
@@ -284,11 +296,13 @@ class EstimateController extends GetxController {
     );
 
     ResponseModel responseModel = await estimateRepo.createEstimate(
-        estimateModel,
-        estimateId: estimateId,
-        isUpdate: isUpdate);
+      estimateModel,
+      estimateId: estimateId,
+      isUpdate: isUpdate,
+    );
     if (responseModel.status) {
       Get.back();
+      clearData();
       if (isUpdate) await loadEstimateDetails(estimateId);
       await initialData();
       CustomSnackBar.success(successList: [responseModel.message.tr]);
@@ -327,8 +341,9 @@ class EstimateController extends GetxController {
     keysearch = searchController.text;
     ResponseModel responseModel = await estimateRepo.searchEstimate(keysearch);
     if (responseModel.status) {
-      estimatesModel =
-          EstimatesModel.fromJson(jsonDecode(responseModel.responseJson));
+      estimatesModel = EstimatesModel.fromJson(
+        jsonDecode(responseModel.responseJson),
+      );
     } else {
       CustomSnackBar.error(errorList: [responseModel.message.tr]);
     }

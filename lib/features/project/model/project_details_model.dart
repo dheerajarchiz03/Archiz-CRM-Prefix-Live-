@@ -1,9 +1,5 @@
 class ProjectDetailsModel {
-  ProjectDetailsModel({
-    bool? status,
-    String? message,
-    ProjectDetails? data,
-  }) {
+  ProjectDetailsModel({bool? status, String? message, ProjectDetails? data}) {
     _status = status;
     _message = message;
     _data = data;
@@ -61,6 +57,12 @@ class ProjectDetails {
     String? totalLoggedTime,
     String? statusName,
     String? addedFromName,
+    String? totalExpenses,
+    String? billableExpenses,
+    String? billedExpenses,
+    String? unbilledExpenses,
+    String? totalTasks,
+    String? openTasks,
   }) {
     _id = id;
     _name = name;
@@ -87,6 +89,12 @@ class ProjectDetails {
     _totalLoggedTime = totalLoggedTime;
     _statusName = statusName;
     _addedFromName = addedFromName;
+    _totalExpenses = totalExpenses;
+    _billableExpenses = billableExpenses;
+    _billedExpenses = billedExpenses;
+    _unbilledExpenses = unbilledExpenses;
+    _totalTasks = totalTasks;
+    _openTasks = openTasks;
   }
   ProjectDetails.fromJson(dynamic json) {
     _id = json['id'];
@@ -124,6 +132,12 @@ class ProjectDetails {
     _totalLoggedTime = json["total_logged_time"];
     _statusName = json["status_name"];
     _addedFromName = json["addedfrom_name"];
+    _totalExpenses = json["total_expenses"];
+    _billableExpenses = json["billable_expenses"];
+    _billedExpenses = json["billed_expenses"];
+    _unbilledExpenses = json["unbilled_expenses"];
+    _totalTasks = json["total_tasks"].toString();
+    _openTasks = json["open_tasks"].toString();
   }
 
   String? _id;
@@ -151,6 +165,12 @@ class ProjectDetails {
   String? _totalLoggedTime;
   String? _statusName;
   String? _addedFromName;
+  String? _totalExpenses;
+  String? _billableExpenses;
+  String? _billedExpenses;
+  String? _unbilledExpenses;
+  String? _totalTasks;
+  String? _openTasks;
 
   String? get id => _id;
   String? get name => _name;
@@ -177,6 +197,12 @@ class ProjectDetails {
   String? get totalLoggedTime => _totalLoggedTime;
   String? get statusName => _statusName;
   String? get addedFromName => _addedFromName;
+  String? get totalExpenses => _totalExpenses;
+  String? get billableExpenses => _billableExpenses;
+  String? get billedExpenses => _billedExpenses;
+  String? get unbilledExpenses => _unbilledExpenses;
+  String? get totalTasks => _totalTasks;
+  String? get openTasks => _openTasks;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -199,8 +225,9 @@ class ProjectDetails {
     map['contact_notification'] = _contactNotification;
     map['notify_contacts'] = _notifyContacts;
     if (_sharedVaultEntries != null) {
-      map['shared_vault_entries'] =
-          _sharedVaultEntries?.map((v) => v.toJson()).toList();
+      map['shared_vault_entries'] = _sharedVaultEntries
+          ?.map((v) => v.toJson())
+          .toList();
     }
     if (_settings != null) {
       map['settings'] = _settings?.toJson();
@@ -214,6 +241,12 @@ class ProjectDetails {
     map['total_logged_time'] = _totalLoggedTime;
     map['status_name'] = _statusName;
     map['addedfrom_name'] = _addedFromName;
+    map['total_expenses'] = _totalExpenses;
+    map['billable_expenses'] = _billableExpenses;
+    map['billed_expenses'] = _billedExpenses;
+    map['unbilled_expenses'] = _unbilledExpenses;
+    map['total_tasks'] = _totalTasks;
+    map['open_tasks'] = _openTasks;
     return map;
   }
 }
@@ -743,11 +776,7 @@ class Vault {
 }
 
 class ProjectMembers {
-  ProjectMembers({
-    String? staffId,
-    String? staffName,
-    String? email,
-  }) {
+  ProjectMembers({String? staffId, String? staffName, String? email}) {
     _staffId = staffId;
     _staffName = staffName;
     _email = email;

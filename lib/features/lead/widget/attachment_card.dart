@@ -1,9 +1,9 @@
-import 'package:archiz_prefix_crm/core/helper/string_format_helper.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
-import 'package:archiz_prefix_crm/features/lead/controller/lead_controller.dart';
-import 'package:archiz_prefix_crm/features/lead/model/lead_details_model.dart';
+import 'package:archiz_cxm360/core/helper/string_format_helper.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
+import 'package:archiz_cxm360/features/lead/controller/lead_details_controller.dart';
+import 'package:archiz_cxm360/features/lead/model/lead_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -49,9 +49,9 @@ class AttachmentCard extends StatelessWidget {
           ),
           trailing: IconButton(
             icon: const Icon(Icons.download),
-            onPressed: () => Get.find<LeadController>().downloadAttachment(
-                attachment[index].fileType ?? '',
-                attachment[index].attachmentKey ?? ''),
+            onPressed: () => Get.find<LeadDetailsController>()
+                .downloadAttachment(attachment[index].fileType ?? '',
+                    attachment[index].attachmentKey ?? ''),
           ),
         ));
   }

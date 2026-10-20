@@ -1,17 +1,19 @@
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
-import 'package:archiz_prefix_crm/core/utils/util.dart';
-import 'package:archiz_prefix_crm/common/controllers/localization_controller.dart';
-import 'package:archiz_prefix_crm/common/controllers/theme_controller.dart';
-import 'package:archiz_prefix_crm/features/splash/controller/splash_controller.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
+import 'package:archiz_cxm360/core/utils/util.dart';
+import 'package:archiz_cxm360/common/controllers/localization_controller.dart';
+import 'package:archiz_cxm360/common/controllers/theme_controller.dart';
+import 'package:archiz_cxm360/features/splash/controller/splash_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:archiz_prefix_crm/core/utils/images.dart';
+import 'package:archiz_cxm360/core/utils/images.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
+
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
@@ -28,6 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
       controller.gotoNextPage();
     });
   }
+
   @override
   void dispose() {
     ThemeController themeController =
@@ -38,13 +41,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: GetBuilder<SplashController>(
-        builder: (controller) => Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          body: Center(
-            child: Image.asset(MyImages.appLogoWhite,  fit: BoxFit.contain),
-          ),
+    return GetBuilder<SplashController>(
+      builder: (controller) => Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: Center(
+          child: Image.asset(MyImages.appLogo, height: 120),
         ),
       ),
     );

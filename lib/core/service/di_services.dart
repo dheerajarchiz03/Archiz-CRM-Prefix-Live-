@@ -1,8 +1,8 @@
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
-import 'package:archiz_prefix_crm/common/controllers/localization_controller.dart';
-import 'package:archiz_prefix_crm/common/controllers/theme_controller.dart';
-import 'package:archiz_prefix_crm/features/splash/controller/splash_controller.dart';
-import 'package:archiz_prefix_crm/features/splash/repo/splash_repo.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
+import 'package:archiz_cxm360/common/controllers/localization_controller.dart';
+import 'package:archiz_cxm360/common/controllers/theme_controller.dart';
+import 'package:archiz_cxm360/features/splash/controller/splash_controller.dart';
+import 'package:archiz_cxm360/features/splash/repo/splash_repo.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

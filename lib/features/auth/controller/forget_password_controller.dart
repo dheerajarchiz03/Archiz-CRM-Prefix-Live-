@@ -1,10 +1,10 @@
-import 'package:archiz_prefix_crm/core/route/route.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/common/models/response_model.dart';
+import 'package:archiz_cxm360/core/route/route.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/common/models/response_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:archiz_prefix_crm/features/auth/repo/auth_repo.dart';
-import 'package:archiz_prefix_crm/common/components/snack_bar/show_custom_snackbar.dart';
+import 'package:archiz_cxm360/features/auth/repo/auth_repo.dart';
+import 'package:archiz_cxm360/common/components/snack_bar/show_custom_snackbar.dart';
 
 class ForgetPasswordController extends GetxController {
   AuthRepo loginRepo;

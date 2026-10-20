@@ -1,14 +1,15 @@
-import 'package:archiz_prefix_crm/common/components/circle_image_button.dart';
-import 'package:archiz_prefix_crm/common/components/dialog/warning_dialog.dart';
-import 'package:archiz_prefix_crm/core/route/route.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/features/dashboard/controller/dashboard_controller.dart';
-import 'package:archiz_prefix_crm/features/dashboard/model/dashboard_model.dart';
+import 'package:archiz_cxm360/common/components/circle_image_button.dart';
+import 'package:archiz_cxm360/common/components/dialog/warning_dialog.dart';
+import 'package:archiz_cxm360/core/route/route.dart';
+import 'package:archiz_cxm360/core/utils/images.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/features/dashboard/controller/dashboard_controller.dart';
+import 'package:archiz_cxm360/features/dashboard/model/dashboard_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key, required this.homeModel});
@@ -16,397 +17,263 @@ class HomeDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Drawer(
-        child: Column(
-          children: [
-            DrawerHeader(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+    return Drawer(
+      child: Column(
+        children: [
+          UserAccountsDrawerHeader(
+            accountName: Text(
+              '${homeModel.staff?.firstName ?? ''} ${homeModel.staff?.lastName ?? ''}',
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              style: mediumLarge.copyWith(color: Colors.white),
+            ),
+            accountEmail: Text(
+              homeModel.staff?.email ?? '',
+              style: lightDefault.copyWith(color: Colors.white),
+            ),
+            onDetailsPressed: () {
+              Get.back();
+              Get.toNamed(RouteHelper.profileScreen);
+            },
+            currentAccountPicture: CircleAvatar(
+              child: CircleImageWidget(
+                imagePath: homeModel.staff?.profileImage ?? '',
+                isAsset: false,
+                isProfile: true,
+                width: 80,
+                height: 80,
+              ),
+            ),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                colorFilter: ColorFilter.mode(
+                  ColorResources.primaryColor.withValues(alpha: 0.6),
+                  BlendMode.multiply,
+                ),
+                image: AssetImage(MyImages.login),
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
                 children: [
-                  CircleAvatar(
-                    backgroundColor: ColorResources.blueGreyColor,
-                    radius: 42,
-                    child: CircleImageWidget(
-                      imagePath: homeModel.staff?.profileImage ?? '',
-                      isAsset: false,
-                      isProfile: true,
-                      width: 80,
-                      height: 80,
+                  homeModel.menuItems?.customers ?? false
+                      ? buildListTile(
+                          leadingIcon: Icons.person_outline,
+                          title: LocalStrings.customers.tr,
+                          onTap: () {
+                            Navigator.pop(context);
+                            Get.toNamed(RouteHelper.customerScreen);
+                          },
+                        )
+                      : const SizedBox.shrink(),
+                  ExpansionTile(
+                    title: Text(
+                      LocalStrings.sales.tr,
+                      style: regularDefault.copyWith(
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                      ),
                     ),
+                    leading: Icon(
+                      Icons.electric_bolt_rounded,
+                      color: Theme.of(context).textTheme.bodyLarge!.color,
+                    ),
+                    iconColor: Theme.of(
+                      Get.context!,
+                    ).textTheme.bodyLarge!.color,
+                    collapsedIconColor: Theme.of(
+                      Get.context!,
+                    ).textTheme.bodyLarge!.color,
+                    children: [
+                      homeModel.menuItems?.proposals ?? false
+                          ? buildListTile(
+                              leadingIcon: Icons.document_scanner_outlined,
+                              title: LocalStrings.proposals.tr,
+                              onTap: () {
+                                Navigator.pop(context);
+                                Get.toNamed(RouteHelper.proposalScreen);
+                              },
+                            )
+                          : const SizedBox.shrink(),
+                      homeModel.menuItems?.estimates ?? false
+                          ? buildListTile(
+                              leadingIcon: Icons.add_chart_outlined,
+                              title: LocalStrings.estimates.tr,
+                              onTap: () {
+                                Navigator.pop(context);
+                                Get.toNamed(RouteHelper.estimateScreen);
+                              },
+                            )
+                          : const SizedBox.shrink(),
+                      homeModel.menuItems?.invoices ?? false
+                          ? buildListTile(
+                              leadingIcon: Icons.assignment_outlined,
+                              title: LocalStrings.invoices.tr,
+                              onTap: () {
+                                Navigator.pop(context);
+                                Get.toNamed(RouteHelper.invoiceScreen);
+                              },
+                            )
+                          : const SizedBox.shrink(),
+                      homeModel.menuItems?.payments ?? false
+                          ? buildListTile(
+                              leadingIcon:
+                                  Icons.account_balance_wallet_outlined,
+                              title: LocalStrings.payments.tr,
+                              onTap: () {
+                                Navigator.pop(context);
+                                Get.toNamed(RouteHelper.paymentScreen);
+                              },
+                            )
+                          : const SizedBox.shrink(),
+                      homeModel.menuItems?.items ?? false
+                          ? buildListTile(
+                              leadingIcon: Icons.add_box_outlined,
+                              title: LocalStrings.items.tr,
+                              onTap: () {
+                                Navigator.pop(context);
+                                Get.toNamed(RouteHelper.itemScreen);
+                              },
+                            )
+                          : const SizedBox.shrink(),
+                    ],
                   ),
-                  const SizedBox(width: Dimensions.space20),
-                  SizedBox(
-                    width: 150,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${homeModel.staff?.firstName ?? ''} ${homeModel.staff?.lastName ?? ''}',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          style: mediumLarge,
-                        ),
-                        TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Get.toNamed(RouteHelper.profileScreen);
-                            },
-                            child: Text(
-                              LocalStrings.viewProfile.tr,
-                              style: semiBoldLarge.copyWith(
-                                  color: Theme.of(context).secondaryHeaderColor,
-                                  decoration: TextDecoration.underline),
-                            )),
-                      ],
-                    ),
-                  )
+                  homeModel.menuItems?.projects ?? false
+                      ? buildListTile(
+                          leadingIcon: Icons.folder_open_outlined,
+                          title: LocalStrings.projects.tr,
+                          onTap: () {
+                            Navigator.pop(context);
+                            Get.toNamed(RouteHelper.projectScreen);
+                          },
+                        )
+                      : const SizedBox.shrink(),
+                  homeModel.menuItems?.tasks ?? false
+                      ? buildListTile(
+                          leadingIcon: Icons.task_alt_rounded,
+                          title: LocalStrings.tasks.tr,
+                          onTap: () {
+                            Navigator.pop(context);
+                            Get.toNamed(RouteHelper.taskScreen);
+                          },
+                        )
+                      : const SizedBox.shrink(),
+                  homeModel.menuItems?.contracts ?? false
+                      ? buildListTile(
+                          leadingIcon: Icons.article_outlined,
+                          title: LocalStrings.contracts.tr,
+                          onTap: () {
+                            Navigator.pop(context);
+                            Get.toNamed(RouteHelper.contractScreen);
+                          },
+                        )
+                      : const SizedBox.shrink(),
+                  homeModel.menuItems?.tickets ?? false
+                      ? buildListTile(
+                          leadingIcon: Icons.confirmation_number_outlined,
+                          title: LocalStrings.support.tr,
+                          onTap: () {
+                            Navigator.pop(context);
+                            Get.toNamed(RouteHelper.ticketScreen);
+                          },
+                        )
+                      : const SizedBox.shrink(),
+                  homeModel.menuItems?.leads ?? false
+                      ? buildListTile(
+                          leadingIcon: Icons.markunread_mailbox_outlined,
+                          title: LocalStrings.leads.tr,
+                          onTap: () {
+                            Navigator.pop(context);
+                            Get.toNamed(RouteHelper.leadScreen);
+                          },
+                        )
+                      : const SizedBox.shrink(),
+                  homeModel.menuItems?.expenses ?? false
+                      ? buildListTile(
+                          leadingIcon: Icons.monetization_on_outlined,
+                          title: LocalStrings.expenses.tr,
+                          onTap: () {
+                            Navigator.pop(context);
+                            Get.toNamed(RouteHelper.expenseScreen);
+                          },
+                        )
+                      : const SizedBox.shrink(),
+                  homeModel.menuItems?.staff ?? false
+                      ? buildListTile(
+                          leadingIcon: Icons.person_4_outlined,
+                          title: LocalStrings.staffs.tr,
+                          onTap: () {
+                            Navigator.pop(context);
+                            Get.toNamed(RouteHelper.staffScreen);
+                          },
+                        )
+                      : const SizedBox.shrink(),
+                  buildListTile(
+                    leadingIcon: Icons.settings_outlined,
+                    title: LocalStrings.settings.tr,
+                    onTap: () {
+                      Navigator.pop(context);
+                      Get.toNamed(RouteHelper.settingsScreen);
+                    },
+                  ),
                 ],
               ),
             ),
-            Expanded(
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: Column(
-                  children: [
-                    homeModel.menuItems?.customers ?? false
-                        ? ListTile(
-                            leading: Icon(
-                              Icons.group_outlined,
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                            ),
-                            title: Text(
-                              LocalStrings.customers.tr,
-                              style: regularDefault.copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color),
-                            ),
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: Dimensions.space12,
-                              color: ColorResources.contentTextColor,
-                            ),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Get.toNamed(RouteHelper.customerScreen);
-                            },
-                          )
-                        : const SizedBox.shrink(),
-                    homeModel.menuItems?.projects ?? false
-                        ? ListTile(
-                            leading: Icon(
-                              Icons.task_outlined,
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                            ),
-                            title: Text(
-                              LocalStrings.projects.tr,
-                              style: regularDefault.copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color),
-                            ),
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: Dimensions.space12,
-                              color: ColorResources.contentTextColor,
-                            ),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Get.toNamed(RouteHelper.projectScreen);
-                            },
-                          )
-                        : const SizedBox.shrink(),
-                    homeModel.menuItems?.tasks ?? false
-                        ? ListTile(
-                            leading: Icon(
-                              Icons.task_alt_rounded,
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                            ),
-                            title: Text(
-                              LocalStrings.tasks.tr,
-                              style: regularDefault.copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color),
-                            ),
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: Dimensions.space12,
-                              color: ColorResources.contentTextColor,
-                            ),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Get.toNamed(RouteHelper.taskScreen);
-                            },
-                          )
-                        : const SizedBox.shrink(),
-                    homeModel.menuItems?.invoices ?? false
-                        ? ListTile(
-                            leading: Icon(
-                              Icons.assignment_outlined,
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                            ),
-                            title: Text(
-                              LocalStrings.invoices.tr,
-                              style: regularDefault.copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color),
-                            ),
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: Dimensions.space12,
-                              color: ColorResources.contentTextColor,
-                            ),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Get.toNamed(RouteHelper.invoiceScreen);
-                            },
-                          )
-                        : const SizedBox.shrink(),
-                    homeModel.menuItems?.contracts ?? false
-                        ? ListTile(
-                            leading: Icon(
-                              Icons.article_outlined,
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                            ),
-                            title: Text(
-                              LocalStrings.contracts.tr,
-                              style: regularDefault.copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color),
-                            ),
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: Dimensions.space12,
-                              color: ColorResources.contentTextColor,
-                            ),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Get.toNamed(RouteHelper.contractScreen);
-                            },
-                          )
-                        : const SizedBox.shrink(),
-                    homeModel.menuItems?.tickets ?? false
-                        ? ListTile(
-                            leading: Icon(
-                              Icons.confirmation_number_outlined,
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                            ),
-                            title: Text(
-                              LocalStrings.tickets.tr,
-                              style: regularDefault.copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color),
-                            ),
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: Dimensions.space12,
-                              color: ColorResources.contentTextColor,
-                            ),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Get.toNamed(RouteHelper.ticketScreen);
-                            },
-                          )
-                        : const SizedBox.shrink(),
-                    homeModel.menuItems?.leads ?? false
-                        ? ListTile(
-                            leading: Icon(
-                              Icons.markunread_mailbox_outlined,
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                            ),
-                            title: Text(
-                              LocalStrings.leads.tr,
-                              style: regularDefault.copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color),
-                            ),
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: Dimensions.space12,
-                              color: ColorResources.contentTextColor,
-                            ),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Get.toNamed(RouteHelper.leadScreen);
-                            },
-                          )
-                        : const SizedBox.shrink(),
-                    homeModel.menuItems?.estimates ?? false
-                        ? ListTile(
-                            leading: Icon(
-                              Icons.add_chart_outlined,
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                            ),
-                            title: Text(
-                              LocalStrings.estimates.tr,
-                              style: regularDefault.copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color),
-                            ),
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: Dimensions.space12,
-                              color: ColorResources.contentTextColor,
-                            ),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Get.toNamed(RouteHelper.estimateScreen);
-                            },
-                          )
-                        : const SizedBox.shrink(),
-                    homeModel.menuItems?.proposals ?? false
-                        ? ListTile(
-                            leading: Icon(
-                              Icons.document_scanner_outlined,
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                            ),
-                            title: Text(
-                              LocalStrings.proposals.tr,
-                              style: regularDefault.copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color),
-                            ),
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: Dimensions.space12,
-                              color: ColorResources.contentTextColor,
-                            ),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Get.toNamed(RouteHelper.proposalScreen);
-                            },
-                          )
-                        : const SizedBox.shrink(),
-                    homeModel.menuItems?.payments ?? false
-                        ? ListTile(
-                            leading: Icon(
-                              Icons.account_balance_wallet_outlined,
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                            ),
-                            title: Text(
-                              LocalStrings.payments.tr,
-                              style: regularDefault.copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color),
-                            ),
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: Dimensions.space12,
-                              color: ColorResources.contentTextColor,
-                            ),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Get.toNamed(RouteHelper.paymentScreen);
-                            },
-                          )
-                        : const SizedBox.shrink(),
-                    homeModel.menuItems?.items ?? false
-                        ? ListTile(
-                            leading: Icon(
-                              Icons.add_box_outlined,
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                            ),
-                            title: Text(
-                              LocalStrings.items.tr,
-                              style: regularDefault.copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color),
-                            ),
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: Dimensions.space12,
-                              color: ColorResources.contentTextColor,
-                            ),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Get.toNamed(RouteHelper.itemScreen);
-                            },
-                          )
-                        : const SizedBox.shrink(),
-                    ListTile(
-                      leading: Icon(
-                        Icons.account_circle_outlined,
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
-                      ),
-                      title: Text(
-                        LocalStrings.visit.tr,
-                        style: regularDefault.copyWith(
-                            color:
-                                Theme.of(context).textTheme.bodyLarge!.color),
-                      ),
-                      trailing: const Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        size: Dimensions.space12,
-                        color: ColorResources.contentTextColor,
-                      ),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Get.toNamed(RouteHelper.settingsScreen);
-                      },
-                    ),
-                  ],
-                ),
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.logout,
+              size: Dimensions.space20,
+              color: Colors.red,
+            ),
+            title: Text(
+              LocalStrings.logout.tr,
+              style: regularDefault.copyWith(
+                color: Theme.of(context).textTheme.bodyLarge!.color,
               ),
             ),
-            ListTile(
-              leading: const Icon(
-                Icons.logout,
-                size: Dimensions.space20,
-                color: Colors.red,
-              ),
-              title: Text(
-                LocalStrings.logout.tr,
-                style: regularDefault.copyWith(
-                    color: Theme.of(context).textTheme.bodyLarge!.color),
-              ),
-              onTap: () {
-                const WarningAlertDialog().warningAlertDialog(
-                  context,
-                  () {
-                    Get.back();
-                    Get.find<DashboardController>().logout();
-                  },
-                  title: LocalStrings.logout.tr,
-                  subTitle: LocalStrings.logoutSureWarningMSg.tr,
-                );
-              },
-            ),
-          ],
+            onTap: () {
+              const WarningAlertDialog().warningAlertDialog(
+                context,
+                () {
+                  Get.back();
+                  Get.find<DashboardController>().logout();
+                },
+                title: LocalStrings.logout.tr,
+                subTitle: LocalStrings.logoutSureWarningMSg.tr,
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildListTile({
+    required IconData leadingIcon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      leading: Icon(
+        leadingIcon,
+        color: Theme.of(Get.context!).textTheme.bodyLarge!.color,
+      ),
+      title: Text(
+        title,
+        style: regularDefault.copyWith(
+          color: Theme.of(Get.context!).textTheme.bodyLarge!.color,
         ),
       ),
+      trailing: Icon(
+        Icons.arrow_forward_ios_rounded,
+        size: Dimensions.space12,
+        color: Theme.of(Get.context!).textTheme.bodyLarge!.color,
+      ),
+      onTap: onTap,
     );
   }
 }

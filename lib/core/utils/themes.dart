@@ -1,4 +1,4 @@
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -27,8 +27,9 @@ ThemeData light = ThemeData(
   primarySwatch: Colors.blue,
   scaffoldBackgroundColor: ColorResources.screenBgColor,
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      foregroundColor: Colors.white,
-      backgroundColor: ColorResources.primaryColor),
+    foregroundColor: Colors.white,
+    backgroundColor: ColorResources.primaryColor,
+  ),
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
     contentPadding: const EdgeInsetsDirectional.only(top: 5, start: 20),
@@ -38,35 +39,49 @@ ThemeData light = ThemeData(
   cardTheme: const CardThemeData(color: Colors.white),
   cardColor: Colors.white,
   dataTableTheme: DataTableThemeData(
-      headingRowColor:
-          WidgetStateProperty.all<Color>(ColorResources.lightBlueGreyColor),
-      dataRowColor: WidgetStateProperty.all<Color>(Colors.white)),
+    headingRowColor: WidgetStateProperty.all<Color>(
+      ColorResources.lightBlueGreyColor,
+    ),
+    dataRowColor: WidgetStateProperty.all<Color>(Colors.white),
+  ),
   drawerTheme: const DrawerThemeData(
-      backgroundColor: ColorResources.colorWhite,
-      surfaceTintColor: ColorResources.primaryColor),
+    backgroundColor: ColorResources.colorWhite,
+    surfaceTintColor: ColorResources.primaryColor,
+  ),
   textTheme: const TextTheme(
-      displaySmall: TextStyle(
-          color: ColorResources.colorGrey,
-          fontWeight: FontWeight.w400,
-          fontSize: 16),
-      bodyMedium: TextStyle(
-          color: Colors.black, fontWeight: FontWeight.w400, fontSize: 12),
-      bodySmall: TextStyle(
-          color: Colors.grey, fontWeight: FontWeight.w400, fontSize: 12),
-      bodyLarge: TextStyle(
-          color: ColorResources.primaryColor,
-          fontWeight: FontWeight.w400,
-          fontSize: 14)),
+    displaySmall: TextStyle(
+      color: ColorResources.colorGrey,
+      fontWeight: FontWeight.w400,
+      fontSize: 16,
+    ),
+    bodyMedium: TextStyle(
+      color: Colors.black,
+      fontWeight: FontWeight.w400,
+      fontSize: 12,
+    ),
+    bodySmall: TextStyle(
+      color: Colors.grey,
+      fontWeight: FontWeight.w400,
+      fontSize: 12,
+    ),
+    bodyLarge: TextStyle(
+      color: ColorResources.primaryColor,
+      fontWeight: FontWeight.w400,
+      fontSize: 14,
+    ),
+  ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: Colors.white,
-      selectedItemColor: Colors.blue,
-      unselectedItemColor: Colors.grey,
-      showUnselectedLabels: true,
-      elevation: 5,
-      type: BottomNavigationBarType.fixed),
+    backgroundColor: Colors.white,
+    selectedItemColor: Colors.blue,
+    unselectedItemColor: Colors.grey,
+    showUnselectedLabels: true,
+    elevation: 5,
+    type: BottomNavigationBarType.fixed,
+  ),
   hintColor: ColorResources.hintColor,
-  expansionTileTheme:
-      const ExpansionTileThemeData(iconColor: ColorResources.colorGrey),
+  expansionTileTheme: const ExpansionTileThemeData(
+    iconColor: ColorResources.colorGrey,
+  ),
 );
 
 ThemeData dark = ThemeData(
@@ -92,8 +107,9 @@ ThemeData dark = ThemeData(
   primarySwatch: Colors.red,
   scaffoldBackgroundColor: ColorResources.screenBgColorDark,
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      foregroundColor: Colors.white,
-      backgroundColor: ColorResources.secondaryColor),
+    foregroundColor: Colors.white,
+    backgroundColor: ColorResources.secondaryColor,
+  ),
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
     contentPadding: const EdgeInsetsDirectional.only(top: 5, start: 30),
@@ -103,19 +119,31 @@ ThemeData dark = ThemeData(
   cardTheme: const CardThemeData(color: Colors.black),
   cardColor: ColorResources.cardColorDark,
   drawerTheme: const DrawerThemeData(
-      backgroundColor: ColorResources.screenBgColorDark,
-      surfaceTintColor: ColorResources.screenBgColorDark),
+    backgroundColor: ColorResources.screenBgColorDark,
+    surfaceTintColor: ColorResources.screenBgColorDark,
+  ),
   textTheme: const TextTheme(
-      displaySmall: TextStyle(
-          color: ColorResources.colorGrey,
-          fontWeight: FontWeight.w400,
-          fontSize: 16),
-      bodyMedium: TextStyle(
-          color: Colors.white, fontWeight: FontWeight.w400, fontSize: 12),
-      bodySmall: TextStyle(
-          color: Colors.grey, fontWeight: FontWeight.w400, fontSize: 12),
-      bodyLarge: TextStyle(
-          color: Colors.white, fontWeight: FontWeight.w400, fontSize: 14)),
+    displaySmall: TextStyle(
+      color: ColorResources.colorGrey,
+      fontWeight: FontWeight.w400,
+      fontSize: 16,
+    ),
+    bodyMedium: TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.w400,
+      fontSize: 12,
+    ),
+    bodySmall: TextStyle(
+      color: Colors.grey,
+      fontWeight: FontWeight.w400,
+      fontSize: 12,
+    ),
+    bodyLarge: TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.w400,
+      fontSize: 14,
+    ),
+  ),
   iconTheme: const IconThemeData(color: Colors.white),
   primaryIconTheme: const IconThemeData(color: Colors.white),
   hintColor: ColorResources.hintColorDark,

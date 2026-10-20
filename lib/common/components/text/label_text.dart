@@ -1,8 +1,7 @@
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
 
 class LabelText extends StatelessWidget {
   final bool isRequired;
@@ -25,23 +24,16 @@ class LabelText extends StatelessWidget {
                 text.tr,
                 textAlign: textAlign,
                 style: regularDefault.copyWith(
-                    color: Theme.of(context).textTheme.bodyMedium!.color),
+                  color: Theme.of(context).textTheme.bodyMedium!.color,
+                ),
               ),
-              const SizedBox(
-                width: 2,
-              ),
+              const SizedBox(width: 2),
               Text(
                 '*',
                 style: semiBoldDefault.copyWith(color: ColorResources.colorRed),
-              )
+              ),
             ],
           )
-        : Text(
-            text.tr,
-            textAlign: textAlign,
-            style: regularDefault.copyWith(
-                color: Theme.of(context).hintColor,
-                fontSize: Dimensions.fontSmall),
-          );
+        : Text(text.tr, textAlign: textAlign, style: regularSmall);
   }
 }

@@ -1,12 +1,16 @@
+import 'package:archiz_cxm360/common/components/text/text_icon.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
 import 'package:flutter/material.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
 
 class AddIconButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
   final Color color, iconColor;
   final double iconSize;
+  final String? text;
+  final TextStyle? textStyle;
 
   const AddIconButton({
     super.key,
@@ -15,6 +19,8 @@ class AddIconButton extends StatelessWidget {
     this.color = ColorResources.secondaryColor,
     this.iconColor = Colors.white,
     this.iconSize = 30.00,
+    this.text,
+    this.textStyle,
   });
 
   @override
@@ -28,11 +34,17 @@ class AddIconButton extends StatelessWidget {
           color: color,
           borderRadius: BorderRadius.circular(Dimensions.defaultRadius),
         ),
-        child: Icon(
-          icon,
-          color: iconColor,
-          size: iconSize,
-        ),
+        child: text != null
+            ? TextIcon(
+                text: text ?? '',
+                icon: icon,
+                iconColor: iconColor,
+                iconSize: iconSize,
+                textStyle:
+                    textStyle ?? regularDefault.copyWith(color: iconColor),
+                alignment: MainAxisAlignment.center,
+              )
+            : Icon(icon, color: iconColor, size: iconSize),
       ),
     );
   }

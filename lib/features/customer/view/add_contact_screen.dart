@@ -1,10 +1,10 @@
-import 'package:archiz_prefix_crm/common/components/app-bar/custom_appbar.dart';
-import 'package:archiz_prefix_crm/common/components/buttons/rounded_button.dart';
-import 'package:archiz_prefix_crm/common/components/buttons/rounded_loading_button.dart';
-import 'package:archiz_prefix_crm/common/components/text-form-field/custom_text_field.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/features/customer/controller/customer_controller.dart';
+import 'package:archiz_cxm360/common/components/app-bar/custom_appbar.dart';
+import 'package:archiz_cxm360/common/components/buttons/rounded_button.dart';
+import 'package:archiz_cxm360/common/components/buttons/rounded_loading_button.dart';
+import 'package:archiz_cxm360/common/components/text-form-field/custom_text_field.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/features/customer/controller/customer_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

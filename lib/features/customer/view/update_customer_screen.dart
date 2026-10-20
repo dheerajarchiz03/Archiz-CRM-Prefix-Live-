@@ -1,23 +1,23 @@
 import 'package:async/async.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
-import 'package:archiz_prefix_crm/common/components/app-bar/custom_appbar.dart';
-import 'package:archiz_prefix_crm/common/components/buttons/rounded_button.dart';
-import 'package:archiz_prefix_crm/common/components/buttons/rounded_loading_button.dart';
-import 'package:archiz_prefix_crm/common/components/custom_drop_down_button_with_text_field.dart';
-import 'package:archiz_prefix_crm/common/components/custom_loader/custom_loader.dart';
-import 'package:archiz_prefix_crm/common/components/text-form-field/custom_drop_down_text_field.dart';
-import 'package:archiz_prefix_crm/common/components/text-form-field/custom_multi_drop_down_text_field.dart';
-import 'package:archiz_prefix_crm/common/components/text-form-field/custom_text_field.dart';
-import 'package:archiz_prefix_crm/common/models/countries_model.dart';
-import 'package:archiz_prefix_crm/common/models/currencies_model.dart';
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
-import 'package:archiz_prefix_crm/features/customer/controller/customer_controller.dart';
-import 'package:archiz_prefix_crm/features/customer/model/groups_model.dart';
-import 'package:archiz_prefix_crm/features/customer/repo/customer_repo.dart';
+import 'package:archiz_cxm360/common/components/app-bar/custom_appbar.dart';
+import 'package:archiz_cxm360/common/components/buttons/rounded_button.dart';
+import 'package:archiz_cxm360/common/components/buttons/rounded_loading_button.dart';
+import 'package:archiz_cxm360/common/components/custom_drop_down_button_with_text_field.dart';
+import 'package:archiz_cxm360/common/components/custom_loader/custom_loader.dart';
+import 'package:archiz_cxm360/common/components/text-form-field/custom_drop_down_text_field.dart';
+import 'package:archiz_cxm360/common/components/text-form-field/custom_multi_drop_down_text_field.dart';
+import 'package:archiz_cxm360/common/components/text-form-field/custom_text_field.dart';
+import 'package:archiz_cxm360/common/models/countries_model.dart';
+import 'package:archiz_cxm360/common/models/currencies_model.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
+import 'package:archiz_cxm360/features/customer/controller/customer_controller.dart';
+import 'package:archiz_cxm360/features/customer/model/groups_model.dart';
+import 'package:archiz_cxm360/features/customer/repo/customer_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
@@ -57,22 +57,22 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: LocalStrings.updateCustomer.tr,
-      ),
+      appBar: CustomAppBar(title: LocalStrings.updateCustomer.tr),
       body: GetBuilder<CustomerController>(
         builder: (controller) {
           return controller.isLoading
               ? const CustomLoader()
               : ContainedTabBarView(
                   tabBarProperties: TabBarProperties(
-                      indicatorSize: TabBarIndicatorSize.tab,
-                      unselectedLabelColor: ColorResources.blueGreyColor,
-                      labelColor: Theme.of(context).textTheme.bodyLarge!.color,
-                      labelStyle: regularDefault,
-                      indicatorColor: ColorResources.secondaryColor,
-                      labelPadding: const EdgeInsets.symmetric(
-                          vertical: Dimensions.space15)),
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    unselectedLabelColor: ColorResources.blueGreyColor,
+                    labelColor: Theme.of(context).textTheme.bodyLarge!.color,
+                    labelStyle: regularDefault,
+                    indicatorColor: ColorResources.secondaryColor,
+                    labelPadding: const EdgeInsets.symmetric(
+                      vertical: Dimensions.space15,
+                    ),
+                  ),
                   tabs: [
                     Text(LocalStrings.profile.tr),
                     Text(LocalStrings.billingAndShipping.tr),
@@ -149,80 +149,88 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
                                 },
                               ),
                               FutureBuilder(
-                                  future: customerGroupsMemoizer
-                                      .runOnce(controller.loadCustomerGroups),
-                                  builder: (context, groupsList) {
-                                    if (groupsList.data?.status ?? false) {
-                                      return CustomMultiDropDownTextField(
-                                        controller: controller.groupController,
-                                        hintText: LocalStrings.selectGroup.tr,
-                                        onChanged: (options) {
-                                          controller.groupsList.clear();
-                                          for (var v in options) {
-                                            controller.groupsList
-                                                .add(v.toString());
-                                          }
-                                        },
-                                        items: controller.groupsModel.data!
-                                            .map((value) {
-                                          return DropdownItem(
-                                              label: value.name?.tr ?? '',
-                                              value: value.id!);
-                                        }).toList(),
-                                      );
-                                    } else if (groupsList.data?.status ==
-                                        false) {
-                                      return CustomDropDownWithTextField(
-                                          selectedValue:
-                                              LocalStrings.noGroupFound.tr,
-                                          list: [LocalStrings.noGroupFound.tr]);
-                                    } else {
-                                      return const CustomLoader(
-                                          isFullScreen: false);
-                                    }
-                                  }),
-                              FutureBuilder(
-                                  future: currenciesMemoizer
-                                      .runOnce(controller.loadCurrencies),
-                                  builder: (context, currenciesList) {
-                                    if (currenciesList.data?.status ?? false) {
-                                      return CustomDropDownTextField(
-                                        hintText:
-                                            LocalStrings.selectCurrency.tr,
-                                        onChanged: (value) {
-                                          controller.currencyController.text =
-                                              value.toString();
-                                        },
-                                        selectedValue:
-                                            controller.currencyController.text,
-                                        items: controller.currenciesModel.data!
-                                            .map((currency) {
-                                          return DropdownMenuItem(
-                                            value: currency.id,
-                                            child: Text(
-                                              currency.name?.tr ?? '',
-                                              style: regularDefault.copyWith(
-                                                  color: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyMedium!
-                                                      .color),
-                                            ),
+                                future: customerGroupsMemoizer.runOnce(
+                                  controller.loadCustomerGroups,
+                                ),
+                                builder: (context, groupsList) {
+                                  if (groupsList.data?.status ?? false) {
+                                    return CustomMultiDropDownTextField(
+                                      controller: controller.groupController,
+                                      hintText: LocalStrings.selectGroup.tr,
+                                      onChanged: (options) {
+                                        controller.groupsList.clear();
+                                        for (var v in options) {
+                                          controller.groupsList.add(
+                                            v.toString(),
                                           );
-                                        }).toList(),
-                                      );
-                                    } else if (currenciesList.data?.status ==
-                                        false) {
-                                      return CustomDropDownWithTextField(
-                                          selectedValue:
-                                              LocalStrings.noCurrencyFound.tr,
-                                          list: [
-                                            LocalStrings.noCurrencyFound.tr
-                                          ]);
-                                    } else {
-                                      return const CustomLoader(
-                                          isFullScreen: false);
-                                    }
-                                  }),
+                                        }
+                                      },
+                                      items: controller.groupsModel.data!.map((
+                                        value,
+                                      ) {
+                                        return DropdownItem(
+                                          label: value.name?.tr ?? '',
+                                          value: value.id!,
+                                        );
+                                      }).toList(),
+                                    );
+                                  } else if (groupsList.data?.status == false) {
+                                    return CustomDropDownWithTextField(
+                                      selectedValue:
+                                          LocalStrings.noGroupFound.tr,
+                                      list: [LocalStrings.noGroupFound.tr],
+                                    );
+                                  } else {
+                                    return const CustomLoader(
+                                      isFullScreen: false,
+                                    );
+                                  }
+                                },
+                              ),
+                              FutureBuilder(
+                                future: currenciesMemoizer.runOnce(
+                                  controller.loadCurrencies,
+                                ),
+                                builder: (context, currenciesList) {
+                                  if (currenciesList.data?.status ?? false) {
+                                    return CustomDropDownTextField(
+                                      hintText: LocalStrings.selectCurrency.tr,
+                                      onChanged: (value) {
+                                        controller.currencyController.text =
+                                            value.toString();
+                                      },
+                                      selectedValue:
+                                          controller.currencyController.text,
+                                      items: controller.currenciesModel.data!
+                                          .map((currency) {
+                                            return DropdownMenuItem(
+                                              value: currency.id,
+                                              child: Text(
+                                                currency.name?.tr ?? '',
+                                                style: regularDefault.copyWith(
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).textTheme.bodyMedium!.color,
+                                                ),
+                                              ),
+                                            );
+                                          })
+                                          .toList(),
+                                    );
+                                  } else if (currenciesList.data?.status ==
+                                      false) {
+                                    return CustomDropDownWithTextField(
+                                      selectedValue:
+                                          LocalStrings.noCurrencyFound.tr,
+                                      list: [LocalStrings.noCurrencyFound.tr],
+                                    );
+                                  } else {
+                                    return const CustomLoader(
+                                      isFullScreen: false,
+                                    );
+                                  }
+                                },
+                              ),
                               CustomTextField(
                                 labelText: LocalStrings.city.tr,
                                 controller: controller.cityController,
@@ -254,46 +262,49 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
                                 },
                               ),
                               FutureBuilder(
-                                  future: countriesMemoizer
-                                      .runOnce(controller.loadCountries),
-                                  builder: (context, countriesList) {
-                                    if (countriesList.data?.status ?? false) {
-                                      return CustomDropDownTextField(
-                                        hintText: LocalStrings.selectCountry.tr,
-                                        onChanged: (value) {
-                                          controller.countryController.text =
-                                              value.toString();
-                                        },
-                                        selectedValue:
-                                            controller.countryController.text,
-                                        items: controller.countriesModel.data!
-                                            .map((country) {
-                                          return DropdownMenuItem(
-                                            value: country.countryId,
-                                            child: Text(
-                                              country.shortName?.tr ?? '',
-                                              style: regularDefault.copyWith(
-                                                  color: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyMedium!
-                                                      .color),
-                                            ),
-                                          );
-                                        }).toList(),
-                                      );
-                                    } else if (countriesList.data?.status ==
-                                        false) {
-                                      return CustomDropDownWithTextField(
-                                          selectedValue:
-                                              LocalStrings.noCountryFound.tr,
-                                          list: [
-                                            LocalStrings.noCountryFound.tr
-                                          ]);
-                                    } else {
-                                      return const CustomLoader(
-                                          isFullScreen: false);
-                                    }
-                                  }),
+                                future: countriesMemoizer.runOnce(
+                                  controller.loadCountries,
+                                ),
+                                builder: (context, countriesList) {
+                                  if (countriesList.data?.status ?? false) {
+                                    return CustomDropDownTextField(
+                                      hintText: LocalStrings.selectCountry.tr,
+                                      onChanged: (value) {
+                                        controller.countryController.text =
+                                            value.toString();
+                                      },
+                                      selectedValue:
+                                          controller.countryController.text,
+                                      items: controller.countriesModel.data!
+                                          .map((country) {
+                                            return DropdownMenuItem(
+                                              value: country.countryId,
+                                              child: Text(
+                                                country.shortName?.tr ?? '',
+                                                style: regularDefault.copyWith(
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).textTheme.bodyMedium!.color,
+                                                ),
+                                              ),
+                                            );
+                                          })
+                                          .toList(),
+                                    );
+                                  } else if (countriesList.data?.status ==
+                                      false) {
+                                    return CustomDropDownWithTextField(
+                                      selectedValue:
+                                          LocalStrings.noCountryFound.tr,
+                                      list: [LocalStrings.noCountryFound.tr],
+                                    );
+                                  } else {
+                                    return const CustomLoader(
+                                      isFullScreen: false,
+                                    );
+                                  }
+                                },
+                              ),
                             ],
                           ),
                         ),
@@ -352,34 +363,38 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
                                 },
                               ),
                               FutureBuilder(
-                                  future: Future.delayed(
-                                      const Duration(seconds: 3)),
-                                  builder: (context, data) {
-                                    return CustomDropDownTextField(
-                                      hintText:
-                                          LocalStrings.selectBillingCountry.tr,
-                                      onChanged: (value) {
-                                        controller.billingCountryController
-                                            .text = value.toString();
-                                      },
-                                      selectedValue: controller
-                                          .billingCountryController.text,
-                                      items: controller.countriesModel.data!
-                                          .map((value) {
-                                        return DropdownMenuItem(
-                                          value: value.countryId,
-                                          child: Text(
-                                            value.shortName?.tr ?? '',
-                                            style: regularDefault.copyWith(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium!
-                                                    .color),
+                                future: Future.delayed(
+                                  const Duration(seconds: 3),
+                                ),
+                                builder: (context, data) {
+                                  return CustomDropDownTextField(
+                                    hintText:
+                                        LocalStrings.selectBillingCountry.tr,
+                                    onChanged: (value) {
+                                      controller.billingCountryController.text =
+                                          value.toString();
+                                    },
+                                    selectedValue: controller
+                                        .billingCountryController
+                                        .text,
+                                    items: controller.countriesModel.data!.map((
+                                      value,
+                                    ) {
+                                      return DropdownMenuItem(
+                                        value: value.countryId,
+                                        child: Text(
+                                          value.shortName?.tr ?? '',
+                                          style: regularDefault.copyWith(
+                                            color: Theme.of(
+                                              context,
+                                            ).textTheme.bodyMedium!.color,
                                           ),
-                                        );
-                                      }).toList(),
-                                    );
-                                  }),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  );
+                                },
+                              ),
                               CustomTextField(
                                 labelText: LocalStrings.shippingStreet.tr,
                                 controller: controller.shippingStreetController,
@@ -421,34 +436,40 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
                                 },
                               ),
                               FutureBuilder(
-                                  future: Future.delayed(
-                                      const Duration(seconds: 3)),
-                                  builder: (context, data) {
-                                    return CustomDropDownTextField(
-                                      hintText:
-                                          LocalStrings.selectShippingCountry.tr,
-                                      onChanged: (value) {
-                                        controller.shippingCountryController
-                                            .text = value.toString();
-                                      },
-                                      selectedValue: controller
-                                          .shippingCountryController.text,
-                                      items: controller.countriesModel.data!
-                                          .map((value) {
-                                        return DropdownMenuItem(
-                                          value: value.countryId,
-                                          child: Text(
-                                            value.shortName?.tr ?? '',
-                                            style: regularDefault.copyWith(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium!
-                                                    .color),
+                                future: Future.delayed(
+                                  const Duration(seconds: 3),
+                                ),
+                                builder: (context, data) {
+                                  return CustomDropDownTextField(
+                                    hintText:
+                                        LocalStrings.selectShippingCountry.tr,
+                                    onChanged: (value) {
+                                      controller
+                                          .shippingCountryController
+                                          .text = value
+                                          .toString();
+                                    },
+                                    selectedValue: controller
+                                        .shippingCountryController
+                                        .text,
+                                    items: controller.countriesModel.data!.map((
+                                      value,
+                                    ) {
+                                      return DropdownMenuItem(
+                                        value: value.countryId,
+                                        child: Text(
+                                          value.shortName?.tr ?? '',
+                                          style: regularDefault.copyWith(
+                                            color: Theme.of(
+                                              context,
+                                            ).textTheme.bodyMedium!.color,
                                           ),
-                                        );
-                                      }).toList(),
-                                    );
-                                  }),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  );
+                                },
+                              ),
                             ],
                           ),
                         ),
@@ -459,20 +480,24 @@ class _UpdateCustomerScreenState extends State<UpdateCustomerScreen> {
         },
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Dimensions.space10),
-        child: GetBuilder<CustomerController>(builder: (controller) {
-          return controller.isLoading
-              ? const SizedBox.shrink()
-              : controller.isSubmitLoading
-                  ? const RoundedLoadingBtn()
-                  : RoundedButton(
-                      text: LocalStrings.update.tr,
-                      press: () {
-                        controller.submitCustomer(
-                            customerId: widget.id, isUpdate: true);
-                      },
-                    );
-        }),
+        padding: const EdgeInsets.all(Dimensions.space10),
+        child: GetBuilder<CustomerController>(
+          builder: (controller) {
+            return controller.isLoading
+                ? const SizedBox.shrink()
+                : controller.isSubmitLoading
+                ? const RoundedLoadingBtn()
+                : RoundedButton(
+                    text: LocalStrings.update.tr,
+                    press: () {
+                      controller.submitCustomer(
+                        customerId: widget.id,
+                        isUpdate: true,
+                      );
+                    },
+                  );
+          },
+        ),
       ),
     );
   }

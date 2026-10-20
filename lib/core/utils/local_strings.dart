@@ -1,41 +1,48 @@
-import "package:archiz_prefix_crm/common/models/language_model.dart";
-import "package:archiz_prefix_crm/core/utils/images.dart";
+import "package:archiz_cxm360/common/models/language_model.dart";
+import "package:archiz_cxm360/core/utils/images.dart";
 import "package:get/get.dart";
 
 class LocalStrings {
-  static const String appName = "Prefix CRM";
+  static const String appName = "Flutex";
+  static const String topic = "Flutex";
 
   static List<LanguageModel> appLanguages = [
     LanguageModel(
-        languageFlag: MyImages.english,
-        languageName: "English",
-        countryCode: "US",
-        languageCode: "en"),
+      languageFlag: MyImages.english,
+      languageName: "English",
+      countryCode: "US",
+      languageCode: "en",
+    ),
     LanguageModel(
-        languageFlag: MyImages.arabic,
-        languageName: "العربية",
-        countryCode: "SA",
-        languageCode: "ar"),
+      languageFlag: MyImages.arabic,
+      languageName: "العربية",
+      countryCode: "SA",
+      languageCode: "ar",
+    ),
     LanguageModel(
-        languageFlag: MyImages.spanish,
-        languageName: "Spanish",
-        countryCode: "ES",
-        languageCode: "es"),
+      languageFlag: MyImages.spanish,
+      languageName: "Spanish",
+      countryCode: "ES",
+      languageCode: "es",
+    ),
     LanguageModel(
-        languageFlag: MyImages.frensh,
-        languageName: "French",
-        countryCode: "FR",
-        languageCode: "fr"),
+      languageFlag: MyImages.frensh,
+      languageName: "French",
+      countryCode: "FR",
+      languageCode: "fr",
+    ),
     LanguageModel(
-        languageFlag: MyImages.german,
-        languageName: "Deutsch",
-        countryCode: "DE",
-        languageCode: "de"),
+      languageFlag: MyImages.german,
+      languageName: "Deutsch",
+      countryCode: "DE",
+      languageCode: "de",
+    ),
     LanguageModel(
-        languageFlag: MyImages.hindi,
-        languageName: "Hindi",
-        countryCode: "HI",
-        languageCode: "hi"),
+      languageFlag: MyImages.hindi,
+      languageName: "Hindi",
+      countryCode: "HI",
+      languageCode: "hi",
+    ),
   ];
 
   // Onboarding Screens
@@ -77,8 +84,9 @@ class LocalStrings {
   static const String enterCompanyName = "Enter Company Name";
   static const String email = "Email";
   static const String enterEmail = "Please, Enter Email Address";
-  static RegExp emailValidatorRegExp =
-      RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+  static RegExp emailValidatorRegExp = RegExp(
+    r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+  );
   static const String invalidEmailMsg = "Enter valid email";
   static const String enterYourPassword = "Enter your password";
 
@@ -147,7 +155,6 @@ class LocalStrings {
   static const String viewAll = "View All";
   static const String edit = "Edit";
   static const String submit = "Submit";
-  static const String save = "Save";
   static const String update = "Update";
   static const String dataNotFound = "Data not found";
   static const String seeAll = "See All";
@@ -171,6 +178,14 @@ class LocalStrings {
   static const String no = "No";
   static const String retry = "Retry";
   static const String error = "Error";
+  static const String filter = "Filter";
+  static const String sort = "Sort";
+  static const String sortBy = "Sort By";
+  static const String newestFirst = "Newest First";
+  static const String oldestFirst = "Oldest First";
+  static const String nameAZ = "Name A-Z";
+  static const String nameZA = "Name Z-A";
+  static const String clear = "Clear";
 
   // Status
   static const String approved = "Approved";
@@ -254,11 +269,13 @@ class LocalStrings {
   static const String enterTotal = "Please, Enter Total.";
   static const String addItems = "Add Items";
   static const String addItem = "Add Item";
+  static const String removeItem = "Remove";
   static const String itemName = "Item Name";
   static const String enterItemName = "Please, Enter Item Name.";
   static const String enterItemQty = "Please, Enter Item Qty.";
   static const String enterRate = "Please, Enter Item Rate.";
   static const String pleaseEnterDate = "Please, Enter Date.";
+  static const String pleaseAddItem = "Please, Add items to the invoice.";
 
   // Project
   static const String project = "Project";
@@ -268,11 +285,8 @@ class LocalStrings {
   static const String deleteProject = "Delete Project";
   static const String deleteProjectWarningMSg =
       "Are you sure that you want to delete this Project?";
-  static const String filter = "Filter";
   static const String projectDetails = "Project Details";
   static const String description = "Description";
-  static const String purpose = "Purpose of meeting";
-  static const String addComment = "Add Comments";
   static const String billingType = "Billing Type";
   static const String selectBillingType = "Select Billing Type";
   static const String fixedRate = "Fixed Rate";
@@ -294,6 +308,10 @@ class LocalStrings {
   static const String taskDetails = "Task Details";
   static const String addProject = "Add Project";
   static const String ratePerHour = "Rate Per Hour";
+  static const String totalComments = "Total comments";
+  static const String visible = "Visible";
+  static const String notVisible = "Not Visible";
+
   // Tasks
   static const String tasks = "Tasks";
   static const String task = "Task";
@@ -349,8 +367,6 @@ class LocalStrings {
       "Please, fill up Task Description field";
   static const String editTask = "Edit Task";
   static const String taskUpdateErrorMsg = "You're Not Allowed to Update Tasks";
-  static const String expense = "Expense";
-  static const String expenses = "Expenses";
   static const String selectProject = "Select Project";
   static const String noProjectFound = "No Projects Found";
   static const String selectInvoice = "Select Invoice";
@@ -367,6 +383,7 @@ class LocalStrings {
   // Invoice
   static const String invoice = "Invoice";
   static const String invoices = "Invoices";
+  static const String sales = "Sales";
   static const String invoiceDetails = "Invoice Details";
   static const String invoiceSummery = "Invoice Summery";
   static const String billTo = "Bill to";
@@ -396,6 +413,8 @@ class LocalStrings {
   static const String pleaseSelectPaymentMode = "Please, Select Payment Mode.";
   static const String selectItem = "Select Item";
   static const String noItemFound = "No Item Found";
+  static const String recordPayment = "Record Payment";
+  static const String amountReceived = "Amount Received";
 
   // Customer
   static const String customer = "Customer";
@@ -417,6 +436,7 @@ class LocalStrings {
   static const String website = "Website";
   static const String currency = "Currency";
   static const String defaultLanguage = "Default Language";
+  static const String defaultCurrency = "Default Currency";
   static const String address = "Address";
   static const String billingAddress = "Billing Address";
   static const String shippingAddress = "Shipping Address";
@@ -433,6 +453,7 @@ class LocalStrings {
       "Make sure to set appropriate permissions for this contact";
   static const String emailNotifications = "Email Notifications";
   static const String creditNote = "Credit Note";
+  static const String creditNotes = "Credit Notes";
   static const String addCustomer = "Add Customer";
   static const String updateCustomer = "Update Customer";
   static const String deleteCustomer = "Delete Customer";
@@ -490,6 +511,21 @@ class LocalStrings {
   static const String deleteProposalWarningMSg =
       "Are you sure that you want to delete this Proposal?";
 
+  // Expense
+  static const String expense = "Expense";
+  static const String expenses = "Expenses";
+  static const String expenseDetails = "Expense Details";
+  static const String expenseSummery = "Expense Summery";
+  static const String expenseCategory = "Expense Category";
+  static const String selectExpenseCategory = "Select Expense Category";
+  static const String noExpenseCategoryFound = "No Expense Category Found";
+  static const String addExpense = "Add Expense";
+  static const String updateExpense = "Update Expense";
+  static const String deleteExpense = "Delete Expense";
+  static const String deleteExpenseWarningMSg =
+      "Are you sure that you want to delete this Expense?";
+  static const String advancedOptions = "Advanced Options";
+
   // Ticket
   static const String ticket = "Ticket";
   static const String tickets = "Tickets";
@@ -503,8 +539,6 @@ class LocalStrings {
   static const String selectContact = "Select Contact";
   static const String noContactFound = "No Contacts Found";
   static const String submitted = "Submitted";
-  static const String createdDate = "Create Date";
-  static const String createdTime = "Create Time";
   static const String priority = "Priority";
   static const String selectPriority = "Select Priority";
   static const String noPriorityFound = "No Priority Found";
@@ -516,8 +550,6 @@ class LocalStrings {
   static const String deleteTicket = "Delete Ticket";
   static const String deleteTicketWarningMSg =
       "Are you sure that you want to delete this Ticket?";
-  static const String deleteVisitWarningMSg =
-      "Are you sure that you want to delete this Visit?";
   static const String subject = "Subject";
   static const String enterSubject = "Please, Enter Subject.";
   static const String enterDescription = "Please, fill up Description field";
@@ -552,18 +584,71 @@ class LocalStrings {
   static const String reOpened = "Reopened";
   static const String attachments = "Attachments";
   static const String leadValue = "Lead Value";
+  static const String reminders = "Reminders";
+  static const String notified = "Notified";
+  static const String notNotified = "Not Notified";
+  static const String setLeadReminder = "Set Lead Reminder";
+  static const String dateToBeNotified = "Date to be notified";
+  static const String sendEmailReminder =
+      "Send also an email for this reminder";
+  static const String leadContacted = "I got in touch with this lead";
+  static const String note = "Note";
+  static const String notes = "Notes";
+  static const String addLeadNote = "Add Note";
+  static const String pleaseEnterNote = "Please, Enter Note.";
+  static const String dateContacted = "Date Contacted";
+  static const String activityLogs = "Activity Logs";
+  static const String createdLead = "Created lead by";
+  static const String createdNewTask = "Created new task";
+  static const String updatedLeadStatusFrom = "Updated lead status from";
+  static const String assignedTo = "Assigned to";
+  static const String leadsKanban = "Leads Kanban";
 
-  // Visits
-  static const String visitDetails = "Visit Details";
-  static const String visitSummery = "Visit Summery";
-  static const String visit = "Visit";
-  static const String visits = "Visits";
-  static const String updateVisit = "Update Visit";
-  static const String deleteVisit = "Delete Visit";
-  static const String createNewVisit = "Create New Visit";
-  static const String startAddress = "Start Address";
-  static const String stopAddress = "Stop Address";
-  static const String addReview = "Add Review";
+  // Staff
+  static const String staff = "Staff";
+  static const String staffs = "Staffs";
+  static const String staffSummery = "Staff Summery";
+  static const String addStaff = "Add Staff";
+  static const String updateStaff = "Update Staff";
+  static const String deleteStaff = "Delete Staff Member";
+  static const String deleteStaffWarningMSg =
+      "Are you sure that you want to delete this Staff?";
+  static const String staffDetails = "Staff Details";
+  static const String selectStaff = "Select Staff";
+  static const String noStaffFound = "No Staff Found";
+  static const String facebook = "Facebook";
+  static const String linkedIn = "LinkedIn";
+  static const String skype = "Skype";
+  static const String notStaffMember = "Not Staff Member";
+  static const String administrator = "Administrator";
+  static const String sendWelcomeEmail = "Send Welcome Email";
+  static const String emailTemplates = "Email Templates";
+  static const String bulkPDFExport = "Bulk PDF Export";
+  static const String knowledgeBase = "Knowledge Base";
+  static const String reports = "Reports";
+  static const String staffRoles = "Staff Roles";
+  static const String subscriptions = "Subscriptions";
+  static const String taskChecklistTemplates = "Task Checklist Templates";
+  static const String estimateRequest = "Estimate Request";
+  static const String viewOwn = "View (Own)";
+  static const String viewGlobal = "View (Global)";
+  static const String create = "Create";
+  static const String delete = "Delete";
+  static const String viewAllTemplates = "View All Templates";
+  static const String createTimesheets = "Create Timesheets";
+  static const String editMilestones = "Edit Milestones";
+  static const String deleteMilestones = "Delete Milestones";
+  static const String viewTimesheetsReport = "View Timesheets Report";
+  static const String editTimesheetsGlobal = "Edit Timesheets (Global)";
+  static const String editOwnTimesheets = "Edit Own Timesheets";
+  static const String deleteTimesheetsGlobal = "Delete Timesheets (Global)";
+  static const String deleteOwnTimesheets = "Delete Own Timesheets";
+  static const String noPermissionAssigned = "No Permission Assigned";
+  static const String transferDataTo =
+      "Staff Member to Transfer this Staff Data to";
+  static const String transferDatadesc =
+      "Some data for this staff member needs to be transferred to another user. Please select user where you want to transfer the data.";
+  static const String staffMember = "Staff Member";
 }
 
 class Messages extends Translations {

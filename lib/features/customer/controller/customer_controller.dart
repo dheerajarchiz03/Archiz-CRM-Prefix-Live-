@@ -1,17 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:archiz_prefix_crm/common/components/snack_bar/show_custom_snackbar.dart';
-import 'package:archiz_prefix_crm/common/models/currencies_model.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/common/models/countries_model.dart';
-import 'package:archiz_prefix_crm/common/models/response_model.dart';
-import 'package:archiz_prefix_crm/features/customer/model/contact_model.dart';
-import 'package:archiz_prefix_crm/features/customer/model/contact_post_model.dart';
-import 'package:archiz_prefix_crm/features/customer/model/customer_details_model.dart';
-import 'package:archiz_prefix_crm/features/customer/model/customer_model.dart';
-import 'package:archiz_prefix_crm/features/customer/model/customer_post_model.dart';
-import 'package:archiz_prefix_crm/features/customer/model/groups_model.dart';
-import 'package:archiz_prefix_crm/features/customer/repo/customer_repo.dart';
+import 'package:archiz_cxm360/common/components/snack_bar/show_custom_snackbar.dart';
+import 'package:archiz_cxm360/common/models/currencies_model.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/common/models/countries_model.dart';
+import 'package:archiz_cxm360/common/models/response_model.dart';
+import 'package:archiz_cxm360/features/customer/model/contact_model.dart';
+import 'package:archiz_cxm360/features/customer/model/contact_post_model.dart';
+import 'package:archiz_cxm360/features/customer/model/customer_details_model.dart';
+import 'package:archiz_cxm360/features/customer/model/customer_model.dart';
+import 'package:archiz_cxm360/features/customer/model/customer_post_model.dart';
+import 'package:archiz_cxm360/features/customer/model/groups_model.dart';
+import 'package:archiz_cxm360/features/customer/repo/customer_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
@@ -41,23 +41,21 @@ class CustomerController extends GetxController {
 
   Future<void> loadCustomers() async {
     ResponseModel responseModel = await customerRepo.getAllCustomers();
-    if (responseModel.status) {
-      customersModel =
-          CustomersModel.fromJson(jsonDecode(responseModel.responseJson));
-    } else {
-      customersModel = CustomersModel();
-      CustomSnackBar.error(errorList: [responseModel.message]);
-    }
+    customersModel = CustomersModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
     isLoading = false;
     update();
   }
 
   Future<void> loadCustomerDetails(customerId) async {
-    ResponseModel responseModel =
-        await customerRepo.getCustomerDetails(customerId);
+    ResponseModel responseModel = await customerRepo.getCustomerDetails(
+      customerId,
+    );
     if (responseModel.status) {
-      customerDetailsModel =
-          CustomerDetailsModel.fromJson(jsonDecode(responseModel.responseJson));
+      customerDetailsModel = CustomerDetailsModel.fromJson(
+        jsonDecode(responseModel.responseJson),
+      );
     } else {
       CustomSnackBar.error(errorList: [responseModel.message]);
     }
@@ -68,28 +66,33 @@ class CustomerController extends GetxController {
 
   Future<GroupsModel> loadCustomerGroups() async {
     ResponseModel responseModel = await customerRepo.getCustomerGroups();
-    return groupsModel =
-        GroupsModel.fromJson(jsonDecode(responseModel.responseJson));
+    return groupsModel = GroupsModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<CountriesModel> loadCountries() async {
     ResponseModel responseModel = await customerRepo.getCountries();
-    return countriesModel =
-        CountriesModel.fromJson(jsonDecode(responseModel.responseJson));
+    return countriesModel = CountriesModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<CurrenciesModel> loadCurrencies() async {
     ResponseModel responseModel = await customerRepo.getCurrencies();
-    return currenciesModel =
-        CurrenciesModel.fromJson(jsonDecode(responseModel.responseJson));
+    return currenciesModel = CurrenciesModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<void> loadCustomerUpdateData(customerId) async {
-    ResponseModel responseModel =
-        await customerRepo.getCustomerDetails(customerId);
+    ResponseModel responseModel = await customerRepo.getCustomerDetails(
+      customerId,
+    );
     if (responseModel.status) {
-      customerDetailsModel =
-          CustomerDetailsModel.fromJson(jsonDecode(responseModel.responseJson));
+      customerDetailsModel = CustomerDetailsModel.fromJson(
+        jsonDecode(responseModel.responseJson),
+      );
       companyController.text = customerDetailsModel.data?.company ?? '';
       vatController.text = customerDetailsModel.data?.vat ?? '';
       phoneNumberController.text = customerDetailsModel.data?.phoneNumber ?? '';
@@ -171,8 +174,10 @@ class CustomerController extends GetxController {
   FocusNode shippingZipFocusNode = FocusNode();
   FocusNode shippingCountryFocusNode = FocusNode();
 
-  Future<void> submitCustomer(
-      {String? customerId, bool isUpdate = false}) async {
+  Future<void> submitCustomer({
+    String? customerId,
+    bool isUpdate = false,
+  }) async {
     String company = companyController.text.toString();
     String vat = vatController.text.toString();
     String phoneNumber = phoneNumberController.text.toString();
@@ -228,9 +233,10 @@ class CustomerController extends GetxController {
     );
 
     ResponseModel responseModel = await customerRepo.submitCustomer(
-        customerModel,
-        customerId: customerId,
-        isUpdate: isUpdate);
+      customerModel,
+      customerId: customerId,
+      isUpdate: isUpdate,
+    );
     if (responseModel.status) {
       clearCustomerData();
       Get.back();
@@ -271,8 +277,9 @@ class CustomerController extends GetxController {
     keysearch = searchController.text;
     ResponseModel responseModel = await customerRepo.searchCustomer(keysearch);
     if (responseModel.status) {
-      customersModel =
-          CustomersModel.fromJson(jsonDecode(responseModel.responseJson));
+      customersModel = CustomersModel.fromJson(
+        jsonDecode(responseModel.responseJson),
+      );
     } else {
       CustomSnackBar.error(errorList: [responseModel.message]);
     }
@@ -293,14 +300,12 @@ class CustomerController extends GetxController {
   }
 
   Future<void> loadCustomerContacts(customerId) async {
-    ResponseModel responseModel =
-        await customerRepo.getCustomerContacts(customerId);
-    if (responseModel.status) {
-      customerContactsModel =
-          ContactsModel.fromJson(jsonDecode(responseModel.responseJson));
-    } else {
-      CustomSnackBar.error(errorList: [responseModel.message.tr]);
-    }
+    ResponseModel responseModel = await customerRepo.getCustomerContacts(
+      customerId,
+    );
+    customerContactsModel = ContactsModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
 
     isLoading = false;
     update();
@@ -354,8 +359,9 @@ class CustomerController extends GetxController {
       password: password,
     );
 
-    ResponseModel responseModel =
-        await customerRepo.createContact(contactModel);
+    ResponseModel responseModel = await customerRepo.createContact(
+      contactModel,
+    );
     if (responseModel.status) {
       Get.back();
       clearData();

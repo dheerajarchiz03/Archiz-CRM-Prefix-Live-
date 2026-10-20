@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
 
 class CustomAlertDialog {
   bool isHorizontalPadding;

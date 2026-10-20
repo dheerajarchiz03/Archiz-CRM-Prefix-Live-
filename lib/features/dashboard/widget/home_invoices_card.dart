@@ -1,10 +1,10 @@
-import 'package:archiz_prefix_crm/common/components/divider/custom_divider.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
-import 'package:archiz_prefix_crm/features/dashboard/model/dashboard_model.dart';
-import 'package:archiz_prefix_crm/features/dashboard/widget/custom_linerprogress.dart';
+import 'package:archiz_cxm360/common/components/divider/custom_divider.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
+import 'package:archiz_cxm360/features/dashboard/model/dashboard_model.dart';
+import 'package:archiz_cxm360/features/dashboard/widget/custom_linerprogress.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

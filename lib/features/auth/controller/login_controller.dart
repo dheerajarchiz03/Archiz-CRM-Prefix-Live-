@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:archiz_prefix_crm/features/auth/model/login_model.dart';
-import 'package:archiz_prefix_crm/features/auth/repo/auth_repo.dart';
+import 'package:archiz_cxm360/features/auth/model/login_model.dart';
+import 'package:archiz_cxm360/features/auth/repo/auth_repo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:archiz_prefix_crm/core/helper/shared_preference_helper.dart';
-import 'package:archiz_prefix_crm/core/route/route.dart';
-import 'package:archiz_prefix_crm/common/models/response_model.dart';
-import 'package:archiz_prefix_crm/common/components/snack_bar/show_custom_snackbar.dart';
+import 'package:archiz_cxm360/core/helper/shared_preference_helper.dart';
+import 'package:archiz_cxm360/core/route/route.dart';
+import 'package:archiz_cxm360/common/models/response_model.dart';
+import 'package:archiz_cxm360/common/components/snack_bar/show_custom_snackbar.dart';
 
 class LoginController extends GetxController {
   AuthRepo loginRepo;
@@ -34,13 +34,15 @@ class LoginController extends GetxController {
       await loginRepo.apiClient.sharedPreferences
           .setBool(SharedPreferenceHelper.rememberMeKey, false);
     }
+
     await loginRepo.apiClient.sharedPreferences.setString(
         SharedPreferenceHelper.userIdKey,
         responseModel.data?.staffId.toString() ?? '-1');
-    print('Save Token after login: ${ responseModel.data?.accessToken.toString()}');
     await loginRepo.apiClient.sharedPreferences.setString(
         SharedPreferenceHelper.accessTokenKey,
         responseModel.data?.accessToken.toString() ?? '');
+
+    await loginRepo.updateToken();
     Get.offAndToNamed(RouteHelper.dashboardScreen);
 
     if (remember) {

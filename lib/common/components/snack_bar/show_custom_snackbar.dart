@@ -1,10 +1,10 @@
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:archiz_prefix_crm/core/helper/string_format_helper.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
+import 'package:archiz_cxm360/core/helper/string_format_helper.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
 
 class CustomSnackBar {
   static error({required List<String> errorList, int duration = 2}) {
@@ -20,10 +20,13 @@ class CustomSnackBar {
     message = Converter.removeQuotationAndSpecialCharacterFromString(message);
     Get.rawSnackbar(
       progressIndicatorBackgroundColor: ColorResources.transparentColor,
-      progressIndicatorValueColor:
-          const AlwaysStoppedAnimation<Color>(Colors.transparent),
-      messageText: Text(message,
-          style: regularLarge.copyWith(color: ColorResources.colorWhite)),
+      progressIndicatorValueColor: const AlwaysStoppedAnimation<Color>(
+        Colors.transparent,
+      ),
+      messageText: Text(
+        message,
+        style: regularLarge.copyWith(color: ColorResources.colorWhite),
+      ),
       dismissDirection: DismissDirection.horizontal,
       snackPosition: SnackPosition.BOTTOM,
       backgroundColor: ColorResources.colorRed,
@@ -42,7 +45,7 @@ class CustomSnackBar {
     );
   }
 
-  static success({required List<String> successList, int duration = 5}) {
+  static success({required List<String> successList, int duration = 2}) {
     String message = '';
     if (successList.isEmpty) {
       message = LocalStrings.somethingWentWrong.tr;
@@ -55,10 +58,13 @@ class CustomSnackBar {
     message = Converter.removeQuotationAndSpecialCharacterFromString(message);
     Get.rawSnackbar(
       progressIndicatorBackgroundColor: ColorResources.colorGreen,
-      progressIndicatorValueColor:
-          const AlwaysStoppedAnimation<Color>(ColorResources.transparentColor),
-      messageText: Text(message,
-          style: regularLarge.copyWith(color: ColorResources.colorWhite)),
+      progressIndicatorValueColor: const AlwaysStoppedAnimation<Color>(
+        ColorResources.transparentColor,
+      ),
+      messageText: Text(
+        message,
+        style: regularLarge.copyWith(color: ColorResources.colorWhite),
+      ),
       dismissDirection: DismissDirection.horizontal,
       snackPosition: SnackPosition.BOTTOM,
       backgroundColor: ColorResources.colorGreen,

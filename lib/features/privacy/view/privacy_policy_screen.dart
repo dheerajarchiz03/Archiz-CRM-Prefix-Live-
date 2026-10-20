@@ -1,13 +1,13 @@
-import 'package:archiz_prefix_crm/common/components/app-bar/custom_appbar.dart';
-import 'package:archiz_prefix_crm/common/components/custom_loader/custom_loader.dart';
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/features/privacy/controller/privacy_controller.dart';
-import 'package:archiz_prefix_crm/features/privacy/repo/privacy_repo.dart';
+import 'package:archiz_cxm360/common/components/app-bar/custom_appbar.dart';
+import 'package:archiz_cxm360/common/components/custom_loader/custom_loader.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/features/privacy/controller/privacy_controller.dart';
+import 'package:archiz_cxm360/features/privacy/repo/privacy_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
 
 class PrivacyPolicyScreen extends StatefulWidget {
   const PrivacyPolicyScreen({super.key});
@@ -21,8 +21,7 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
   void initState() {
     Get.put(ApiClient(sharedPreferences: Get.find()));
     Get.put(PrivacyRepo(apiClient: Get.find()));
-    final controller = Get.put(PrivacyController(repo: Get.find()));
-
+    final controller = Get.put(PrivacyController(privacyRepo: Get.find()));
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -33,34 +32,27 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBar: CustomAppBar(
-          title: LocalStrings.privacyPolicy.tr,
-          bgColor: Theme.of(context).appBarTheme.backgroundColor!,
-          isShowActionBtn: false,
-        ),
-        body: GetBuilder<PrivacyController>(
-          builder: (controller) => SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: controller.isLoading
-                ? const CustomLoader()
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SingleChildScrollView(
-                          child: Container(
-                              padding: const EdgeInsets.all(20),
-                              width: double.infinity,
-                              color: Colors.transparent,
-                              child: HtmlWidget(controller.selectedHtml,
-                                  textStyle: regularDefault.copyWith(
-                                      color: Colors.black),
-                                  onLoadingBuilder:
-                                      (context, element, loadingProgress) =>
-                                          const Center(child: CustomLoader()))))
-                    ],
+      appBar: CustomAppBar(title: LocalStrings.privacyPolicy.tr),
+      body: GetBuilder<PrivacyController>(
+        builder: (controller) => SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: controller.isLoading
+              ? const CustomLoader()
+              : SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: HtmlWidget(
+                      controller.privacyResponseModel.data?.description ?? '',
+                      textStyle: regularDefault.copyWith(
+                        color: Theme.of(context).textTheme.bodyMedium!.color,
+                      ),
+                      onLoadingBuilder: (context, element, loadingProgress) =>
+                          const Center(child: CustomLoader()),
+                    ),
                   ),
-          ),
-        ));
+                ),
+        ),
+      ),
+    );
   }
 }

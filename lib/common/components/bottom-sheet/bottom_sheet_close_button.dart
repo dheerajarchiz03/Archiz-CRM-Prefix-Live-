@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
 
 class BottomSheetCloseButton extends StatelessWidget {
   const BottomSheetCloseButton({super.key});

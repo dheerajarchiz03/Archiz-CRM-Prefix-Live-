@@ -1,9 +1,9 @@
-import 'package:archiz_prefix_crm/common/components/bottom-sheet/bottom_sheet_bar.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
-import 'package:archiz_prefix_crm/common/controllers/localization_controller.dart';
-import 'package:archiz_prefix_crm/features/menu/widget/language_body.dart';
+import 'package:archiz_cxm360/common/components/bottom-sheet/bottom_sheet_bar.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
+import 'package:archiz_cxm360/common/controllers/localization_controller.dart';
+import 'package:archiz_cxm360/features/menu/widget/language_body.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

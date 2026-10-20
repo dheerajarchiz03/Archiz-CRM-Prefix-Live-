@@ -1,6 +1,6 @@
 {
-    "name": "admin",
-    "short_name": "admin",
+    "name": "flutex_admin",
+    "short_name": "flutex_admin",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

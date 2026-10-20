@@ -1,8 +1,8 @@
-import 'package:archiz_prefix_crm/common/controllers/theme_controller.dart';
+import 'package:archiz_cxm360/common/controllers/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
 
 class MyUtils {
   static splashScreenUtils(bool isDark) {

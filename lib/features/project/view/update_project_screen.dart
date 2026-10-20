@@ -1,21 +1,21 @@
 import 'package:async/async.dart';
-import 'package:archiz_prefix_crm/common/components/app-bar/custom_appbar.dart';
-import 'package:archiz_prefix_crm/common/components/buttons/rounded_button.dart';
-import 'package:archiz_prefix_crm/common/components/buttons/rounded_loading_button.dart';
-import 'package:archiz_prefix_crm/common/components/custom_date_form_field.dart';
-import 'package:archiz_prefix_crm/common/components/custom_drop_down_button_with_text_field.dart';
-import 'package:archiz_prefix_crm/common/components/custom_loader/custom_loader.dart';
-import 'package:archiz_prefix_crm/common/components/text-form-field/custom_drop_down_text_field.dart';
-import 'package:archiz_prefix_crm/common/components/text-form-field/custom_text_field.dart';
-import 'package:archiz_prefix_crm/core/helper/date_converter.dart';
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
-import 'package:archiz_prefix_crm/features/customer/model/customer_model.dart';
-import 'package:archiz_prefix_crm/features/project/controller/project_controller.dart';
-import 'package:archiz_prefix_crm/features/project/repo/project_repo.dart';
+import 'package:archiz_cxm360/common/components/app-bar/custom_appbar.dart';
+import 'package:archiz_cxm360/common/components/buttons/rounded_button.dart';
+import 'package:archiz_cxm360/common/components/buttons/rounded_loading_button.dart';
+import 'package:archiz_cxm360/common/components/custom_date_form_field.dart';
+import 'package:archiz_cxm360/common/components/custom_drop_down_button_with_text_field.dart';
+import 'package:archiz_cxm360/common/components/custom_loader/custom_loader.dart';
+import 'package:archiz_cxm360/common/components/text-form-field/custom_drop_down_text_field.dart';
+import 'package:archiz_cxm360/common/components/text-form-field/custom_text_field.dart';
+import 'package:archiz_cxm360/core/helper/date_converter.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
+import 'package:archiz_cxm360/features/customer/model/customer_model.dart';
+import 'package:archiz_cxm360/features/project/controller/project_controller.dart';
+import 'package:archiz_cxm360/features/project/repo/project_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -52,9 +52,7 @@ class _UpdateProjectScreenState extends State<UpdateProjectScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: LocalStrings.updateProject.tr,
-      ),
+      appBar: CustomAppBar(title: LocalStrings.updateProject.tr),
       body: GetBuilder<ProjectController>(
         builder: (controller) {
           return controller.isLoading
@@ -68,8 +66,9 @@ class _UpdateProjectScreenState extends State<UpdateProjectScreen> {
                     physics: const AlwaysScrollableScrollPhysics(),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: Dimensions.space15,
-                          horizontal: Dimensions.space10),
+                        vertical: Dimensions.space15,
+                        horizontal: Dimensions.space10,
+                      ),
                       child: Column(
                         spacing: Dimensions.space15,
                         children: [
@@ -91,42 +90,44 @@ class _UpdateProjectScreenState extends State<UpdateProjectScreen> {
                             },
                           ),
                           FutureBuilder(
-                              future: customersMemoizer
-                                  .runOnce(controller.loadCustomers),
-                              builder: (context, customerList) {
-                                if (customerList.data?.status ?? false) {
-                                  return CustomDropDownTextField(
-                                    hintText: LocalStrings.selectClient.tr,
-                                    onChanged: (value) {
-                                      controller.clientController.text = value;
-                                    },
-                                    selectedValue:
-                                        controller.clientController.text,
-                                    items: controller.customersModel.data!
-                                        .map((customer) {
-                                      return DropdownMenuItem(
-                                        value: customer.userId,
-                                        child: Text(
-                                          customer.company ?? '',
-                                          style: regularDefault.copyWith(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium!
-                                                  .color),
+                            future: customersMemoizer.runOnce(
+                              controller.loadCustomers,
+                            ),
+                            builder: (context, customerList) {
+                              if (customerList.data?.status ?? false) {
+                                return CustomDropDownTextField(
+                                  hintText: LocalStrings.selectClient.tr,
+                                  onChanged: (value) {
+                                    controller.clientController.text = value;
+                                  },
+                                  selectedValue:
+                                      controller.clientController.text,
+                                  items: controller.customersModel.data!.map((
+                                    customer,
+                                  ) {
+                                    return DropdownMenuItem(
+                                      value: customer.userId,
+                                      child: Text(
+                                        customer.company ?? '',
+                                        style: regularDefault.copyWith(
+                                          color: Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium!.color,
                                         ),
-                                      );
-                                    }).toList(),
-                                  );
-                                } else if (customerList.data?.status == false) {
-                                  return CustomDropDownWithTextField(
-                                      selectedValue:
-                                          LocalStrings.noClientFound.tr,
-                                      list: [LocalStrings.noClientFound.tr]);
-                                } else {
-                                  return const CustomLoader(
-                                      isFullScreen: false);
-                                }
-                              }),
+                                      ),
+                                    );
+                                  }).toList(),
+                                );
+                              } else if (customerList.data?.status == false) {
+                                return CustomDropDownWithTextField(
+                                  selectedValue: LocalStrings.noClientFound.tr,
+                                  list: [LocalStrings.noClientFound.tr],
+                                );
+                              } else {
+                                return const CustomLoader(isFullScreen: false);
+                              }
+                            },
+                          ),
                           CustomDropDownTextField(
                             hintText: LocalStrings.selectBillingType.tr,
                             selectedValue:
@@ -137,17 +138,19 @@ class _UpdateProjectScreenState extends State<UpdateProjectScreen> {
                             },
                             dropDownColor: Theme.of(context).cardColor,
                             items: controller.billingType.entries
-                                .map((MapEntry element) => DropdownMenuItem(
-                                      value: element.key,
-                                      child: Text(
-                                        element.value,
-                                        style: regularDefault.copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium!
-                                                .color),
+                                .map(
+                                  (MapEntry element) => DropdownMenuItem(
+                                    value: element.key,
+                                    child: Text(
+                                      element.value,
+                                      style: regularDefault.copyWith(
+                                        color: Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium!.color,
                                       ),
-                                    ))
+                                    ),
+                                  ),
+                                )
                                 .toList(),
                           ),
                           if (controller.billingTypeController.text == '1')
@@ -184,22 +187,27 @@ class _UpdateProjectScreenState extends State<UpdateProjectScreen> {
                               controller.statusController.text = value;
                             },
                             items: controller.projectStatus.entries
-                                .map((MapEntry element) => DropdownMenuItem(
-                                      value: element.key,
-                                      child: Text(
-                                        element.value,
-                                        style: regularDefault.copyWith(
-                                            color: ColorResources
-                                                .projectStatusColor(
-                                                    element.key)),
+                                .map(
+                                  (MapEntry element) => DropdownMenuItem(
+                                    value: element.key,
+                                    child: Text(
+                                      element.value,
+                                      style: regularDefault.copyWith(
+                                        color:
+                                            ColorResources.projectStatusColor(
+                                              element.key,
+                                            ),
                                       ),
-                                    ))
+                                    ),
+                                  ),
+                                )
                                 .toList(),
                           ),
                           CustomDateFormField(
                             labelText: LocalStrings.startDate.tr,
                             initialValue: DateConverter.convertStringToDatetime(
-                                controller.startDateController.text),
+                              controller.startDateController.text,
+                            ),
                             onChanged: (DateTime? value) {
                               controller.startDateController.text =
                                   DateConverter.formatDate(value!);
@@ -208,7 +216,8 @@ class _UpdateProjectScreenState extends State<UpdateProjectScreen> {
                           CustomDateFormField(
                             labelText: LocalStrings.endDate.tr,
                             initialValue: DateConverter.convertStringToDatetime(
-                                controller.deadlineController.text),
+                              controller.deadlineController.text,
+                            ),
                             onChanged: (DateTime? value) {
                               controller.deadlineController.text =
                                   DateConverter.formatDate(value!);
@@ -227,24 +236,29 @@ class _UpdateProjectScreenState extends State<UpdateProjectScreen> {
                         ],
                       ),
                     ),
-                  ));
+                  ),
+                );
         },
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Dimensions.space10),
-        child: GetBuilder<ProjectController>(builder: (controller) {
-          return controller.isLoading
-              ? const SizedBox.shrink()
-              : controller.submitLoading
-                  ? const RoundedLoadingBtn()
-                  : RoundedButton(
-                      text: LocalStrings.update.tr,
-                      press: () {
-                        controller.submitProject(
-                            projectId: widget.id, isUpdate: true);
-                      },
-                    );
-        }),
+        padding: const EdgeInsets.all(Dimensions.space10),
+        child: GetBuilder<ProjectController>(
+          builder: (controller) {
+            return controller.isLoading
+                ? const SizedBox.shrink()
+                : controller.submitLoading
+                ? const RoundedLoadingBtn()
+                : RoundedButton(
+                    text: LocalStrings.update.tr,
+                    press: () {
+                      controller.submitProject(
+                        projectId: widget.id,
+                        isUpdate: true,
+                      );
+                    },
+                  );
+          },
+        ),
       ),
     );
   }

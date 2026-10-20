@@ -1,4 +1,4 @@
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,16 +11,20 @@ import '../buttons/rounded_button.dart';
 class WarningAlertDialog {
   const WarningAlertDialog();
 
-  void warningAlertDialog(BuildContext context, VoidCallback press,
-      {String title = LocalStrings.logoutSureWarningMSg,
-      String subTitle = '',
-      String image = MyImages.warningImage}) {
+  void warningAlertDialog(
+    BuildContext context,
+    VoidCallback press, {
+    String title = LocalStrings.logoutSureWarningMSg,
+    String subTitle = '',
+    String image = MyImages.warningImage,
+  }) {
     showDialog(
       context: context,
       builder: (context) => Dialog(
         backgroundColor: ColorResources.getCardBgColor(),
-        insetPadding:
-            const EdgeInsets.symmetric(horizontal: Dimensions.space40),
+        insetPadding: const EdgeInsets.symmetric(
+          horizontal: Dimensions.space40,
+        ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         child: SingleChildScrollView(
           physics: const ClampingScrollPhysics(),
@@ -29,25 +33,25 @@ class WarningAlertDialog {
             children: [
               Container(
                 padding: const EdgeInsets.only(
-                    top: Dimensions.space40,
-                    bottom: Dimensions.space15,
-                    left: Dimensions.space15,
-                    right: Dimensions.space15),
+                  top: Dimensions.space40,
+                  bottom: Dimensions.space15,
+                  left: Dimensions.space15,
+                  right: Dimensions.space15,
+                ),
                 alignment: Alignment.center,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                    color: ColorResources.getCardBgColor(),
-                    borderRadius:
-                        BorderRadius.circular(Dimensions.defaultRadius)),
+                  color: ColorResources.getCardBgColor(),
+                  borderRadius: BorderRadius.circular(Dimensions.defaultRadius),
+                ),
                 child: Column(
                   children: [
                     const SizedBox(height: Dimensions.space10),
                     Text(
                       title.tr,
-                      style: regularSmall.copyWith(
-                          color: ColorResources.getTextColor(),
-                          fontWeight: FontWeight.bold,
-                          fontSize: Dimensions.fontDefault + 3),
+                      style: boldMediumLarge.copyWith(
+                        color: ColorResources.getTextColor(),
+                      ),
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 4,
@@ -57,9 +61,9 @@ class WarningAlertDialog {
                     if (subTitle != '')
                       Text(
                         subTitle.tr,
-                        style: regularSmall.copyWith(
-                            color: ColorResources.getTextColor(),
-                            fontSize: Dimensions.fontDefault),
+                        style: regularDefault.copyWith(
+                          color: ColorResources.getTextColor(),
+                        ),
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 4,
@@ -70,23 +74,25 @@ class WarningAlertDialog {
                       children: [
                         Expanded(
                           child: RoundedButton(
-                              text: LocalStrings.no.tr,
-                              press: () {
-                                Navigator.pop(context);
-                              },
-                              horizontalPadding: 3,
-                              verticalPadding: 3),
+                            text: LocalStrings.no.tr,
+                            press: () {
+                              Navigator.pop(context);
+                            },
+                            horizontalPadding: 3,
+                            verticalPadding: 3,
+                          ),
                         ),
                         const SizedBox(width: Dimensions.space10),
                         Expanded(
                           child: RoundedButton(
-                              text: LocalStrings.yes.tr,
-                              press: press,
-                              horizontalPadding: 3,
-                              verticalPadding: 3),
-                        )
+                            text: LocalStrings.yes.tr,
+                            press: press,
+                            horizontalPadding: 3,
+                            verticalPadding: 3,
+                          ),
+                        ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -94,12 +100,8 @@ class WarningAlertDialog {
                 top: -40,
                 left: MediaQuery.of(context).padding.left,
                 right: MediaQuery.of(context).padding.right,
-                child: Image.asset(
-                  image,
-                  height: 80,
-                  width: 80,
-                ),
-              )
+                child: Image.asset(image, height: 80, width: 80),
+              ),
             ],
           ),
         ),

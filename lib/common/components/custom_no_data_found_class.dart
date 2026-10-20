@@ -1,12 +1,12 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/images.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
-import 'package:archiz_prefix_crm/common/components/buttons/custom_round_border_shape.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/images.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
+import 'package:archiz_cxm360/common/components/buttons/custom_round_border_shape.dart';
 import '../../core/utils/dimensions.dart';
 import 'image/custom_svg_picture.dart';
 

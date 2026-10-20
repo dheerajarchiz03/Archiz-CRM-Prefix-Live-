@@ -1,56 +1,62 @@
-import 'package:archiz_prefix_crm/features/auth/view/forget_password.dart';
-import 'package:archiz_prefix_crm/features/auth/view/login_screen.dart';
-import 'package:archiz_prefix_crm/features/contract/view/add_contract_screen.dart';
-import 'package:archiz_prefix_crm/features/contract/view/contract_details_screen.dart';
-import 'package:archiz_prefix_crm/features/contract/view/contracts_screen.dart';
-import 'package:archiz_prefix_crm/features/contract/view/update_contract_screen.dart';
-import 'package:archiz_prefix_crm/features/customer/view/add_contact_screen.dart';
-import 'package:archiz_prefix_crm/features/customer/view/add_customer_screen.dart';
-import 'package:archiz_prefix_crm/features/customer/view/customers_screen.dart';
-import 'package:archiz_prefix_crm/features/customer/view/customer_details_screen.dart';
-import 'package:archiz_prefix_crm/features/customer/view/update_customer_screen.dart';
-import 'package:archiz_prefix_crm/features/estimate/view/add_estimate_screen.dart';
-import 'package:archiz_prefix_crm/features/estimate/view/estimate_details_screen.dart';
-import 'package:archiz_prefix_crm/features/estimate/view/estimate_screen.dart';
-import 'package:archiz_prefix_crm/features/estimate/view/update_estimate_screen.dart';
-import 'package:archiz_prefix_crm/features/dashboard/view/dashboard_screen.dart';
-import 'package:archiz_prefix_crm/features/onboarding/view/onboard_intro_screen.dart';
-import 'package:archiz_prefix_crm/features/invoice/view/add_invoice_screen.dart';
-import 'package:archiz_prefix_crm/features/invoice/view/invoice_details_screen.dart';
-import 'package:archiz_prefix_crm/features/invoice/view/invoice_screen.dart';
-import 'package:archiz_prefix_crm/features/invoice/view/update_invoice_screen.dart';
-import 'package:archiz_prefix_crm/features/item/view/item_details_screen.dart';
-import 'package:archiz_prefix_crm/features/item/view/item_screen.dart';
-import 'package:archiz_prefix_crm/features/lead/view/add_lead_screen.dart';
-import 'package:archiz_prefix_crm/features/lead/view/lead_details_screen.dart';
-import 'package:archiz_prefix_crm/features/lead/view/lead_screen.dart';
-import 'package:archiz_prefix_crm/features/lead/view/update_lead_screen.dart';
-import 'package:archiz_prefix_crm/features/menu/view/menu_screen.dart';
-import 'package:archiz_prefix_crm/features/payment/view/payment_details_screen.dart';
-import 'package:archiz_prefix_crm/features/payment/view/payment_screen.dart';
-import 'package:archiz_prefix_crm/features/privacy/view/privacy_policy_screen.dart';
-import 'package:archiz_prefix_crm/features/profile/view/profile_screen.dart';
-import 'package:archiz_prefix_crm/features/project/view/add_project_screen.dart';
-import 'package:archiz_prefix_crm/features/project/view/project_details_screen.dart';
-import 'package:archiz_prefix_crm/features/project/view/project_screen.dart';
-import 'package:archiz_prefix_crm/features/project/view/update_project_screen.dart';
-import 'package:archiz_prefix_crm/features/proposal/view/add_proposal_screen.dart';
-import 'package:archiz_prefix_crm/features/proposal/view/proposal_details_screen.dart';
-import 'package:archiz_prefix_crm/features/proposal/view/proposal_screen.dart';
-import 'package:archiz_prefix_crm/features/proposal/view/update_proposal_screen.dart';
-import 'package:archiz_prefix_crm/features/splash/view/splash_screen.dart';
-import 'package:archiz_prefix_crm/features/task/view/add_task_screen.dart';
-import 'package:archiz_prefix_crm/features/task/view/task_details_screen.dart';
-import 'package:archiz_prefix_crm/features/task/view/task_screen.dart';
-import 'package:archiz_prefix_crm/features/task/view/update_task_screen.dart';
-import 'package:archiz_prefix_crm/features/ticket/view/add_ticket_screen.dart';
-import 'package:archiz_prefix_crm/features/ticket/view/ticket_details_screen.dart';
-import 'package:archiz_prefix_crm/features/ticket/view/ticket_screen.dart';
-import 'package:archiz_prefix_crm/features/ticket/view/update_ticket_screen.dart';
-import 'package:archiz_prefix_crm/features/visit/view/add_visit_screen.dart';
-import 'package:archiz_prefix_crm/features/visit/view/add_review_visit_screen.dart';
-import 'package:archiz_prefix_crm/features/visit/view/visit_detail_screen.dart';
-import 'package:archiz_prefix_crm/features/visit/view/visit_screen_list.dart';
+import 'package:archiz_cxm360/features/auth/view/forget_password.dart';
+import 'package:archiz_cxm360/features/auth/view/login_screen.dart';
+import 'package:archiz_cxm360/features/contract/view/add_contract_screen.dart';
+import 'package:archiz_cxm360/features/contract/view/contract_details_screen.dart';
+import 'package:archiz_cxm360/features/contract/view/contracts_screen.dart';
+import 'package:archiz_cxm360/features/contract/view/update_contract_screen.dart';
+import 'package:archiz_cxm360/features/customer/view/add_contact_screen.dart';
+import 'package:archiz_cxm360/features/customer/view/add_customer_screen.dart';
+import 'package:archiz_cxm360/features/customer/view/customers_screen.dart';
+import 'package:archiz_cxm360/features/customer/view/customer_details_screen.dart';
+import 'package:archiz_cxm360/features/customer/view/update_customer_screen.dart';
+import 'package:archiz_cxm360/features/estimate/view/add_estimate_screen.dart';
+import 'package:archiz_cxm360/features/estimate/view/estimate_details_screen.dart';
+import 'package:archiz_cxm360/features/estimate/view/estimate_screen.dart';
+import 'package:archiz_cxm360/features/estimate/view/update_estimate_screen.dart';
+import 'package:archiz_cxm360/features/dashboard/view/dashboard_screen.dart';
+import 'package:archiz_cxm360/features/expense/view/add_expense_screen.dart';
+import 'package:archiz_cxm360/features/expense/view/expense_details_screen.dart';
+import 'package:archiz_cxm360/features/expense/view/expense_screen.dart';
+import 'package:archiz_cxm360/features/expense/view/update_expense_screen.dart';
+import 'package:archiz_cxm360/features/lead/view/kanban_lead_screen.dart';
+import 'package:archiz_cxm360/features/notification/view/notification_screen.dart';
+import 'package:archiz_cxm360/features/onboarding/view/onboard_intro_screen.dart';
+import 'package:archiz_cxm360/features/invoice/view/add_invoice_screen.dart';
+import 'package:archiz_cxm360/features/invoice/view/invoice_details_screen.dart';
+import 'package:archiz_cxm360/features/invoice/view/invoice_screen.dart';
+import 'package:archiz_cxm360/features/invoice/view/update_invoice_screen.dart';
+import 'package:archiz_cxm360/features/item/view/item_details_screen.dart';
+import 'package:archiz_cxm360/features/item/view/item_screen.dart';
+import 'package:archiz_cxm360/features/lead/view/add_lead_screen.dart';
+import 'package:archiz_cxm360/features/lead/view/lead_details_screen.dart';
+import 'package:archiz_cxm360/features/lead/view/lead_screen.dart';
+import 'package:archiz_cxm360/features/lead/view/update_lead_screen.dart';
+import 'package:archiz_cxm360/features/menu/view/menu_screen.dart';
+import 'package:archiz_cxm360/features/payment/view/payment_details_screen.dart';
+import 'package:archiz_cxm360/features/payment/view/payment_screen.dart';
+import 'package:archiz_cxm360/features/privacy/view/privacy_policy_screen.dart';
+import 'package:archiz_cxm360/features/profile/view/edit_profile_screen.dart';
+import 'package:archiz_cxm360/features/profile/view/profile_screen.dart';
+import 'package:archiz_cxm360/features/project/view/add_project_screen.dart';
+import 'package:archiz_cxm360/features/project/view/project_details_screen.dart';
+import 'package:archiz_cxm360/features/project/view/project_screen.dart';
+import 'package:archiz_cxm360/features/project/view/update_project_screen.dart';
+import 'package:archiz_cxm360/features/proposal/view/add_proposal_screen.dart';
+import 'package:archiz_cxm360/features/proposal/view/proposal_details_screen.dart';
+import 'package:archiz_cxm360/features/proposal/view/proposal_screen.dart';
+import 'package:archiz_cxm360/features/proposal/view/update_proposal_screen.dart';
+import 'package:archiz_cxm360/features/splash/view/splash_screen.dart';
+import 'package:archiz_cxm360/features/staff/view/add_staff_screen.dart';
+import 'package:archiz_cxm360/features/staff/view/staff_details_screen.dart';
+import 'package:archiz_cxm360/features/staff/view/staffs_screen.dart';
+import 'package:archiz_cxm360/features/task/view/add_task_screen.dart';
+import 'package:archiz_cxm360/features/task/view/task_details_screen.dart';
+import 'package:archiz_cxm360/features/task/view/task_screen.dart';
+import 'package:archiz_cxm360/features/task/view/update_task_screen.dart';
+import 'package:archiz_cxm360/features/ticket/view/add_ticket_screen.dart';
+import 'package:archiz_cxm360/features/ticket/view/ticket_details_screen.dart';
+import 'package:archiz_cxm360/features/ticket/view/ticket_screen.dart';
+import 'package:archiz_cxm360/features/ticket/view/update_ticket_screen.dart';
 import 'package:get/get.dart';
 
 class RouteHelper {
@@ -86,6 +92,7 @@ class RouteHelper {
   static const String addTicketScreen = "/add_ticket_screen";
   static const String updateTicketScreen = "/update_ticket_screen";
   static const String leadScreen = "/lead_screen";
+  static const String kanbanLeadScreen = "/kanban_lead_screen";
   static const String leadDetailsScreen = "/lead_details_screen";
   static const String addLeadScreen = "/add_lead_screen";
   static const String updateLeadScreen = "/update_lead_screen";
@@ -97,118 +104,157 @@ class RouteHelper {
   static const String proposalDetailsScreen = "/proposal_details_screen";
   static const String addProposalScreen = "/add_proposal_screen";
   static const String updateProposalScreen = "/update_proposal_screen";
+  static const String expenseScreen = "/expense_screen";
+  static const String expenseDetailsScreen = "/expense_details_screen";
+  static const String addExpenseScreen = "/add_expense_screen";
+  static const String updateExpenseScreen = "/update_expense_screen";
+  static const String staffScreen = "/staff_screen";
+  static const String staffDetailsScreen = "/staff_details_screen";
+  static const String addStaffScreen = "/add_staff_screen";
   static const String paymentScreen = "/payment_screen";
   static const String paymentDetailsScreen = "/payment_details_screen";
   static const String itemScreen = "/item_screen";
   static const String itemDetailsScreen = "/item_details_screen";
-  // static const String settingsScreen = "/settings_screen";
+  static const String notificationsScreen = "/notifications_screen";
+  static const String settingsScreen = "/settings_screen";
   static const String profileScreen = "/profile_screen";
+  static const String editProfileScreen = "/edit_profile_screen";
   static const String privacyScreen = "/privacy_screen";
-  // Visit
-  static const String settingsScreen = "/visit_screen_list";
-  static const String visitDetailsScreen = "/visit_details_screen";
-  static const String addVisitScreen = "/add_visit_screen";
-  static const String addReviewVisitScreen = "/add_review_visit_screen";
-
 
   List<GetPage> routes = [
     GetPage(name: splashScreen, page: () => const SplashScreen()),
     GetPage(name: onboardScreen, page: () => const OnBoardIntroScreen()),
     GetPage(name: loginScreen, page: () => const LoginScreen()),
     GetPage(
-        name: forgotPasswordScreen, page: () => const ForgetPasswordScreen()),
+      name: forgotPasswordScreen,
+      page: () => const ForgetPasswordScreen(),
+    ),
     GetPage(name: dashboardScreen, page: () => const DashboardScreen()),
     GetPage(name: customerScreen, page: () => const CustomersScreen()),
     GetPage(
-        name: customerDetailsScreen,
-        page: () => CustomerDetailsScreen(id: Get.arguments)),
+      name: customerDetailsScreen,
+      page: () => CustomerDetailsScreen(id: Get.arguments),
+    ),
     GetPage(name: addCustomerScreen, page: () => const AddCustomerScreen()),
     GetPage(
-        name: addContactScreen,
-        page: () => AddContactScreen(id: Get.arguments)),
+      name: addContactScreen,
+      page: () => AddContactScreen(id: Get.arguments),
+    ),
     GetPage(
-        name: updateCustomerScreen,
-        page: () => UpdateCustomerScreen(id: Get.arguments)),
+      name: updateCustomerScreen,
+      page: () => UpdateCustomerScreen(id: Get.arguments),
+    ),
     GetPage(name: projectScreen, page: () => const ProjectsScreen()),
     GetPage(
-        name: projectDetailsScreen,
-        page: () => ProjectDetailsScreen(id: Get.arguments)),
+      name: projectDetailsScreen,
+      page: () => ProjectDetailsScreen(id: Get.arguments),
+    ),
     GetPage(name: addProjectScreen, page: () => const AddProjectScreen()),
     GetPage(
-        name: updateProjectScreen,
-        page: () => UpdateProjectScreen(id: Get.arguments)),
+      name: updateProjectScreen,
+      page: () => UpdateProjectScreen(id: Get.arguments),
+    ),
     GetPage(name: taskScreen, page: () => const TaskScreen()),
     GetPage(
-        name: taskDetailsScreen,
-        page: () => TaskDetailsScreen(id: Get.arguments)),
+      name: taskDetailsScreen,
+      page: () => TaskDetailsScreen(id: Get.arguments),
+    ),
     GetPage(name: addTaskScreen, page: () => const AddTaskScreen()),
     GetPage(
-        name: updateTaskScreen,
-        page: () => UpdateTaskScreen(id: Get.arguments)),
+      name: updateTaskScreen,
+      page: () => UpdateTaskScreen(id: Get.arguments),
+    ),
     GetPage(name: invoiceScreen, page: () => const InvoicesScreen()),
     GetPage(
-        name: invoiceDetailsScreen,
-        page: () => InvoiceDetailsScreen(id: Get.arguments)),
+      name: invoiceDetailsScreen,
+      page: () => InvoiceDetailsScreen(id: Get.arguments),
+    ),
     GetPage(name: addInvoiceScreen, page: () => const AddInvoiceScreen()),
     GetPage(
-        name: updateInvoiceScreen,
-        page: () => UpdateInvoiceScreen(id: Get.arguments)),
+      name: updateInvoiceScreen,
+      page: () => UpdateInvoiceScreen(id: Get.arguments),
+    ),
     GetPage(name: contractScreen, page: () => const ContractsScreen()),
     GetPage(
-        name: contractDetailsScreen,
-        page: () => ContractDetailsScreen(id: Get.arguments)),
+      name: contractDetailsScreen,
+      page: () => ContractDetailsScreen(id: Get.arguments),
+    ),
     GetPage(name: addContractScreen, page: () => const AddContractScreen()),
     GetPage(
-        name: updateContractScreen,
-        page: () => UpdateContractScreen(id: Get.arguments)),
+      name: updateContractScreen,
+      page: () => UpdateContractScreen(id: Get.arguments),
+    ),
     GetPage(name: ticketScreen, page: () => const TicketsScreen()),
     GetPage(
-        name: ticketDetailsScreen,
-        page: () => TicketDetailsScreen(id: Get.arguments)),
+      name: ticketDetailsScreen,
+      page: () => TicketDetailsScreen(id: Get.arguments),
+    ),
     GetPage(name: addTicketScreen, page: () => const AddTicketScreen()),
     GetPage(
-        name: updateTicketScreen,
-        page: () => UpdateTicketScreen(id: Get.arguments)),
+      name: updateTicketScreen,
+      page: () => UpdateTicketScreen(id: Get.arguments),
+    ),
     GetPage(name: leadScreen, page: () => const LeadScreen()),
+    GetPage(name: kanbanLeadScreen, page: () => const KanbanLeadScreen()),
     GetPage(
-        name: leadDetailsScreen,
-        page: () => LeadDetailsScreen(id: Get.arguments)),
+      name: leadDetailsScreen,
+      page: () => LeadDetailsScreen(id: Get.arguments),
+    ),
     GetPage(name: addLeadScreen, page: () => const AddLeadScreen()),
     GetPage(
-        name: updateLeadScreen,
-        page: () => UpdateLeadScreen(id: Get.arguments)),
+      name: updateLeadScreen,
+      page: () => UpdateLeadScreen(id: Get.arguments),
+    ),
     GetPage(name: estimateScreen, page: () => const EstimateScreen()),
     GetPage(
-        name: estimateDetailsScreen,
-        page: () => EstimateDetailsScreen(id: Get.arguments)),
+      name: estimateDetailsScreen,
+      page: () => EstimateDetailsScreen(id: Get.arguments),
+    ),
     GetPage(name: addEstimateScreen, page: () => const AddEstimateScreen()),
     GetPage(
-        name: updateEstimateScreen,
-        page: () => UpdateEstimateScreen(id: Get.arguments)),
+      name: updateEstimateScreen,
+      page: () => UpdateEstimateScreen(id: Get.arguments),
+    ),
+    GetPage(name: expenseScreen, page: () => const ExpenseScreen()),
+    GetPage(
+      name: expenseDetailsScreen,
+      page: () => ExpenseDetailsScreen(id: Get.arguments),
+    ),
+    GetPage(name: addExpenseScreen, page: () => const AddExpenseScreen()),
+    GetPage(
+      name: updateExpenseScreen,
+      page: () => UpdateExpenseScreen(id: Get.arguments),
+    ),
     GetPage(name: proposalScreen, page: () => const ProposalScreen()),
     GetPage(
-        name: proposalDetailsScreen,
-        page: () => ProposalDetailsScreen(id: Get.arguments)),
+      name: proposalDetailsScreen,
+      page: () => ProposalDetailsScreen(id: Get.arguments),
+    ),
     GetPage(name: addProposalScreen, page: () => const AddProposalScreen()),
     GetPage(
-        name: updateProposalScreen,
-        page: () => UpdateProposalScreen(id: Get.arguments)),
+      name: updateProposalScreen,
+      page: () => UpdateProposalScreen(id: Get.arguments),
+    ),
+    GetPage(name: staffScreen, page: () => const StaffsScreen()),
+    GetPage(
+      name: staffDetailsScreen,
+      page: () => StaffDetailsScreen(id: Get.arguments),
+    ),
+    GetPage(name: addStaffScreen, page: () => const AddStaffScreen()),
     GetPage(name: paymentScreen, page: () => const PaymentScreen()),
     GetPage(
-        name: paymentDetailsScreen,
-        page: () => PaymentDetailsScreen(id: Get.arguments)),
+      name: paymentDetailsScreen,
+      page: () => PaymentDetailsScreen(id: Get.arguments),
+    ),
     GetPage(name: itemScreen, page: () => const ItemScreen()),
     GetPage(
-        name: itemDetailsScreen,
-        page: () => ItemDetailsScreen(id: Get.arguments)),
+      name: itemDetailsScreen,
+      page: () => ItemDetailsScreen(id: Get.arguments),
+    ),
+    GetPage(name: notificationsScreen, page: () => const NotificationScreen()),
     GetPage(name: profileScreen, page: () => const ProfileScreen()),
-    // GetPage(name: settingsScreen, page: () => const MenuScreen()),
+    GetPage(name: editProfileScreen, page: () => const EditProfileScreen()),
+    GetPage(name: settingsScreen, page: () => const MenuScreen()),
     GetPage(name: privacyScreen, page: () => const PrivacyPolicyScreen()),
-
-    GetPage(name: settingsScreen, page: () => const VisitScreen()),
-    GetPage(name: addVisitScreen, page: () => const AddVisitScreen()),
-    GetPage(name: addReviewVisitScreen, page: () => const AddReviewVisitScreen()),
-    GetPage(name: visitDetailsScreen, page: () => VisitDetailsScreen(id: Get.arguments)),
-
   ];
 }

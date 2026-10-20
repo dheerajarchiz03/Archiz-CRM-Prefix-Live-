@@ -1,4 +1,4 @@
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
 
 class SplashRepo {
   ApiClient apiClient;

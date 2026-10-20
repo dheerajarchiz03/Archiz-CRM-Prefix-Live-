@@ -1,21 +1,21 @@
 import 'package:async/async.dart';
-import 'package:archiz_prefix_crm/common/components/app-bar/custom_appbar.dart';
-import 'package:archiz_prefix_crm/common/components/buttons/rounded_button.dart';
-import 'package:archiz_prefix_crm/common/components/buttons/rounded_loading_button.dart';
-import 'package:archiz_prefix_crm/common/components/custom_drop_down_button_with_text_field.dart';
-import 'package:archiz_prefix_crm/common/components/custom_loader/custom_loader.dart';
-import 'package:archiz_prefix_crm/common/components/text-form-field/custom_drop_down_text_field.dart';
-import 'package:archiz_prefix_crm/common/components/text-form-field/custom_text_field.dart';
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
-import 'package:archiz_prefix_crm/features/customer/model/customer_model.dart';
-import 'package:archiz_prefix_crm/features/ticket/controller/ticket_controller.dart';
-import 'package:archiz_prefix_crm/features/ticket/model/departments_model.dart';
-import 'package:archiz_prefix_crm/features/ticket/model/priorities_model.dart';
-import 'package:archiz_prefix_crm/features/ticket/model/services_model.dart';
-import 'package:archiz_prefix_crm/features/ticket/repo/ticket_repo.dart';
+import 'package:archiz_cxm360/common/components/app-bar/custom_appbar.dart';
+import 'package:archiz_cxm360/common/components/buttons/rounded_button.dart';
+import 'package:archiz_cxm360/common/components/buttons/rounded_loading_button.dart';
+import 'package:archiz_cxm360/common/components/custom_drop_down_button_with_text_field.dart';
+import 'package:archiz_cxm360/common/components/custom_loader/custom_loader.dart';
+import 'package:archiz_cxm360/common/components/text-form-field/custom_drop_down_text_field.dart';
+import 'package:archiz_cxm360/common/components/text-form-field/custom_text_field.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
+import 'package:archiz_cxm360/features/customer/model/customer_model.dart';
+import 'package:archiz_cxm360/features/ticket/controller/ticket_controller.dart';
+import 'package:archiz_cxm360/features/ticket/model/departments_model.dart';
+import 'package:archiz_cxm360/features/ticket/model/priorities_model.dart';
+import 'package:archiz_cxm360/features/ticket/model/services_model.dart';
+import 'package:archiz_cxm360/features/ticket/repo/ticket_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -55,9 +55,7 @@ class _UpdateTicketScreenState extends State<UpdateTicketScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: LocalStrings.updateTicket.tr,
-      ),
+      appBar: CustomAppBar(title: LocalStrings.updateTicket.tr),
       body: GetBuilder<TicketController>(
         builder: (controller) {
           return controller.isLoading
@@ -72,8 +70,9 @@ class _UpdateTicketScreenState extends State<UpdateTicketScreen> {
                     physics: const AlwaysScrollableScrollPhysics(),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: Dimensions.space15,
-                          horizontal: Dimensions.space10),
+                        vertical: Dimensions.space15,
+                        horizontal: Dimensions.space10,
+                      ),
                       child: Column(
                         children: [
                           CustomTextField(
@@ -95,208 +94,216 @@ class _UpdateTicketScreenState extends State<UpdateTicketScreen> {
                           ),
                           const SizedBox(height: Dimensions.space15),
                           FutureBuilder(
-                              future: customersMemoizer
-                                  .runOnce(controller.loadCustomers),
-                              builder: (context, customerList) {
-                                if (customerList.data?.status ?? false) {
+                            future: customersMemoizer.runOnce(
+                              controller.loadCustomers,
+                            ),
+                            builder: (context, customerList) {
+                              if (customerList.data?.status ?? false) {
+                                return CustomDropDownTextField(
+                                  hintText: LocalStrings.selectClient.tr,
+                                  onChanged: (value) {
+                                    controller.userController.text = value;
+                                    controller.selectedCustomer = value;
+                                    controller.update();
+                                  },
+                                  selectedValue: controller.userController.text,
+                                  dropDownColor: Theme.of(context).cardColor,
+                                  items: controller.customersModel.data!.map((
+                                    customer,
+                                  ) {
+                                    return DropdownMenuItem(
+                                      value: customer.userId,
+                                      child: Text(
+                                        customer.company ?? '',
+                                        style: regularDefault.copyWith(
+                                          color: Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium!.color,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                );
+                              } else if (customerList.data?.status == false) {
+                                return CustomDropDownWithTextField(
+                                  selectedValue: LocalStrings.noClientFound.tr,
+                                  list: [LocalStrings.noClientFound.tr],
+                                );
+                              } else {
+                                return const CustomLoader(isFullScreen: false);
+                              }
+                            },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: Dimensions.space15,
+                            ),
+                            child: FutureBuilder(
+                              future: controller.loadCustomerContacts(
+                                controller.selectedCustomer,
+                              ),
+                              builder: (context, contactsList) {
+                                if (contactsList.data?.status ?? false) {
                                   return CustomDropDownTextField(
-                                    hintText: LocalStrings.selectClient.tr,
+                                    hintText: LocalStrings.selectContact.tr,
                                     onChanged: (value) {
-                                      controller.userController.text = value;
-                                      controller.selectedCustomer = value;
-                                      controller.update();
+                                      controller.contactController.text = value;
                                     },
                                     selectedValue:
-                                        controller.userController.text,
-                                    dropDownColor: Theme.of(context).cardColor,
-                                    items: controller.customersModel.data!
-                                        .map((customer) {
+                                        controller.contactController.text,
+                                    items: controller.contactsModel.data!.map((
+                                      contact,
+                                    ) {
                                       return DropdownMenuItem(
-                                        value: customer.userId,
+                                        value: contact.id,
                                         child: Text(
-                                          customer.company ?? '',
+                                          '${contact.firstName ?? ''} ${contact.lastName ?? ''}',
                                           style: regularDefault.copyWith(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium!
-                                                  .color),
+                                            color: Theme.of(
+                                              context,
+                                            ).textTheme.bodyMedium!.color,
+                                          ),
                                         ),
                                       );
                                     }).toList(),
                                   );
-                                } else if (customerList.data?.status == false) {
+                                } else if (contactsList.data?.status == false) {
                                   return CustomDropDownWithTextField(
-                                      selectedValue:
-                                          LocalStrings.noClientFound.tr,
-                                      list: [LocalStrings.noClientFound.tr]);
+                                    selectedValue:
+                                        LocalStrings.noContactFound.tr,
+                                    list: [LocalStrings.noContactFound.tr],
+                                  );
                                 } else {
                                   return const CustomLoader(
-                                      isFullScreen: false);
+                                    isFullScreen: false,
+                                  );
                                 }
-                              }),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(top: Dimensions.space15),
-                            child: FutureBuilder(
-                                future: controller.loadCustomerContacts(
-                                    controller.selectedCustomer),
-                                builder: (context, contactsList) {
-                                  if (contactsList.data?.status ?? false) {
-                                    return CustomDropDownTextField(
-                                      hintText: LocalStrings.selectContact.tr,
-                                      onChanged: (value) {
-                                        controller.contactController.text =
-                                            value;
-                                      },
-                                      selectedValue:
-                                          controller.contactController.text,
-                                      items: controller.contactsModel.data!
-                                          .map((contact) {
-                                        return DropdownMenuItem(
-                                          value: contact.id,
-                                          child: Text(
-                                            '${contact.firstName ?? ''} ${contact.lastName ?? ''}',
-                                            style: regularDefault.copyWith(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium!
-                                                    .color),
-                                          ),
-                                        );
-                                      }).toList(),
-                                    );
-                                  } else if (contactsList.data?.status ==
-                                      false) {
-                                    return CustomDropDownWithTextField(
-                                        selectedValue:
-                                            LocalStrings.noContactFound.tr,
-                                        list: [LocalStrings.noContactFound.tr]);
-                                  } else {
-                                    return const CustomLoader(
-                                        isFullScreen: false);
-                                  }
-                                }),
+                              },
+                            ),
                           ),
                           const SizedBox(height: Dimensions.space15),
                           FutureBuilder(
-                              future: departmentMemoizer
-                                  .runOnce(controller.loadDepartments),
-                              builder: (context, departmentList) {
-                                if (departmentList.data?.status ?? false) {
-                                  return CustomDropDownTextField(
-                                    hintText: LocalStrings.selectDepartment.tr,
-                                    onChanged: (value) {
-                                      controller.departmentController.text =
-                                          value;
-                                    },
-                                    selectedValue:
-                                        controller.departmentController.text,
-                                    items: controller.departmentModel.data!
-                                        .map((department) {
-                                      return DropdownMenuItem(
-                                        value: department.id,
-                                        child: Text(
-                                          department.name ?? '',
-                                          style: regularDefault.copyWith(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium!
-                                                  .color),
+                            future: departmentMemoizer.runOnce(
+                              controller.loadDepartments,
+                            ),
+                            builder: (context, departmentList) {
+                              if (departmentList.data?.status ?? false) {
+                                return CustomDropDownTextField(
+                                  hintText: LocalStrings.selectDepartment.tr,
+                                  onChanged: (value) {
+                                    controller.departmentController.text =
+                                        value;
+                                  },
+                                  selectedValue:
+                                      controller.departmentController.text,
+                                  items: controller.departmentModel.data!.map((
+                                    department,
+                                  ) {
+                                    return DropdownMenuItem(
+                                      value: department.id,
+                                      child: Text(
+                                        department.name ?? '',
+                                        style: regularDefault.copyWith(
+                                          color: Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium!.color,
                                         ),
-                                      );
-                                    }).toList(),
-                                  );
-                                } else if (departmentList.data?.status ==
-                                    false) {
-                                  return CustomDropDownWithTextField(
-                                      selectedValue:
-                                          LocalStrings.noDepartmentFound.tr,
-                                      list: [
-                                        LocalStrings.noDepartmentFound.tr
-                                      ]);
-                                } else {
-                                  return const CustomLoader(
-                                      isFullScreen: false);
-                                }
-                              }),
+                                      ),
+                                    );
+                                  }).toList(),
+                                );
+                              } else if (departmentList.data?.status == false) {
+                                return CustomDropDownWithTextField(
+                                  selectedValue:
+                                      LocalStrings.noDepartmentFound.tr,
+                                  list: [LocalStrings.noDepartmentFound.tr],
+                                );
+                              } else {
+                                return const CustomLoader(isFullScreen: false);
+                              }
+                            },
+                          ),
                           const SizedBox(height: Dimensions.space15),
                           FutureBuilder(
-                              future: priorityMemoizer
-                                  .runOnce(controller.loadPriorities),
-                              builder: (context, prioritiesList) {
-                                if (prioritiesList.data?.status ?? false) {
-                                  return CustomDropDownTextField(
-                                    hintText: LocalStrings.selectPriority.tr,
-                                    onChanged: (value) {
-                                      controller.priorityController.text =
-                                          value;
-                                    },
-                                    selectedValue:
-                                        controller.priorityController.text,
-                                    items: controller.priorityModel.data!
-                                        .map((priority) {
-                                      return DropdownMenuItem(
-                                        value: priority.id,
-                                        child: Text(
-                                          priority.name ?? '',
-                                          style: regularDefault.copyWith(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium!
-                                                  .color),
+                            future: priorityMemoizer.runOnce(
+                              controller.loadPriorities,
+                            ),
+                            builder: (context, prioritiesList) {
+                              if (prioritiesList.data?.status ?? false) {
+                                return CustomDropDownTextField(
+                                  hintText: LocalStrings.selectPriority.tr,
+                                  onChanged: (value) {
+                                    controller.priorityController.text = value;
+                                  },
+                                  selectedValue:
+                                      controller.priorityController.text,
+                                  items: controller.priorityModel.data!.map((
+                                    priority,
+                                  ) {
+                                    return DropdownMenuItem(
+                                      value: priority.id,
+                                      child: Text(
+                                        priority.name ?? '',
+                                        style: regularDefault.copyWith(
+                                          color: Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium!.color,
                                         ),
-                                      );
-                                    }).toList(),
-                                  );
-                                } else if (prioritiesList.data?.status ==
-                                    false) {
-                                  return CustomDropDownWithTextField(
-                                      selectedValue:
-                                          LocalStrings.noPriorityFound.tr,
-                                      list: [LocalStrings.noPriorityFound.tr]);
-                                } else {
-                                  return const CustomLoader(
-                                      isFullScreen: false);
-                                }
-                              }),
+                                      ),
+                                    );
+                                  }).toList(),
+                                );
+                              } else if (prioritiesList.data?.status == false) {
+                                return CustomDropDownWithTextField(
+                                  selectedValue:
+                                      LocalStrings.noPriorityFound.tr,
+                                  list: [LocalStrings.noPriorityFound.tr],
+                                );
+                              } else {
+                                return const CustomLoader(isFullScreen: false);
+                              }
+                            },
+                          ),
                           const SizedBox(height: Dimensions.space15),
                           FutureBuilder(
-                              future: serviceMemoizer
-                                  .runOnce(controller.loadServices),
-                              builder: (context, servicesList) {
-                                if (servicesList.data?.status ?? false) {
-                                  return CustomDropDownTextField(
-                                    hintText: LocalStrings.selectService.tr,
-                                    onChanged: (value) {
-                                      controller.serviceController.text = value;
-                                    },
-                                    selectedValue:
-                                        controller.serviceController.text,
-                                    items: controller.serviceModel.data!
-                                        .map((service) {
-                                      return DropdownMenuItem(
-                                        value: service.id,
-                                        child: Text(
-                                          service.name ?? '',
-                                          style: regularDefault.copyWith(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium!
-                                                  .color),
+                            future: serviceMemoizer.runOnce(
+                              controller.loadServices,
+                            ),
+                            builder: (context, servicesList) {
+                              if (servicesList.data?.status ?? false) {
+                                return CustomDropDownTextField(
+                                  hintText: LocalStrings.selectService.tr,
+                                  onChanged: (value) {
+                                    controller.serviceController.text = value;
+                                  },
+                                  selectedValue:
+                                      controller.serviceController.text,
+                                  items: controller.serviceModel.data!.map((
+                                    service,
+                                  ) {
+                                    return DropdownMenuItem(
+                                      value: service.id,
+                                      child: Text(
+                                        service.name ?? '',
+                                        style: regularDefault.copyWith(
+                                          color: Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium!.color,
                                         ),
-                                      );
-                                    }).toList(),
-                                  );
-                                } else if (servicesList.data?.status == false) {
-                                  return CustomDropDownWithTextField(
-                                      selectedValue:
-                                          LocalStrings.noServiceFound.tr,
-                                      list: [LocalStrings.noServiceFound.tr]);
-                                } else {
-                                  return const CustomLoader(
-                                      isFullScreen: false);
-                                }
-                              }),
+                                      ),
+                                    );
+                                  }).toList(),
+                                );
+                              } else if (servicesList.data?.status == false) {
+                                return CustomDropDownWithTextField(
+                                  selectedValue: LocalStrings.noServiceFound.tr,
+                                  list: [LocalStrings.noServiceFound.tr],
+                                );
+                              } else {
+                                return const CustomLoader(isFullScreen: false);
+                              }
+                            },
+                          ),
                           const SizedBox(height: Dimensions.space15),
                           CustomTextField(
                             animatedLabel: true,
@@ -313,24 +320,30 @@ class _UpdateTicketScreenState extends State<UpdateTicketScreen> {
                         ],
                       ),
                     ),
-                  ));
+                  ),
+                );
         },
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Dimensions.space10),
-        child: GetBuilder<TicketController>(builder: (controller) {
-          return controller.isLoading
-              ? const SizedBox.shrink()
-              : controller.isSubmitLoading
-                  ? const RoundedLoadingBtn()
-                  : RoundedButton(
-                      text: LocalStrings.update.tr,
-                      press: () {
-                        controller.submitTicket(context,
-                            ticketId: widget.id, isUpdate: true);
-                      },
-                    );
-        }),
+        padding: const EdgeInsets.all(Dimensions.space10),
+        child: GetBuilder<TicketController>(
+          builder: (controller) {
+            return controller.isLoading
+                ? const SizedBox.shrink()
+                : controller.isSubmitLoading
+                ? const RoundedLoadingBtn()
+                : RoundedButton(
+                    text: LocalStrings.update.tr,
+                    press: () {
+                      controller.submitTicket(
+                        context,
+                        ticketId: widget.id,
+                        isUpdate: true,
+                      );
+                    },
+                  );
+          },
+        ),
       ),
     );
   }

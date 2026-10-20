@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:archiz_prefix_crm/common/components/snack_bar/show_custom_snackbar.dart';
-import 'package:archiz_prefix_crm/core/helper/shared_preference_helper.dart';
-import 'package:archiz_prefix_crm/core/route/route.dart';
-import 'package:archiz_prefix_crm/common/models/response_model.dart';
-import 'package:archiz_prefix_crm/features/dashboard/model/dashboard_model.dart';
-import 'package:archiz_prefix_crm/features/dashboard/repo/dashboard_repo.dart';
+import 'package:archiz_cxm360/common/components/snack_bar/show_custom_snackbar.dart';
+import 'package:archiz_cxm360/core/helper/shared_preference_helper.dart';
+import 'package:archiz_cxm360/core/route/route.dart';
+import 'package:archiz_cxm360/common/models/response_model.dart';
+import 'package:archiz_cxm360/features/dashboard/model/dashboard_model.dart';
+import 'package:archiz_cxm360/features/dashboard/repo/dashboard_repo.dart';
 import 'package:get/get.dart';
 
 class DashboardController extends GetxController {
@@ -45,9 +45,10 @@ class DashboardController extends GetxController {
     ResponseModel responseModel = await dashboardRepo.logout();
 
     if (responseModel.status) {
-      print('Token stored -> ${SharedPreferenceHelper.accessTokenKey}');
-      await dashboardRepo.apiClient.sharedPreferences.setString(SharedPreferenceHelper.accessTokenKey, '');
-      await dashboardRepo.apiClient.sharedPreferences.setBool(SharedPreferenceHelper.rememberMeKey, false);
+      await dashboardRepo.apiClient.sharedPreferences
+          .setString(SharedPreferenceHelper.accessTokenKey, '');
+      await dashboardRepo.apiClient.sharedPreferences
+          .setBool(SharedPreferenceHelper.rememberMeKey, false);
       CustomSnackBar.success(successList: [responseModel.message.tr]);
       Get.offAllNamed(RouteHelper.loginScreen);
     } else {

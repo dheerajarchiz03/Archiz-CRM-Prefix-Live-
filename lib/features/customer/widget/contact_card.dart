@@ -1,8 +1,8 @@
-import 'package:archiz_prefix_crm/common/components/circle_image_button.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
-import 'package:archiz_prefix_crm/features/customer/model/contact_model.dart';
+import 'package:archiz_cxm360/common/components/circle_image_button.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
+import 'package:archiz_cxm360/features/customer/model/contact_model.dart';
 
 import 'package:flutter/material.dart';
 
@@ -20,41 +20,46 @@ class ContactCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: Dimensions.space5),
       child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Dimensions.cardRadius),
-            color: Theme.of(context).cardColor,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(Dimensions.cardRadius),
+          color: Theme.of(context).cardColor,
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: ListTile(
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: Dimensions.space15,
+            vertical: Dimensions.space10,
           ),
-          clipBehavior: Clip.antiAlias,
-          child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(
-                horizontal: Dimensions.space15, vertical: Dimensions.space10),
-            leading: CircleAvatar(
-              backgroundColor: ColorResources.blueGreyColor,
-              radius: 32,
-              child: CircleImageWidget(
-                imagePath: contactModel.data![index].profileImage ?? '',
-                isAsset: false,
-                isProfile: true,
-                width: 60,
-                height: 60,
-              ),
+          leading: CircleAvatar(
+            backgroundColor: ColorResources.blueGreyColor,
+            radius: 32,
+            child: CircleImageWidget(
+              imagePath: contactModel.data![index].profileImage ?? '',
+              isAsset: false,
+              isProfile: true,
+              width: 60,
+              height: 60,
             ),
-            title: Text(
-                '${contactModel.data![index].firstName} ${contactModel.data![index].lastName}',
-                overflow: TextOverflow.ellipsis,
-                style: regularDefault.copyWith(
-                    color: Theme.of(context).textTheme.bodyMedium!.color)),
-            subtitle: Text(
-              '${contactModel.data![index].email}',
-              style: regularSmall.copyWith(color: ColorResources.blueColor),
+          ),
+          title: Text(
+            '${contactModel.data![index].firstName} ${contactModel.data![index].lastName}',
+            overflow: TextOverflow.ellipsis,
+            style: regularDefault.copyWith(
+              color: Theme.of(context).textTheme.bodyMedium!.color,
             ),
-            trailing: Switch(
-              activeColor: Colors.white,
-              activeTrackColor: Theme.of(context).primaryColor,
-              onChanged: (value) {},
-              value: true,
-            ),
-          )),
+          ),
+          subtitle: Text(
+            '${contactModel.data![index].email}',
+            style: regularSmall.copyWith(color: ColorResources.blueColor),
+          ),
+          trailing: Switch(
+            activeThumbColor: Colors.white,
+            activeTrackColor: Theme.of(context).primaryColor,
+            onChanged: (value) {},
+            value: true,
+          ),
+        ),
+      ),
     );
   }
 }

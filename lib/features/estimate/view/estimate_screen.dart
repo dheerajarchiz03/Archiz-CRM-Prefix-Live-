@@ -1,17 +1,18 @@
-import 'package:archiz_prefix_crm/common/components/app-bar/custom_appbar.dart';
-import 'package:archiz_prefix_crm/common/components/custom_fab.dart';
-import 'package:archiz_prefix_crm/common/components/custom_loader/custom_loader.dart';
-import 'package:archiz_prefix_crm/common/components/no_data.dart';
-import 'package:archiz_prefix_crm/common/components/overview_card.dart';
-import 'package:archiz_prefix_crm/common/components/search_field.dart';
-import 'package:archiz_prefix_crm/core/route/route.dart';
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/features/estimate/controller/estimate_controller.dart';
-import 'package:archiz_prefix_crm/features/estimate/repo/estimate_repo.dart';
-import 'package:archiz_prefix_crm/features/estimate/widget/estimate_card.dart';
+import 'package:archiz_cxm360/common/components/app-bar/custom_appbar.dart';
+import 'package:archiz_cxm360/common/components/custom_fab.dart';
+import 'package:archiz_cxm360/common/components/custom_loader/custom_loader.dart';
+import 'package:archiz_cxm360/common/components/no_data.dart';
+import 'package:archiz_cxm360/common/components/overview_card.dart';
+import 'package:archiz_cxm360/common/components/search_field.dart';
+import 'package:archiz_cxm360/common/components/text/text_icon.dart';
+import 'package:archiz_cxm360/core/route/route.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/features/estimate/controller/estimate_controller.dart';
+import 'package:archiz_cxm360/features/estimate/repo/estimate_repo.dart';
+import 'package:archiz_cxm360/features/estimate/widget/estimate_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -153,31 +154,18 @@ class _EstimateScreenState extends State<EstimateScreen> {
                       Padding(
                         padding: const EdgeInsets.all(Dimensions.space15),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               LocalStrings.estimates.tr,
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
-                            const Spacer(),
                             InkWell(
                               onTap: () {},
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.sort_outlined,
-                                    size: Dimensions.space20,
-                                    color: ColorResources.blueGreyColor,
-                                  ),
-                                  const SizedBox(width: Dimensions.space5),
-                                  Text(
-                                    LocalStrings.filter.tr,
-                                    style: const TextStyle(
-                                        fontSize: Dimensions.fontDefault,
-                                        color: ColorResources.blueGreyColor),
-                                  )
-                                ],
-                              ),
-                            )
+                              child: TextIcon(
+                                  text: LocalStrings.filter.tr,
+                                  icon: Icons.sort_outlined),
+                            ),
                           ],
                         ),
                       ),

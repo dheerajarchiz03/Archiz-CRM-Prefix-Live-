@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:archiz_prefix_crm/common/components/snack_bar/show_custom_snackbar.dart';
-import 'package:archiz_prefix_crm/common/models/response_model.dart';
-import 'package:archiz_prefix_crm/features/item/model/item_details_model.dart';
-import 'package:archiz_prefix_crm/features/item/model/item_model.dart';
-import 'package:archiz_prefix_crm/features/item/repo/item_repo.dart';
+import 'package:archiz_cxm360/common/components/snack_bar/show_custom_snackbar.dart';
+import 'package:archiz_cxm360/common/models/response_model.dart';
+import 'package:archiz_cxm360/features/item/model/item_details_model.dart';
+import 'package:archiz_cxm360/features/item/model/item_model.dart';
+import 'package:archiz_cxm360/features/item/repo/item_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

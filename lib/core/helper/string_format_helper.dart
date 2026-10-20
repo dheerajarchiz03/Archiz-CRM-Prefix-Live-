@@ -1,4 +1,4 @@
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
 import 'package:html/parser.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -156,6 +156,25 @@ class Converter {
         break;
       case '4': // Urgent
         status = LocalStrings.priorityUrgent.tr;
+        break;
+    }
+    return status;
+  }
+
+  static String leadNoteTypes(String state) {
+    String status = '';
+    switch (state) {
+      case 'not_lead_activity_created':
+        status = LocalStrings.createdLead.tr;
+        break;
+      case 'not_activity_new_task_created':
+        status = LocalStrings.createdNewTask.tr;
+        break;
+      case 'not_lead_activity_status_updated':
+        status = LocalStrings.updatedLeadStatusFrom.tr;
+        break;
+      case 'not_lead_activity_assigned_to':
+        status = LocalStrings.assignedTo.tr;
         break;
     }
     return status;

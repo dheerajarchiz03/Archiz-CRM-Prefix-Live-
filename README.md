@@ -1,4 +1,4 @@
-# admin
+# flutex_admin
 
 A new Flutter project.
 

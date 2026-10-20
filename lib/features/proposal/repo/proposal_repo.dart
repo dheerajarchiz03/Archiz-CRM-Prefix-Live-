@@ -1,8 +1,8 @@
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
-import 'package:archiz_prefix_crm/core/utils/method.dart';
-import 'package:archiz_prefix_crm/core/utils/url_container.dart';
-import 'package:archiz_prefix_crm/common/models/response_model.dart';
-import 'package:archiz_prefix_crm/features/proposal/model/proposal_post_model.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
+import 'package:archiz_cxm360/core/utils/method.dart';
+import 'package:archiz_cxm360/core/utils/url_container.dart';
+import 'package:archiz_cxm360/common/models/response_model.dart';
+import 'package:archiz_cxm360/features/proposal/model/proposal_post_model.dart';
 
 class ProposalRepo {
   ApiClient apiClient;
@@ -10,50 +10,89 @@ class ProposalRepo {
 
   Future<ResponseModel> getAllProposals() async {
     String url = "${UrlContainer.baseUrl}${UrlContainer.proposalsUrl}";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> getProposalDetails(proposalId) async {
     String url =
         "${UrlContainer.baseUrl}${UrlContainer.proposalsUrl}/id/$proposalId";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
+    return responseModel;
+  }
+
+  Future<ResponseModel> getSettingsData() async {
+    String url =
+        "${UrlContainer.baseUrl}${UrlContainer.miscellaneousUrl}/general";
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> getAllCustomers() async {
     String url = "${UrlContainer.baseUrl}${UrlContainer.customersUrl}";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> getAllLeads() async {
     String url = "${UrlContainer.baseUrl}${UrlContainer.leadsUrl}";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> getCurrencies() async {
     String url =
         "${UrlContainer.baseUrl}${UrlContainer.miscellaneousUrl}/currencies";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> getItems() async {
     String url = "${UrlContainer.baseUrl}${UrlContainer.itemsUrl}";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
-  Future<ResponseModel> createProposal(ProposalPostModel proposalModel,
-      {String? proposalId, bool isUpdate = false}) async {
+  Future<ResponseModel> createProposal(
+    ProposalPostModel proposalModel, {
+    String? proposalId,
+    bool isUpdate = false,
+  }) async {
     String url = "${UrlContainer.baseUrl}${UrlContainer.proposalsUrl}";
 
     Map<String, dynamic> params = {
@@ -68,14 +107,10 @@ class ProposalRepo {
       "status": proposalModel.status,
       //"assigned": proposalModel.assigned,
       "email": proposalModel.email,
-      "newitems[0][description]": proposalModel.firstItemName,
-      "newitems[0][long_description]": proposalModel.firstItemDescription,
-      "newitems[0][qty]": proposalModel.firstItemQty,
-      "newitems[0][rate]": proposalModel.firstItemRate,
-      "newitems[0][unit]": proposalModel.firstItemUnit,
       "subtotal": proposalModel.subtotal,
       "total": proposalModel.total,
     };
+
     int i = 0;
     for (var proposal in proposalModel.newItems) {
       String proposalItemName = proposal.itemNameController.text;
@@ -85,7 +120,6 @@ class ProposalRepo {
       String proposalItemUnit = proposal.unitController.text;
 
       if (proposalItemName.isNotEmpty && proposalItemRate.isNotEmpty) {
-        i = i + 1;
         params['newitems[$i][description]'] = proposalItemName;
         params['newitems[$i][long_description]'] = proposalItemDescription;
         params['newitems[$i][qty]'] = proposalItemQty;
@@ -94,6 +128,7 @@ class ProposalRepo {
         //params['newitems[$i][order]'] = '1';
         //params['newitems[0][taxname][]'] = 'CGST|9.00';
         //params['newitems[0][taxname][]'] = 'SGST|9.00';
+        i++;
       }
     }
 
@@ -106,26 +141,35 @@ class ProposalRepo {
     }
 
     ResponseModel responseModel = await apiClient.request(
-        isUpdate ? '$url/id/$proposalId' : url,
-        isUpdate ? Method.putMethod : Method.postMethod,
-        params,
-        passHeader: true);
+      isUpdate ? '$url/id/$proposalId' : url,
+      isUpdate ? Method.putMethod : Method.postMethod,
+      params,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> deleteProposal(proposalId) async {
     String url =
         "${UrlContainer.baseUrl}${UrlContainer.proposalsUrl}/id/$proposalId";
-    ResponseModel responseModel = await apiClient
-        .request(url, Method.deleteMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.deleteMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 
   Future<ResponseModel> searchProposal(keysearch) async {
     String url =
         "${UrlContainer.baseUrl}${UrlContainer.proposalsUrl}/search/$keysearch";
-    ResponseModel responseModel =
-        await apiClient.request(url, Method.getMethod, null, passHeader: true);
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
     return responseModel;
   }
 }

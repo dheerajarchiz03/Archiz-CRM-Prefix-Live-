@@ -1,15 +1,15 @@
 import 'dart:convert';
 
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/common/controllers/localization_controller.dart';
-import 'package:archiz_prefix_crm/common/models/language_model.dart';
-import 'package:archiz_prefix_crm/features/dashboard/repo/dashboard_repo.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/common/controllers/localization_controller.dart';
+import 'package:archiz_cxm360/common/models/language_model.dart';
+import 'package:archiz_cxm360/features/dashboard/repo/dashboard_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:archiz_prefix_crm/core/helper/shared_preference_helper.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
+import 'package:archiz_cxm360/core/helper/shared_preference_helper.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
 
 class LanguageBody extends StatefulWidget {
   final List<LanguageModel> langList;

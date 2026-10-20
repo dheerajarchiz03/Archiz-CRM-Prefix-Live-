@@ -1,17 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:archiz_prefix_crm/common/components/snack_bar/show_custom_snackbar.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/common/models/response_model.dart';
-import 'package:archiz_prefix_crm/features/customer/model/contact_model.dart';
-import 'package:archiz_prefix_crm/features/customer/model/customer_model.dart';
-import 'package:archiz_prefix_crm/features/ticket/model/departments_model.dart';
-import 'package:archiz_prefix_crm/features/ticket/model/priorities_model.dart';
-import 'package:archiz_prefix_crm/features/ticket/model/services_model.dart';
-import 'package:archiz_prefix_crm/features/ticket/model/ticket_create_model.dart';
-import 'package:archiz_prefix_crm/features/ticket/model/ticket_details_model.dart';
-import 'package:archiz_prefix_crm/features/ticket/model/ticket_model.dart';
-import 'package:archiz_prefix_crm/features/ticket/repo/ticket_repo.dart';
+import 'package:archiz_cxm360/common/components/snack_bar/show_custom_snackbar.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/common/models/response_model.dart';
+import 'package:archiz_cxm360/features/customer/model/contact_model.dart';
+import 'package:archiz_cxm360/features/customer/model/customer_model.dart';
+import 'package:archiz_cxm360/features/ticket/model/departments_model.dart';
+import 'package:archiz_cxm360/features/ticket/model/priorities_model.dart';
+import 'package:archiz_cxm360/features/ticket/model/services_model.dart';
+import 'package:archiz_cxm360/features/ticket/model/ticket_create_model.dart';
+import 'package:archiz_cxm360/features/ticket/model/ticket_details_model.dart';
+import 'package:archiz_cxm360/features/ticket/model/ticket_model.dart';
+import 'package:archiz_cxm360/features/ticket/repo/ticket_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -101,13 +101,6 @@ class TicketController extends GetxController {
   TextEditingController userController = TextEditingController();
   TextEditingController contactController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-
-  // Visit type radio button variables
-  String selectedVisitType = 'current'; // 'current' or 'future'
-  
-  // Date and time variables
-  DateTime? selectedDate;
-  TimeOfDay? selectedTime;
 
   FocusNode subjectFocusNode = FocusNode();
   FocusNode departmentFocusNode = FocusNode();
@@ -239,9 +232,6 @@ class TicketController extends GetxController {
   void clearData() {
     isLoading = false;
     selectedCustomer = '';
-    selectedVisitType = 'current';
-    selectedDate = null;
-    selectedTime = null;
     subjectController.text = '';
     departmentController.text = '';
     priorityController.text = '';
@@ -249,50 +239,5 @@ class TicketController extends GetxController {
     userController.text = '';
     contactController.text = '';
     descriptionController.text = '';
-  }
-
-  // Method to handle visit type selection
-  void setVisitType(String type) {
-    selectedVisitType = type;
-    if (type == 'current') {
-      // Set current date and time for current visit
-      selectedDate = DateTime.now();
-      selectedTime = TimeOfDay.now();
-    } else {
-      // Clear date and time for future visit (user will select)
-      selectedDate = null;
-      selectedTime = null;
-    }
-    update();
-  }
-
-  // Method to handle date selection
-  Future<void> selectDate(BuildContext context) async {
-    if (selectedVisitType == 'future') {
-      final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate ?? DateTime.now(),
-        firstDate: DateTime.now(),
-        lastDate: DateTime.now().add(const Duration(days: 365)),
-      );
-      if (picked != null && picked != selectedDate) {
-        selectedDate = picked;
-        update();
-      }
-    }
-  }
-
-  // Method to handle time selection
-  Future<void> selectTime(BuildContext context) async {
-    if (selectedVisitType == 'future') {
-      final TimeOfDay? picked = await showTimePicker(
-        context: context,
-        initialTime: selectedTime ?? TimeOfDay.now(),
-      );
-      if (picked != null && picked != selectedTime) {
-        selectedTime = picked;
-        update();
-      }
-    }
   }
 }

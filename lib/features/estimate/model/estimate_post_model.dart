@@ -1,4 +1,4 @@
-import 'package:archiz_prefix_crm/features/estimate/model/estimate_item_model.dart';
+import 'package:archiz_cxm360/features/estimate/model/estimate_item_model.dart';
 
 class EstimatePostModel {
   final String clientId;
@@ -6,11 +6,6 @@ class EstimatePostModel {
   final String date;
   final String duedate;
   final String currency;
-  final String firstItemName;
-  final String? firstItemDescription;
-  final String firstItemQty;
-  final String firstItemRate;
-  final String? firstItemUnit;
   final List<EstimateItemsModel> newItems;
   final String subtotal;
   final String total;
@@ -39,11 +34,6 @@ class EstimatePostModel {
     required this.date,
     required this.duedate,
     required this.currency,
-    required this.firstItemName,
-    this.firstItemDescription,
-    required this.firstItemQty,
-    required this.firstItemRate,
-    this.firstItemUnit,
     required this.newItems,
     required this.subtotal,
     required this.total,

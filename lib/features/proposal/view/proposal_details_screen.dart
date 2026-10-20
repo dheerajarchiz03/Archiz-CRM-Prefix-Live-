@@ -1,19 +1,19 @@
-import 'package:archiz_prefix_crm/common/components/app-bar/custom_appbar.dart';
-import 'package:archiz_prefix_crm/common/components/card/custom_card.dart';
-import 'package:archiz_prefix_crm/common/components/custom_loader/custom_loader.dart';
-import 'package:archiz_prefix_crm/common/components/dialog/warning_dialog.dart';
-import 'package:archiz_prefix_crm/common/components/divider/custom_divider.dart';
-import 'package:archiz_prefix_crm/common/components/table_item.dart';
-import 'package:archiz_prefix_crm/core/helper/string_format_helper.dart';
-import 'package:archiz_prefix_crm/core/route/route.dart';
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/images.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
-import 'package:archiz_prefix_crm/features/proposal/controller/proposal_controller.dart';
-import 'package:archiz_prefix_crm/features/proposal/repo/proposal_repo.dart';
+import 'package:archiz_cxm360/common/components/app-bar/custom_appbar.dart';
+import 'package:archiz_cxm360/common/components/card/custom_card.dart';
+import 'package:archiz_cxm360/common/components/custom_loader/custom_loader.dart';
+import 'package:archiz_cxm360/common/components/dialog/warning_dialog.dart';
+import 'package:archiz_cxm360/common/components/divider/custom_divider.dart';
+import 'package:archiz_cxm360/common/components/table_item.dart';
+import 'package:archiz_cxm360/core/helper/string_format_helper.dart';
+import 'package:archiz_cxm360/core/route/route.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/images.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
+import 'package:archiz_cxm360/features/proposal/controller/proposal_controller.dart';
+import 'package:archiz_cxm360/features/proposal/repo/proposal_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -50,26 +50,23 @@ class _ProposalDetailsScreenState extends State<ProposalDetailsScreen> {
           onPressed: () {
             Get.toNamed(RouteHelper.updateProposalScreen, arguments: widget.id);
           },
-          icon: const Icon(
-            Icons.edit,
-            size: 20,
-          ),
+          icon: const Icon(Icons.edit, size: 20),
         ),
         actionWidgetTwo: IconButton(
           onPressed: () {
-            const WarningAlertDialog().warningAlertDialog(context, () {
-              Get.back();
-              Get.find<ProposalController>().deleteProposal(widget.id);
-              Navigator.pop(context);
-            },
-                title: LocalStrings.deleteProposal.tr,
-                subTitle: LocalStrings.deleteProposalWarningMSg.tr,
-                image: MyImages.exclamationImage);
+            const WarningAlertDialog().warningAlertDialog(
+              context,
+              () {
+                Get.back();
+                Get.find<ProposalController>().deleteProposal(widget.id);
+                Navigator.pop(context);
+              },
+              title: LocalStrings.deleteProposal.tr,
+              subTitle: LocalStrings.deleteProposalWarningMSg.tr,
+              image: MyImages.exclamationImage,
+            );
           },
-          icon: const Icon(
-            Icons.delete,
-            size: 20,
-          ),
+          icon: const Icon(Icons.delete, size: 20),
         ),
       ),
       body: GetBuilder<ProposalController>(
@@ -93,21 +90,37 @@ class _ProposalDetailsScreenState extends State<ProposalDetailsScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                controller.proposalDetailsModel.data!.subject ??
-                                    '',
-                                style: mediumLarge,
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.6,
+                                child: Text(
+                                  controller
+                                          .proposalDetailsModel
+                                          .data!
+                                          .subject ??
+                                      '',
+                                  style: mediumLarge,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                               Text(
-                                Converter.proposalStatusString(controller
-                                        .proposalDetailsModel.data!.status ??
-                                    ''),
+                                Converter.proposalStatusString(
+                                  controller
+                                          .proposalDetailsModel
+                                          .data!
+                                          .status ??
+                                      '',
+                                ),
                                 style: lightDefault.copyWith(
-                                    color: ColorResources.proposalStatusColor(
-                                        controller.proposalDetailsModel.data!
-                                                .status ??
-                                            '')),
-                              )
+                                  color: ColorResources.proposalStatusColor(
+                                    controller
+                                            .proposalDetailsModel
+                                            .data!
+                                            .status ??
+                                        '',
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                           const SizedBox(height: Dimensions.space10),
@@ -119,10 +132,14 @@ class _ProposalDetailsScreenState extends State<ProposalDetailsScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(LocalStrings.company.tr,
-                                        style: lightSmall),
-                                    Text(LocalStrings.email.tr,
-                                        style: lightSmall),
+                                    Text(
+                                      LocalStrings.company.tr,
+                                      style: lightSmall,
+                                    ),
+                                    Text(
+                                      LocalStrings.email.tr,
+                                      style: lightSmall,
+                                    ),
                                   ],
                                 ),
                                 Row(
@@ -130,15 +147,21 @@ class _ProposalDetailsScreenState extends State<ProposalDetailsScreen> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                        controller.proposalDetailsModel.data!
-                                                .proposalTo ??
-                                            '',
-                                        style: regularDefault),
+                                      controller
+                                              .proposalDetailsModel
+                                              .data!
+                                              .proposalTo ??
+                                          '',
+                                      style: regularDefault,
+                                    ),
                                     Text(
-                                        controller.proposalDetailsModel.data!
-                                                .email ??
-                                            '-',
-                                        style: regularDefault),
+                                      controller
+                                              .proposalDetailsModel
+                                              .data!
+                                              .email ??
+                                          '-',
+                                      style: regularDefault,
+                                    ),
                                   ],
                                 ),
                                 const CustomDivider(space: Dimensions.space10),
@@ -146,10 +169,14 @@ class _ProposalDetailsScreenState extends State<ProposalDetailsScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(LocalStrings.date.tr,
-                                        style: lightSmall),
-                                    Text(LocalStrings.openTill.tr,
-                                        style: lightSmall),
+                                    Text(
+                                      LocalStrings.date.tr,
+                                      style: lightSmall,
+                                    ),
+                                    Text(
+                                      LocalStrings.openTill.tr,
+                                      style: lightSmall,
+                                    ),
                                   ],
                                 ),
                                 Row(
@@ -157,15 +184,21 @@ class _ProposalDetailsScreenState extends State<ProposalDetailsScreen> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                        controller.proposalDetailsModel.data!
-                                                .date ??
-                                            '',
-                                        style: regularDefault),
+                                      controller
+                                              .proposalDetailsModel
+                                              .data!
+                                              .date ??
+                                          '',
+                                      style: regularDefault,
+                                    ),
                                     Text(
-                                        controller.proposalDetailsModel.data!
-                                                .openTill ??
-                                            '-',
-                                        style: regularDefault),
+                                      controller
+                                              .proposalDetailsModel
+                                              .data!
+                                              .openTill ??
+                                          '-',
+                                      style: regularDefault,
+                                    ),
                                   ],
                                 ),
                               ],
@@ -173,47 +206,49 @@ class _ProposalDetailsScreenState extends State<ProposalDetailsScreen> {
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(
-                                vertical: Dimensions.space10),
+                              vertical: Dimensions.space10,
+                            ),
                             child: Text(
                               LocalStrings.items.tr,
                               style: mediumLarge.copyWith(
-                                  color:
-                                      Theme.of(context).secondaryHeaderColor),
+                                color: Theme.of(context).secondaryHeaderColor,
+                              ),
                             ),
                           ),
                           CustomCard(
                             child: ListView.separated(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  return TableItem(
-                                    title: controller.proposalDetailsModel.data!
-                                            .items![index].description ??
-                                        '',
-                                    qty: controller.proposalDetailsModel.data!
-                                            .items![index].qty ??
-                                        '',
-                                    unit: controller.proposalDetailsModel.data!
-                                            .items![index].unit ??
-                                        '',
-                                    rate: controller.proposalDetailsModel.data!
-                                            .items![index].rate ??
-                                        '',
-                                    total:
-                                        '${double.parse(controller.proposalDetailsModel.data!.items![index].rate ?? '0') * double.parse(controller.proposalDetailsModel.data!.items![index].qty ?? '0')}',
-                                    currency: controller
-                                        .proposalDetailsModel.data!.symbol,
-                                  );
-                                },
-                                separatorBuilder: (context, index) =>
-                                    const CustomDivider(
-                                        space: Dimensions.space10),
-                                itemCount: controller
-                                    .proposalDetailsModel.data!.items!.length),
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              padding: EdgeInsets.symmetric(
+                                vertical: Dimensions.space5,
+                              ),
+                              itemBuilder: (context, index) {
+                                return TableItem(
+                                  item: controller
+                                      .proposalDetailsModel
+                                      .data!
+                                      .items![index],
+                                  currency: controller
+                                      .proposalDetailsModel
+                                      .data!
+                                      .symbol,
+                                );
+                              },
+                              separatorBuilder: (context, index) =>
+                                  const CustomDivider(
+                                    space: Dimensions.space10,
+                                  ),
+                              itemCount: controller
+                                  .proposalDetailsModel
+                                  .data!
+                                  .items!
+                                  .length,
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(Dimensions.space10),
                             child: Column(
+                              spacing: Dimensions.space10,
                               children: [
                                 Row(
                                   mainAxisAlignment:
@@ -229,7 +264,6 @@ class _ProposalDetailsScreenState extends State<ProposalDetailsScreen> {
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: Dimensions.space10),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -239,32 +273,46 @@ class _ProposalDetailsScreenState extends State<ProposalDetailsScreen> {
                                       style: lightDefault,
                                     ),
                                     Text(
-                                      controller.proposalDetailsModel.data!
+                                      controller
+                                              .proposalDetailsModel
+                                              .data!
                                               .discountTotal ??
                                           '',
                                       style: regularDefault,
                                     ),
                                   ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: Dimensions.space10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        LocalStrings.tax.tr,
-                                        style: lightDefault,
-                                      ),
-                                      Text(
-                                        controller.proposalDetailsModel.data!
-                                                .totalTax ??
-                                            '',
-                                        style: regularDefault,
-                                      ),
-                                    ],
-                                  ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      LocalStrings.tax.tr,
+                                      style: lightDefault,
+                                    ),
+                                    Text(
+                                      controller
+                                              .proposalDetailsModel
+                                              .data!
+                                              .totalTax ??
+                                          '',
+                                      style: regularDefault,
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      LocalStrings.total.tr,
+                                      style: regularLarge,
+                                    ),
+                                    Text(
+                                      '${controller.proposalDetailsModel.data!.symbol ?? ''}${controller.proposalDetailsModel.data!.total ?? ''}',
+                                      style: mediumLarge,
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

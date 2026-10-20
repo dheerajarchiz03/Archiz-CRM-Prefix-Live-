@@ -1,9 +1,9 @@
-import 'package:archiz_prefix_crm/common/components/card/custom_card.dart';
-import 'package:archiz_prefix_crm/common/components/divider/custom_divider.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
-import 'package:archiz_prefix_crm/features/customer/model/customer_details_model.dart';
+import 'package:archiz_cxm360/common/components/card/custom_card.dart';
+import 'package:archiz_cxm360/common/components/divider/custom_divider.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
+import 'package:archiz_cxm360/features/customer/model/customer_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

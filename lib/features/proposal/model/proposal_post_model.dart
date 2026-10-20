@@ -1,4 +1,4 @@
-import 'package:archiz_prefix_crm/features/proposal/model/proposal_item_model.dart';
+import 'package:archiz_cxm360/features/proposal/model/proposal_item_model.dart';
 
 class ProposalPostModel {
   final String subject;
@@ -12,11 +12,6 @@ class ProposalPostModel {
   final String status;
   final String? assigned;
   final String email;
-  final String firstItemName;
-  final String? firstItemDescription;
-  final String firstItemQty;
-  final String firstItemRate;
-  final String? firstItemUnit;
   final List<ProposalItemModel> newItems;
   final List<String>? removedItems;
   final String subtotal;
@@ -34,11 +29,6 @@ class ProposalPostModel {
     required this.status,
     this.assigned,
     required this.email,
-    required this.firstItemName,
-    this.firstItemDescription,
-    required this.firstItemQty,
-    required this.firstItemRate,
-    this.firstItemUnit,
     required this.newItems,
     this.removedItems,
     required this.subtotal,

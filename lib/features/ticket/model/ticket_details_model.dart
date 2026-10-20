@@ -328,7 +328,7 @@ class TicketDetails {
     _ticketKey = json['ticketkey'];
     _subject = json['subject'];
     _message = json['message'];
-    _admin = json['admin'];
+    _admin = json['cxm360'];
     _date = json['date'];
     _projectId = json['project_id'];
     _lastReply = json['lastreply'];
@@ -751,7 +751,7 @@ class TicketDetails {
     map['ticketkey'] = _ticketKey;
     map['subject'] = _subject;
     map['message'] = _message;
-    map['admin'] = _admin;
+    map['cxm360'] = _admin;
     map['date'] = _date;
     map['project_id'] = _projectId;
     map['lastreply'] = _lastReply;
@@ -909,7 +909,7 @@ class TicketReply {
     _id = json['id'];
     _fromName = json['from_name'];
     _replyEmail = json['reply_email'];
-    _admin = json['admin'];
+    _admin = json['cxm360'];
     _userId = json['userid'];
     _message = json['message'];
     _date = json['date'];
@@ -950,7 +950,7 @@ class TicketReply {
     map['id'] = _id;
     map['from_name'] = _fromName;
     map['reply_email'] = _replyEmail;
-    map['admin'] = _admin;
+    map['cxm360'] = _admin;
     map['userid'] = _userId;
     map['message'] = _message;
     map['date'] = _date;

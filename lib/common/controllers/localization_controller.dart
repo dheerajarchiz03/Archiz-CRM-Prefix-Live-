@@ -1,6 +1,6 @@
-import 'package:archiz_prefix_crm/core/helper/shared_preference_helper.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/common/models/language_model.dart';
+import 'package:archiz_cxm360/core/helper/shared_preference_helper.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/common/models/language_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';

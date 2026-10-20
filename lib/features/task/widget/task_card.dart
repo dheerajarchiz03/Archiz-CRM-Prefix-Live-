@@ -1,30 +1,24 @@
-import 'package:archiz_prefix_crm/common/components/divider/custom_divider.dart';
-import 'package:archiz_prefix_crm/common/components/text/text_icon.dart';
-import 'package:archiz_prefix_crm/core/helper/date_converter.dart';
-import 'package:archiz_prefix_crm/core/helper/string_format_helper.dart';
-import 'package:archiz_prefix_crm/core/route/route.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
-import 'package:archiz_prefix_crm/features/task/model/tasks_model.dart';
+import 'package:archiz_cxm360/common/components/divider/custom_divider.dart';
+import 'package:archiz_cxm360/common/components/text/text_icon.dart';
+import 'package:archiz_cxm360/core/helper/date_converter.dart';
+import 'package:archiz_cxm360/core/helper/string_format_helper.dart';
+import 'package:archiz_cxm360/core/route/route.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
+import 'package:archiz_cxm360/features/task/model/tasks_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TaskCard extends StatelessWidget {
-  const TaskCard({
-    super.key,
-    required this.index,
-    required this.taskModel,
-  });
-  final int index;
-  final TasksModel taskModel;
+  const TaskCard({super.key, required this.task});
+  final Task task;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(RouteHelper.taskDetailsScreen,
-            arguments: taskModel.data![index].id!);
+        Get.toNamed(RouteHelper.taskDetailsScreen, arguments: task.id!);
       },
       child: Card(
         margin: EdgeInsets.zero,
@@ -36,80 +30,80 @@ class TaskCard extends StatelessWidget {
               border: Border(
                 left: BorderSide(
                   width: 5.0,
-                  color: ColorResources.taskStatusColor(
-                      taskModel.data![index].status!),
+                  color: ColorResources.taskStatusColor(task.status!),
                 ),
               ),
             ),
             child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Column(
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.sizeOf(context).width / 1.5,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${taskModel.data![index].name}',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                              const SizedBox(height: Dimensions.space3),
-                              Text(
-                                taskModel.data![index].projectData?.name ?? '',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: lightSmall.copyWith(
-                                    color: ColorResources.blueGreyColor),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.sizeOf(context).width / 1.5,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              Converter.taskPriorityString(
-                                  taskModel.data![index].priority ?? ''),
-                              style: regularDefault.copyWith(
-                                color: ColorResources.taskStatusColor(
-                                    taskModel.data![index].priority ?? ''),
-                              ),
+                              '${task.name}',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
                             const SizedBox(height: Dimensions.space3),
                             Text(
-                              taskModel.data![index].relType?.capitalizeFirst ??
-                                  '-',
-                              style: lightSmall,
+                              task.projectData?.name ?? '',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: lightSmall.copyWith(
+                                color: ColorResources.blueGreyColor,
+                              ),
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                    const CustomDivider(space: Dimensions.space10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextIcon(
-                          text: Converter.taskStatusString(
-                              taskModel.data![index].status ?? ''),
-                          icon: Icons.check_circle_outline_rounded,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            Converter.taskPriorityString(task.priority ?? ''),
+                            style: regularDefault.copyWith(
+                              color: ColorResources.taskStatusColor(
+                                task.priority ?? '',
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: Dimensions.space3),
+                          Text(
+                            task.relType?.capitalizeFirst ?? '-',
+                            style: lightSmall,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const CustomDivider(space: Dimensions.space10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextIcon(
+                        text: Converter.taskStatusString(task.status ?? ''),
+                        icon: Icons.check_circle_outline_rounded,
+                      ),
+                      TextIcon(
+                        text: DateConverter.formatValidityDate(
+                          task.dateAdded ?? '',
                         ),
-                        TextIcon(
-                          text: DateConverter.formatValidityDate(
-                              taskModel.data![index].dateAdded ?? ''),
-                          icon: Icons.calendar_month,
-                        ),
-                      ],
-                    )
-                  ],
-                )),
+                        icon: Icons.calendar_month,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),

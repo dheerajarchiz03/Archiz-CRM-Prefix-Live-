@@ -1,17 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:archiz_prefix_crm/common/components/snack_bar/show_custom_snackbar.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/common/models/response_model.dart';
-import 'package:archiz_prefix_crm/features/customer/model/customer_model.dart';
-import 'package:archiz_prefix_crm/features/estimate/model/estimate_model.dart';
-import 'package:archiz_prefix_crm/features/invoice/model/invoice_model.dart';
-import 'package:archiz_prefix_crm/features/project/model/project_details_model.dart';
-import 'package:archiz_prefix_crm/features/project/model/project_model.dart';
-import 'package:archiz_prefix_crm/features/project/model/project_post_model.dart';
-import 'package:archiz_prefix_crm/features/project/repo/project_repo.dart';
-import 'package:archiz_prefix_crm/features/proposal/model/proposal_model.dart';
-import 'package:archiz_prefix_crm/features/task/model/tasks_model.dart';
+import 'package:archiz_cxm360/common/components/snack_bar/show_custom_snackbar.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/common/models/response_model.dart';
+import 'package:archiz_cxm360/features/customer/model/customer_model.dart';
+import 'package:archiz_cxm360/features/estimate/model/estimate_model.dart';
+import 'package:archiz_cxm360/features/invoice/model/invoice_model.dart';
+import 'package:archiz_cxm360/features/project/model/project_details_model.dart';
+import 'package:archiz_cxm360/features/project/model/project_discussions_model.dart';
+import 'package:archiz_cxm360/features/project/model/project_model.dart';
+import 'package:archiz_cxm360/features/project/model/project_post_model.dart';
+import 'package:archiz_cxm360/features/project/repo/project_repo.dart';
+import 'package:archiz_cxm360/features/proposal/model/proposal_model.dart';
+import 'package:archiz_cxm360/features/task/model/tasks_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,11 +25,11 @@ class ProjectController extends GetxController {
   bool submitLoading = false;
 
   bool projectOverviewEnable = true;
-  bool projectTasksEnable = true;
-  bool projectInvoicesEnable = true;
-  bool projectEstimatesEnable = true;
-  bool projectProposalsEnable = true;
-  bool projectDiscussionsEnable = true;
+  bool projectTasksEnable = false;
+  bool projectInvoicesEnable = false;
+  bool projectEstimatesEnable = false;
+  bool projectProposalsEnable = false;
+  bool projectDiscussionsEnable = false;
   //bool projectTimesheets = false;
   //bool projectMilestones = false;
   //bool projectFiles = false;
@@ -49,6 +50,7 @@ class ProjectController extends GetxController {
   InvoicesModel invoicesModel = InvoicesModel();
   EstimatesModel estimatesModel = EstimatesModel();
   ProposalsModel proposalsModel = ProposalsModel();
+  ProjectDiscussionsModel projectDiscussionsModel = ProjectDiscussionsModel();
   CustomersModel customersModel = CustomersModel();
 
   final Map<String, String> billingType = {
@@ -77,8 +79,9 @@ class ProjectController extends GetxController {
   Future<void> loadProjects() async {
     ResponseModel responseModel = await projectRepo.getAllProjects();
     if (responseModel.status) {
-      projectsModel =
-          ProjectsModel.fromJson(jsonDecode(responseModel.responseJson));
+      projectsModel = ProjectsModel.fromJson(
+        jsonDecode(responseModel.responseJson),
+      );
     } else {
       CustomSnackBar.error(errorList: [responseModel.message.tr]);
     }
@@ -87,11 +90,31 @@ class ProjectController extends GetxController {
   }
 
   Future<void> loadProjectDetails(projectId) async {
-    ResponseModel responseModel =
-        await projectRepo.getProjectDetails(projectId);
+    ResponseModel responseModel = await projectRepo.getProjectDetails(
+      projectId,
+    );
     if (responseModel.status) {
-      projectDetailsModel =
-          ProjectDetailsModel.fromJson(jsonDecode(responseModel.responseJson));
+      projectDetailsModel = ProjectDetailsModel.fromJson(
+        jsonDecode(responseModel.responseJson),
+      );
+
+      AvailableFeatures availableFeatures =
+          projectDetailsModel.data?.settings?.availableFeatures ??
+          AvailableFeatures();
+
+      projectOverviewEnable =
+          availableFeatures.projectOverview.toString() == '1' ? true : false;
+      projectTasksEnable = availableFeatures.projectTasks.toString() == '1'
+          ? true
+          : false;
+      projectInvoicesEnable =
+          availableFeatures.projectInvoices.toString() == '1' ? true : false;
+      projectEstimatesEnable =
+          availableFeatures.projectEstimates.toString() == '1' ? true : false;
+      projectProposalsEnable =
+          availableFeatures.projectProposals.toString() == '1' ? true : false;
+      projectDiscussionsEnable =
+          availableFeatures.projectDiscussions.toString() == '1' ? true : false;
     } else {
       CustomSnackBar.error(errorList: [responseModel.message.tr]);
     }
@@ -101,33 +124,36 @@ class ProjectController extends GetxController {
   }
 
   Future<void> loadProjectGroup(projectId, group) async {
-    ResponseModel responseModel =
-        await projectRepo.getProjectGroup(projectId, group);
-    if (responseModel.status) {
-      switch (group) {
-        case 'tasks':
-          tasksModel =
-              TasksModel.fromJson(jsonDecode(responseModel.responseJson));
-          break;
-        case 'invoices':
-          invoicesModel =
-              InvoicesModel.fromJson(jsonDecode(responseModel.responseJson));
-          break;
-        case 'estimates':
-          estimatesModel =
-              EstimatesModel.fromJson(jsonDecode(responseModel.responseJson));
-          break;
-        case 'proposals':
-          proposalsModel =
-              ProposalsModel.fromJson(jsonDecode(responseModel.responseJson));
-          break;
-        case 'discussions':
-          projectDetailsModel = ProjectDetailsModel.fromJson(
-              jsonDecode(responseModel.responseJson));
-          break;
-      }
-    } else {
-      CustomSnackBar.error(errorList: [responseModel.message.tr]);
+    ResponseModel responseModel = await projectRepo.getProjectGroup(
+      projectId,
+      group,
+    );
+    switch (group) {
+      case 'tasks':
+        tasksModel = TasksModel.fromJson(
+          jsonDecode(responseModel.responseJson),
+        );
+        break;
+      case 'invoices':
+        invoicesModel = InvoicesModel.fromJson(
+          jsonDecode(responseModel.responseJson),
+        );
+        break;
+      case 'estimates':
+        estimatesModel = EstimatesModel.fromJson(
+          jsonDecode(responseModel.responseJson),
+        );
+        break;
+      case 'proposals':
+        proposalsModel = ProposalsModel.fromJson(
+          jsonDecode(responseModel.responseJson),
+        );
+        break;
+      case 'discussions':
+        projectDiscussionsModel = ProjectDiscussionsModel.fromJson(
+          jsonDecode(responseModel.responseJson),
+        );
+        break;
     }
 
     isLoading = false;
@@ -136,16 +162,19 @@ class ProjectController extends GetxController {
 
   Future<CustomersModel> loadCustomers() async {
     ResponseModel responseModel = await projectRepo.getAllCustomers();
-    return customersModel =
-        CustomersModel.fromJson(jsonDecode(responseModel.responseJson));
+    return customersModel = CustomersModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<void> loadProjectUpdateData(projectId) async {
-    ResponseModel responseModel =
-        await projectRepo.getProjectDetails(projectId);
+    ResponseModel responseModel = await projectRepo.getProjectDetails(
+      projectId,
+    );
     if (responseModel.status) {
-      projectDetailsModel =
-          ProjectDetailsModel.fromJson(jsonDecode(responseModel.responseJson));
+      projectDetailsModel = ProjectDetailsModel.fromJson(
+        jsonDecode(responseModel.responseJson),
+      );
       nameController.text = projectDetailsModel.data?.name ?? '';
       clientController.text = projectDetailsModel.data?.clientId ?? '';
       billingTypeController.text = projectDetailsModel.data?.billingType ?? '';
@@ -247,8 +276,11 @@ class ProjectController extends GetxController {
       description: description,
     );
 
-    ResponseModel responseModel = await projectRepo.createProject(projectModel,
-        projectId: projectId, isUpdate: isUpdate);
+    ResponseModel responseModel = await projectRepo.createProject(
+      projectModel,
+      projectId: projectId,
+      isUpdate: isUpdate,
+    );
     if (responseModel.status) {
       Get.back();
       if (isUpdate) await loadProjectDetails(projectId);
@@ -289,8 +321,9 @@ class ProjectController extends GetxController {
     keysearch = searchController.text;
     ResponseModel responseModel = await projectRepo.searchProject(keysearch);
     if (responseModel.status) {
-      projectsModel =
-          ProjectsModel.fromJson(jsonDecode(responseModel.responseJson));
+      projectsModel = ProjectsModel.fromJson(
+        jsonDecode(responseModel.responseJson),
+      );
     } else {
       CustomSnackBar.error(errorList: [responseModel.message.tr]);
     }

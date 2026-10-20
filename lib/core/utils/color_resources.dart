@@ -1,4 +1,4 @@
-import 'package:archiz_prefix_crm/common/controllers/theme_controller.dart';
+import 'package:archiz_cxm360/common/controllers/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -433,8 +433,8 @@ class ColorResources {
 
   static Color getUnselectedIconColor() {
     return Get.find<ThemeController>().darkTheme
-        ? colorWhite
-        : colorGrey.withValues(alpha: 0.6);
+        ? Color(0xFF121212)
+        : textFieldDisableBorderColor;
   }
 
   static Color getSelectedIconColor() {

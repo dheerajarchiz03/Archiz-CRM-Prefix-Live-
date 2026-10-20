@@ -1,17 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:archiz_prefix_crm/common/components/snack_bar/show_custom_snackbar.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/common/models/currencies_model.dart';
-import 'package:archiz_prefix_crm/common/models/response_model.dart';
-import 'package:archiz_prefix_crm/features/customer/model/customer_model.dart';
-import 'package:archiz_prefix_crm/features/item/model/item_model.dart';
-import 'package:archiz_prefix_crm/features/lead/model/lead_model.dart';
-import 'package:archiz_prefix_crm/features/proposal/model/proposal_details_model.dart';
-import 'package:archiz_prefix_crm/features/proposal/model/proposal_item_model.dart';
-import 'package:archiz_prefix_crm/features/proposal/model/proposal_model.dart';
-import 'package:archiz_prefix_crm/features/proposal/model/proposal_post_model.dart';
-import 'package:archiz_prefix_crm/features/proposal/repo/proposal_repo.dart';
+import 'package:archiz_cxm360/common/components/snack_bar/show_custom_snackbar.dart';
+import 'package:archiz_cxm360/common/models/settings_model.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/common/models/currencies_model.dart';
+import 'package:archiz_cxm360/common/models/response_model.dart';
+import 'package:archiz_cxm360/features/customer/model/customer_model.dart';
+import 'package:archiz_cxm360/features/item/model/item_model.dart';
+import 'package:archiz_cxm360/features/lead/model/lead_model.dart';
+import 'package:archiz_cxm360/features/proposal/model/proposal_details_model.dart';
+import 'package:archiz_cxm360/features/proposal/model/proposal_item_model.dart';
+import 'package:archiz_cxm360/features/proposal/model/proposal_model.dart';
+import 'package:archiz_cxm360/features/proposal/model/proposal_post_model.dart';
+import 'package:archiz_cxm360/features/proposal/repo/proposal_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,6 +24,7 @@ class ProposalController extends GetxController {
   bool isSubmitLoading = false;
   ProposalsModel proposalsModel = ProposalsModel();
   ProposalDetailsModel proposalDetailsModel = ProposalDetailsModel();
+  SettingsModel settingsModel = SettingsModel();
   CustomersModel customersModel = CustomersModel();
   LeadsModel leadsModel = LeadsModel();
   CurrenciesModel currenciesModel = CurrenciesModel();
@@ -55,60 +57,76 @@ class ProposalController extends GetxController {
 
   Future<void> loadProposals() async {
     ResponseModel responseModel = await proposalRepo.getAllProposals();
-    if (responseModel.status) {
-      proposalsModel =
-          ProposalsModel.fromJson(jsonDecode(responseModel.responseJson));
-    } else {
-      CustomSnackBar.error(errorList: [responseModel.message.tr]);
-    }
+    proposalsModel = ProposalsModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
     isLoading = false;
     update();
   }
 
   Future<void> loadProposalDetails(proposalId) async {
-    ResponseModel responseModel =
-        await proposalRepo.getProposalDetails(proposalId);
-    if (responseModel.status) {
-      proposalDetailsModel =
-          ProposalDetailsModel.fromJson(jsonDecode(responseModel.responseJson));
-    } else {
-      CustomSnackBar.error(errorList: [responseModel.message.tr]);
-    }
+    ResponseModel responseModel = await proposalRepo.getProposalDetails(
+      proposalId,
+    );
+    proposalDetailsModel = ProposalDetailsModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
 
+    isLoading = false;
+    update();
+  }
+
+  Future<void> loadProposalCreateData() async {
+    ResponseModel responseModel = await proposalRepo.getSettingsData();
+    settingsModel = SettingsModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
+    //numberController.text = settingsModel.data?.proposalNumberPrefix ?? '';
     isLoading = false;
     update();
   }
 
   Future<CustomersModel> loadCustomers() async {
     ResponseModel responseModel = await proposalRepo.getAllCustomers();
-    return customersModel =
-        CustomersModel.fromJson(jsonDecode(responseModel.responseJson));
+    return customersModel = CustomersModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<LeadsModel> loadLeads() async {
     ResponseModel responseModel = await proposalRepo.getAllLeads();
-    return leadsModel =
-        LeadsModel.fromJson(jsonDecode(responseModel.responseJson));
+    return leadsModel = LeadsModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<CurrenciesModel> loadCurrencies() async {
     ResponseModel responseModel = await proposalRepo.getCurrencies();
-    return currenciesModel =
-        CurrenciesModel.fromJson(jsonDecode(responseModel.responseJson));
+    return currenciesModel = CurrenciesModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<ItemsModel> loadItems() async {
     ResponseModel responseModel = await proposalRepo.getItems();
-    return itemsModel =
-        ItemsModel.fromJson(jsonDecode(responseModel.responseJson));
+    return itemsModel = ItemsModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<void> loadProposalUpdateData(proposalId) async {
-    ResponseModel responseModel =
-        await proposalRepo.getProposalDetails(proposalId);
+    ResponseModel responseModel = await proposalRepo.getProposalDetails(
+      proposalId,
+    );
     if (responseModel.status) {
-      proposalDetailsModel =
-          ProposalDetailsModel.fromJson(jsonDecode(responseModel.responseJson));
+      proposalDetailsModel = ProposalDetailsModel.fromJson(
+        jsonDecode(responseModel.responseJson),
+      );
+      ResponseModel settingsResponseModel = await proposalRepo
+          .getSettingsData();
+      settingsModel = SettingsModel.fromJson(
+        jsonDecode(settingsResponseModel.responseJson),
+      );
       subjectController.text = proposalDetailsModel.data?.subject ?? '';
       proposalRelatedController.text = proposalDetailsModel.data?.relType ?? '';
       clientController.text = proposalDetailsModel.data?.relId ?? '';
@@ -118,38 +136,40 @@ class ProposalController extends GetxController {
       openTillController.text = proposalDetailsModel.data?.openTill ?? '';
       statusController.text = proposalDetailsModel.data?.status ?? '';
       currencyController.text = proposalDetailsModel.data?.currencyId ?? '';
+      totalProposalAmount = proposalDetailsModel.data?.total ?? '';
 
       // Items
       removedItemsList.clear();
       proposalItemList.clear();
-      itemController.text =
-          proposalDetailsModel.data?.items?.first.description ?? '';
-      descriptionController.text =
-          proposalDetailsModel.data?.items?.first.longDescription ?? '';
-      qtyController.text = proposalDetailsModel.data?.items?.first.qty ?? '';
-      unitController.text = proposalDetailsModel.data?.items?.first.unit ?? '';
-      rateController.text = proposalDetailsModel.data?.items?.first.rate ?? '';
       if (proposalDetailsModel.data!.items!.length > 1) {
-        for (var i = 1; i < proposalDetailsModel.data!.items!.length; i++) {
-          proposalItemList.add(ProposalItemModel(
-            itemNameController: TextEditingController(
+        for (var i = 0; i < proposalDetailsModel.data!.items!.length; i++) {
+          proposalItemList.add(
+            ProposalItemModel(
+              itemNameController: TextEditingController(
                 text: proposalDetailsModel.data!.items![i].description
-                    .toString()),
-            descriptionController: TextEditingController(
+                    .toString(),
+              ),
+              descriptionController: TextEditingController(
                 text: proposalDetailsModel.data!.items![i].longDescription
-                    .toString()),
-            qtyController: TextEditingController(
-                text: proposalDetailsModel.data!.items![i].qty.toString()),
-            unitController: TextEditingController(
-                text: proposalDetailsModel.data!.items![i].unit.toString()),
-            rateController: TextEditingController(
-                text: proposalDetailsModel.data!.items![i].rate.toString()),
-          ));
+                    .toString(),
+              ),
+              qtyController: TextEditingController(
+                text: proposalDetailsModel.data!.items![i].qty.toString(),
+              ),
+              unitController: TextEditingController(
+                text: proposalDetailsModel.data!.items![i].unit.toString(),
+              ),
+              rateController: TextEditingController(
+                text: proposalDetailsModel.data!.items![i].rate.toString(),
+              ),
+            ),
+          );
         }
       }
       for (var i = 0; i < proposalDetailsModel.data!.items!.length; i++) {
-        removedItemsList
-            .add(proposalDetailsModel.data!.items![i].id.toString());
+        removedItemsList.add(
+          proposalDetailsModel.data!.items![i].id.toString(),
+        );
       }
     } else {
       CustomSnackBar.error(errorList: [responseModel.message.tr]);
@@ -189,13 +209,23 @@ class ProposalController extends GetxController {
   FocusNode rateFocusNode = FocusNode();
 
   void increaseItemField() {
-    proposalItemList.add(ProposalItemModel(
-      itemNameController: TextEditingController(),
-      descriptionController: TextEditingController(),
-      qtyController: TextEditingController(),
-      unitController: TextEditingController(),
-      rateController: TextEditingController(),
-    ));
+    proposalItemList.add(
+      ProposalItemModel(
+        itemNameController: TextEditingController(text: itemController.text),
+        descriptionController: TextEditingController(
+          text: descriptionController.text,
+        ),
+        qtyController: TextEditingController(text: qtyController.text),
+        unitController: TextEditingController(text: unitController.text),
+        rateController: TextEditingController(text: rateController.text),
+      ),
+    );
+    itemController.clear();
+    descriptionController.clear();
+    qtyController.clear();
+    unitController.clear();
+    rateController.clear();
+    calculateProposalAmount();
     update();
   }
 
@@ -210,13 +240,6 @@ class ProposalController extends GetxController {
   void calculateProposalAmount() {
     double totalAmount = 0;
 
-    double firstProposalAmount =
-        double.tryParse(rateController.text.toString()) ?? 0;
-    double firstProposalQty =
-        double.tryParse(qtyController.text.toString()) ?? 0;
-
-    totalAmount = totalAmount + (firstProposalAmount * firstProposalQty);
-
     for (var proposal in proposalItemList) {
       double proposalAmount =
           double.tryParse(proposal.rateController.text) ?? 0;
@@ -226,11 +249,13 @@ class ProposalController extends GetxController {
 
     totalProposalAmount = totalAmount.toString();
 
-    //update();
+    update();
   }
 
-  Future<void> submitProposal(
-      {String? proposalId, bool isUpdate = false}) async {
+  Future<void> submitProposal({
+    String? proposalId,
+    bool isUpdate = false,
+  }) async {
     String subject = subjectController.text.toString();
     String related = proposalRelatedController.text.toString();
     String client = clientController.text.toString();
@@ -281,22 +306,8 @@ class ProposalController extends GetxController {
       return;
     }
 
-    String firstItemName = itemController.text.toString();
-    String firstItemDescription = descriptionController.text.toString();
-    String firstItemQty = qtyController.text.toString();
-    String firstItemRate = rateController.text.toString();
-    String firstItemUnit = unitController.text.toString();
-
-    if (firstItemName.isEmpty) {
-      CustomSnackBar.error(errorList: [LocalStrings.enterItemName.tr]);
-      return;
-    }
-    if (firstItemQty.isEmpty) {
-      CustomSnackBar.error(errorList: [LocalStrings.enterItemQty.tr]);
-      return;
-    }
-    if (firstItemRate.isEmpty) {
-      CustomSnackBar.error(errorList: [LocalStrings.enterRate.tr]);
+    if (proposalItemList.isEmpty) {
+      CustomSnackBar.error(errorList: [LocalStrings.pleaseAddItem.tr]);
       return;
     }
 
@@ -313,11 +324,6 @@ class ProposalController extends GetxController {
       openTill: openTill,
       status: status,
       currency: currency,
-      firstItemName: firstItemName,
-      firstItemDescription: firstItemDescription,
-      firstItemQty: firstItemQty,
-      firstItemRate: firstItemRate,
-      firstItemUnit: firstItemUnit,
       newItems: proposalItemList,
       removedItems: removedItemsList,
       subtotal: totalProposalAmount,
@@ -325,9 +331,10 @@ class ProposalController extends GetxController {
     );
 
     ResponseModel responseModel = await proposalRepo.createProposal(
-        proposalModel,
-        proposalId: proposalId,
-        isUpdate: isUpdate);
+      proposalModel,
+      proposalId: proposalId,
+      isUpdate: isUpdate,
+    );
     if (responseModel.status) {
       Get.back();
       if (isUpdate) await loadProposalDetails(proposalId);
@@ -369,8 +376,9 @@ class ProposalController extends GetxController {
     keysearch = searchController.text;
     ResponseModel responseModel = await proposalRepo.searchProposal(keysearch);
     if (responseModel.status) {
-      proposalsModel =
-          ProposalsModel.fromJson(jsonDecode(responseModel.responseJson));
+      proposalsModel = ProposalsModel.fromJson(
+        jsonDecode(responseModel.responseJson),
+      );
     } else {
       CustomSnackBar.error(errorList: [responseModel.message.tr]);
     }

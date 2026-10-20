@@ -1,25 +1,25 @@
 import 'package:async/async.dart';
-import 'package:archiz_prefix_crm/common/components/app-bar/custom_appbar.dart';
-import 'package:archiz_prefix_crm/common/components/buttons/rounded_button.dart';
-import 'package:archiz_prefix_crm/common/components/buttons/rounded_loading_button.dart';
-import 'package:archiz_prefix_crm/common/components/custom_date_form_field.dart';
-import 'package:archiz_prefix_crm/common/components/custom_drop_down_button_with_text_field.dart';
-import 'package:archiz_prefix_crm/common/components/custom_loader/custom_loader.dart';
-import 'package:archiz_prefix_crm/common/components/text-form-field/custom_drop_down_text_field.dart';
-import 'package:archiz_prefix_crm/common/components/text-form-field/custom_text_field.dart';
-import 'package:archiz_prefix_crm/common/components/text/text_icon.dart';
-import 'package:archiz_prefix_crm/core/helper/date_converter.dart';
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
-import 'package:archiz_prefix_crm/common/models/currencies_model.dart';
-import 'package:archiz_prefix_crm/features/customer/model/customer_model.dart';
-import 'package:archiz_prefix_crm/features/item/model/item_model.dart';
-import 'package:archiz_prefix_crm/features/lead/model/lead_model.dart';
-import 'package:archiz_prefix_crm/features/proposal/controller/proposal_controller.dart';
-import 'package:archiz_prefix_crm/features/proposal/repo/proposal_repo.dart';
+import 'package:archiz_cxm360/common/components/app-bar/custom_appbar.dart';
+import 'package:archiz_cxm360/common/components/buttons/rounded_button.dart';
+import 'package:archiz_cxm360/common/components/buttons/rounded_loading_button.dart';
+import 'package:archiz_cxm360/common/components/custom_date_form_field.dart';
+import 'package:archiz_cxm360/common/components/custom_drop_down_button_with_text_field.dart';
+import 'package:archiz_cxm360/common/components/custom_loader/custom_loader.dart';
+import 'package:archiz_cxm360/common/components/text-form-field/custom_drop_down_text_field.dart';
+import 'package:archiz_cxm360/common/components/text-form-field/custom_text_field.dart';
+import 'package:archiz_cxm360/common/components/text/text_icon.dart';
+import 'package:archiz_cxm360/core/helper/date_converter.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
+import 'package:archiz_cxm360/common/models/currencies_model.dart';
+import 'package:archiz_cxm360/features/customer/model/customer_model.dart';
+import 'package:archiz_cxm360/features/item/model/item_model.dart';
+import 'package:archiz_cxm360/features/lead/model/lead_model.dart';
+import 'package:archiz_cxm360/features/proposal/controller/proposal_controller.dart';
+import 'package:archiz_cxm360/features/proposal/repo/proposal_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -58,13 +58,11 @@ class _UpdateProposalScreenState extends State<UpdateProposalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: LocalStrings.updateProposal.tr,
-      ),
-      body: GetBuilder<ProposalController>(
-        builder: (controller) {
-          return controller.isLoading
+    return GetBuilder<ProposalController>(
+      builder: (controller) {
+        return Scaffold(
+          appBar: CustomAppBar(title: LocalStrings.updateProposal.tr),
+          body: controller.isLoading
               ? const CustomLoader()
               : RefreshIndicator(
                   color: Theme.of(context).primaryColor,
@@ -76,8 +74,9 @@ class _UpdateProposalScreenState extends State<UpdateProposalScreen> {
                     physics: const AlwaysScrollableScrollPhysics(),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: Dimensions.space15,
-                          horizontal: Dimensions.space10),
+                        vertical: Dimensions.space15,
+                        horizontal: Dimensions.space10,
+                      ),
                       child: Column(
                         spacing: Dimensions.space15,
                         children: [
@@ -107,98 +106,107 @@ class _UpdateProposalScreenState extends State<UpdateProposalScreen> {
                             selectedValue:
                                 controller.proposalRelatedController.text,
                             items: controller.proposalRelated.entries
-                                .map((MapEntry element) => DropdownMenuItem(
-                                      value: element.key,
-                                      child: Text(
-                                        element.value,
-                                        style: regularDefault.copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium!
-                                                .color),
+                                .map(
+                                  (MapEntry element) => DropdownMenuItem(
+                                    value: element.key,
+                                    child: Text(
+                                      element.value,
+                                      style: regularDefault.copyWith(
+                                        color: Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium!.color,
                                       ),
-                                    ))
+                                    ),
+                                  ),
+                                )
                                 .toList(),
                           ),
                           if (controller.proposalRelatedController.text ==
                               'lead')
                             FutureBuilder(
-                                future:
-                                    leadsMemoizer.runOnce(controller.loadLeads),
-                                builder: (context, leadList) {
-                                  if (leadList.data?.status ?? false) {
-                                    return CustomDropDownTextField(
-                                      hintText: LocalStrings.selectLead.tr,
-                                      onChanged: (value) {
-                                        controller.clientController.text =
-                                            value;
-                                      },
-                                      items: controller.leadsModel.data!
-                                          .map((value) {
-                                        return DropdownMenuItem(
-                                          value: value.id,
-                                          child: Text(
-                                            value.company ?? '',
-                                            style: regularDefault.copyWith(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium!
-                                                    .color),
+                              future: leadsMemoizer.runOnce(
+                                controller.loadLeads,
+                              ),
+                              builder: (context, leadList) {
+                                if (leadList.data?.status ?? false) {
+                                  return CustomDropDownTextField(
+                                    hintText: LocalStrings.selectLead.tr,
+                                    onChanged: (value) {
+                                      controller.clientController.text = value;
+                                    },
+                                    items: controller.leadsModel.data!.map((
+                                      value,
+                                    ) {
+                                      return DropdownMenuItem(
+                                        value: value.id,
+                                        child: Text(
+                                          value.company ?? '',
+                                          style: regularDefault.copyWith(
+                                            color: Theme.of(
+                                              context,
+                                            ).textTheme.bodyMedium!.color,
                                           ),
-                                        );
-                                      }).toList(),
-                                    );
-                                  } else if (leadList.data?.status == false) {
-                                    return CustomDropDownWithTextField(
-                                        selectedValue:
-                                            LocalStrings.noLeadFound.tr,
-                                        list: [LocalStrings.noLeadFound.tr]);
-                                  } else {
-                                    return const CustomLoader(
-                                        isFullScreen: false);
-                                  }
-                                }),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  );
+                                } else if (leadList.data?.status == false) {
+                                  return CustomDropDownWithTextField(
+                                    selectedValue: LocalStrings.noLeadFound.tr,
+                                    list: [LocalStrings.noLeadFound.tr],
+                                  );
+                                } else {
+                                  return const CustomLoader(
+                                    isFullScreen: false,
+                                  );
+                                }
+                              },
+                            ),
                           if (controller.proposalRelatedController.text ==
                               'customer')
                             FutureBuilder(
-                                future: customersMemoizer
-                                    .runOnce(controller.loadCustomers),
-                                builder: (context, customerList) {
-                                  if (customerList.data?.status ?? false) {
-                                    return CustomDropDownTextField(
-                                      hintText: LocalStrings.selectClient.tr,
-                                      onChanged: (value) {
-                                        controller.clientController.text =
-                                            value.userId;
-                                        //controller.clientNameController.text = value.company;
-                                        //controller.clientEmailController.text = value.email;
-                                      },
-                                      items: controller.customersModel.data!
-                                          .map((value) {
-                                        return DropdownMenuItem(
-                                          value: value,
-                                          child: Text(
-                                            value.company ?? '',
-                                            style: regularDefault.copyWith(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium!
-                                                    .color),
+                              future: customersMemoizer.runOnce(
+                                controller.loadCustomers,
+                              ),
+                              builder: (context, customerList) {
+                                if (customerList.data?.status ?? false) {
+                                  return CustomDropDownTextField(
+                                    hintText: LocalStrings.selectClient.tr,
+                                    onChanged: (value) {
+                                      controller.clientController.text =
+                                          value.userId;
+                                      //controller.clientNameController.text = value.company;
+                                      //controller.clientEmailController.text = value.email;
+                                    },
+                                    items: controller.customersModel.data!.map((
+                                      value,
+                                    ) {
+                                      return DropdownMenuItem(
+                                        value: value,
+                                        child: Text(
+                                          value.company ?? '',
+                                          style: regularDefault.copyWith(
+                                            color: Theme.of(
+                                              context,
+                                            ).textTheme.bodyMedium!.color,
                                           ),
-                                        );
-                                      }).toList(),
-                                    );
-                                  } else if (customerList.data?.status ==
-                                      false) {
-                                    return CustomDropDownWithTextField(
-                                        selectedValue:
-                                            LocalStrings.noClientFound.tr,
-                                        list: [LocalStrings.noClientFound.tr]);
-                                  } else {
-                                    return const CustomLoader(
-                                        isFullScreen: false);
-                                  }
-                                }),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  );
+                                } else if (customerList.data?.status == false) {
+                                  return CustomDropDownWithTextField(
+                                    selectedValue:
+                                        LocalStrings.noClientFound.tr,
+                                    list: [LocalStrings.noClientFound.tr],
+                                  );
+                                } else {
+                                  return const CustomLoader(
+                                    isFullScreen: false,
+                                  );
+                                }
+                              },
+                            ),
                           CustomTextField(
                             labelText: LocalStrings.to.tr,
                             controller: controller.clientNameController,
@@ -240,7 +248,8 @@ class _UpdateProposalScreenState extends State<UpdateProposalScreen> {
                                   labelText: LocalStrings.date.tr,
                                   initialValue:
                                       DateConverter.convertStringToDatetime(
-                                          controller.dateController.text),
+                                        controller.dateController.text,
+                                      ),
                                   onChanged: (DateTime? value) {
                                     controller.dateController.text =
                                         DateConverter.formatDate(value!);
@@ -253,7 +262,8 @@ class _UpdateProposalScreenState extends State<UpdateProposalScreen> {
                                   labelText: LocalStrings.dueDate.tr,
                                   initialValue:
                                       DateConverter.convertStringToDatetime(
-                                          controller.openTillController.text),
+                                        controller.openTillController.text,
+                                      ),
                                   onChanged: (DateTime? value) {
                                     controller.openTillController.text =
                                         DateConverter.formatDate(value!);
@@ -269,58 +279,61 @@ class _UpdateProposalScreenState extends State<UpdateProposalScreen> {
                               controller.statusController.text = value;
                             },
                             items: controller.proposalStatus.entries
-                                .map((MapEntry element) => DropdownMenuItem(
-                                      value: element.key,
-                                      child: Text(
-                                        element.value,
-                                        style: regularDefault.copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium!
-                                                .color),
+                                .map(
+                                  (MapEntry element) => DropdownMenuItem(
+                                    value: element.key,
+                                    child: Text(
+                                      element.value,
+                                      style: regularDefault.copyWith(
+                                        color: Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium!.color,
                                       ),
-                                    ))
+                                    ),
+                                  ),
+                                )
                                 .toList(),
                           ),
                           FutureBuilder(
-                              future: currenciesMemoizer
-                                  .runOnce(controller.loadCurrencies),
-                              builder: (context, currenciesList) {
-                                if (currenciesList.data?.status ?? false) {
-                                  return CustomDropDownTextField(
-                                    hintText: LocalStrings.selectCurrency.tr,
-                                    selectedValue:
-                                        controller.currencyController.text,
-                                    onChanged: (value) {
-                                      controller.currencyController.text =
-                                          value;
-                                    },
-                                    items: controller.currenciesModel.data!
-                                        .map((currency) {
-                                      return DropdownMenuItem(
-                                        value: currency.id,
-                                        child: Text(
-                                          currency.name ?? '',
-                                          style: regularDefault.copyWith(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium!
-                                                  .color),
+                            future: currenciesMemoizer.runOnce(
+                              controller.loadCurrencies,
+                            ),
+                            builder: (context, currenciesList) {
+                              if (currenciesList.data?.status ?? false) {
+                                return CustomDropDownTextField(
+                                  hintText: LocalStrings.selectCurrency.tr,
+                                  selectedValue:
+                                      controller.currencyController.text,
+                                  onChanged: (value) {
+                                    controller.currencyController.text = value;
+                                  },
+                                  items: controller.currenciesModel.data!.map((
+                                    currency,
+                                  ) {
+                                    return DropdownMenuItem(
+                                      value: currency.id,
+                                      child: Text(
+                                        currency.name ?? '',
+                                        style: regularDefault.copyWith(
+                                          color: Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium!.color,
                                         ),
-                                      );
-                                    }).toList(),
-                                  );
-                                } else if (currenciesList.data?.status ==
-                                    false) {
-                                  return CustomDropDownWithTextField(
-                                      selectedValue:
-                                          LocalStrings.noCurrencyFound.tr,
-                                      list: [LocalStrings.noCurrencyFound.tr]);
-                                } else {
-                                  return const CustomLoader(
-                                      isFullScreen: false);
-                                }
-                              }),
+                                      ),
+                                    );
+                                  }).toList(),
+                                );
+                              } else if (currenciesList.data?.status == false) {
+                                return CustomDropDownWithTextField(
+                                  selectedValue:
+                                      LocalStrings.noCurrencyFound.tr,
+                                  list: [LocalStrings.noCurrencyFound.tr],
+                                );
+                              } else {
+                                return const CustomLoader(isFullScreen: false);
+                              }
+                            },
+                          ),
                           // Items Section Start
                           Row(
                             children: [
@@ -342,7 +355,8 @@ class _UpdateProposalScreenState extends State<UpdateProposalScreen> {
                                     Text(
                                       '${LocalStrings.showQuantityAs.tr}:',
                                       style: lightSmall.copyWith(
-                                          color: ColorResources.blueGreyColor),
+                                        color: ColorResources.blueGreyColor,
+                                      ),
                                     ),
                                     const SizedBox(width: Dimensions.space5),
                                     const Icon(
@@ -353,21 +367,24 @@ class _UpdateProposalScreenState extends State<UpdateProposalScreen> {
                                     Text(
                                       ' ${LocalStrings.qty.tr}',
                                       style: lightSmall.copyWith(
-                                          color: ColorResources.blueGreyColor),
+                                        color: ColorResources.blueGreyColor,
+                                      ),
                                     ),
                                   ],
                                 ),
-                              )
+                              ),
                             ],
                           ),
                           Container(
                             padding: const EdgeInsets.all(Dimensions.space15),
                             decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: ColorResources.blueGreyColor,
-                                ),
-                                borderRadius:
-                                    BorderRadius.circular(Dimensions.space10)),
+                              border: Border.all(
+                                color: ColorResources.blueGreyColor,
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                Dimensions.space10,
+                              ),
+                            ),
                             child: Column(
                               spacing: Dimensions.space15,
                               children: [
@@ -467,22 +484,28 @@ class _UpdateProposalScreenState extends State<UpdateProposalScreen> {
                                     },
                                     child: Container(
                                       decoration: const BoxDecoration(
-                                          color: ColorResources.colorRed,
-                                          shape: BoxShape.circle),
-                                      child: const Icon(Icons.clear,
-                                          color: ColorResources.colorWhite,
-                                          size: 15),
+                                        color: ColorResources.colorRed,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.clear,
+                                        color: ColorResources.colorWhite,
+                                        size: 15,
+                                      ),
                                     ),
                                   ),
                                   child: Container(
                                     padding: const EdgeInsets.all(
-                                        Dimensions.space15),
+                                      Dimensions.space15,
+                                    ),
                                     decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: ColorResources.blueGreyColor,
-                                        ),
-                                        borderRadius: BorderRadius.circular(
-                                            Dimensions.space10)),
+                                      border: Border.all(
+                                        color: ColorResources.blueGreyColor,
+                                      ),
+                                      borderRadius: BorderRadius.circular(
+                                        Dimensions.space10,
+                                      ),
+                                    ),
                                     child: Column(
                                       spacing: Dimensions.space15,
                                       children: [
@@ -495,7 +518,8 @@ class _UpdateProposalScreenState extends State<UpdateProposalScreen> {
                                           validator: (value) {
                                             if (value!.isEmpty) {
                                               return LocalStrings
-                                                  .enterItemName.tr;
+                                                  .enterItemName
+                                                  .tr;
                                             } else {
                                               return null;
                                             }
@@ -577,7 +601,8 @@ class _UpdateProposalScreenState extends State<UpdateProposalScreen> {
                             child: TextIcon(
                               text: LocalStrings.addItems.tr,
                               textStyle: regularDefault.copyWith(
-                                  color: ColorResources.secondaryColor),
+                                color: ColorResources.secondaryColor,
+                              ),
                               alignment: MainAxisAlignment.center,
                               icon: Icons.add_circle_outline_rounded,
                               iconSize: 20,
@@ -586,25 +611,26 @@ class _UpdateProposalScreenState extends State<UpdateProposalScreen> {
                         ],
                       ),
                     ),
-                  ));
-        },
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Dimensions.space10),
-        child: GetBuilder<ProposalController>(builder: (controller) {
-          return controller.isLoading
-              ? const SizedBox.shrink()
-              : controller.isSubmitLoading
-                  ? const RoundedLoadingBtn()
-                  : RoundedButton(
-                      text: LocalStrings.update.tr,
-                      press: () {
-                        controller.submitProposal(
-                            proposalId: widget.id, isUpdate: true);
-                      },
-                    );
-        }),
-      ),
+                  ),
+                ),
+          bottomNavigationBar: Padding(
+            padding: const EdgeInsets.all(Dimensions.space10),
+            child: controller.isLoading
+                ? const SizedBox.shrink()
+                : controller.isSubmitLoading
+                ? const RoundedLoadingBtn()
+                : RoundedButton(
+                    text: LocalStrings.update.tr,
+                    press: () {
+                      controller.submitProposal(
+                        proposalId: widget.id,
+                        isUpdate: true,
+                      );
+                    },
+                  ),
+          ),
+        );
+      },
     );
   }
 }

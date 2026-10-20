@@ -1,16 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:archiz_prefix_crm/common/components/file_download_dialog/download_dialog.dart';
-import 'package:archiz_prefix_crm/common/components/snack_bar/show_custom_snackbar.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/common/models/response_model.dart';
-import 'package:archiz_prefix_crm/features/lead/model/lead_create_model.dart';
-import 'package:archiz_prefix_crm/features/lead/model/lead_details_model.dart';
-import 'package:archiz_prefix_crm/features/lead/model/lead_model.dart';
-import 'package:archiz_prefix_crm/features/lead/model/sources_model.dart';
-import 'package:archiz_prefix_crm/features/lead/model/statuses_model.dart';
-import 'package:archiz_prefix_crm/features/lead/repo/lead_repo.dart';
+import 'package:archiz_cxm360/common/components/snack_bar/show_custom_snackbar.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/common/models/response_model.dart';
+import 'package:archiz_cxm360/core/utils/url_container.dart';
+import 'package:archiz_cxm360/features/lead/controller/lead_details_controller.dart';
+import 'package:archiz_cxm360/features/lead/model/kanban_lead_model.dart';
+import 'package:archiz_cxm360/features/lead/model/lead_create_model.dart';
+import 'package:archiz_cxm360/features/lead/model/lead_details_model.dart';
+import 'package:archiz_cxm360/features/lead/model/lead_model.dart';
+import 'package:archiz_cxm360/features/lead/model/sources_model.dart';
+import 'package:archiz_cxm360/features/lead/model/statuses_model.dart';
+import 'package:archiz_cxm360/features/lead/repo/lead_repo.dart';
+import 'package:archiz_cxm360/features/staff/model/staff_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
 class LeadController extends GetxController {
@@ -19,87 +23,126 @@ class LeadController extends GetxController {
 
   bool isLoading = true;
   bool isSubmitLoading = false;
+  bool showFab = true;
+  ScrollController scrollController = ScrollController();
   LeadsModel leadsModel = LeadsModel();
+  final leads = <Lead>[].obs;
+  int page = 0;
+  String? sortBy;
+  String? source;
+  String? status;
+  bool hasMoreData = true;
   LeadDetailsModel leadDetailsModel = LeadDetailsModel();
+  KanbanLeadModel kanbanLeadModel = KanbanLeadModel();
 
   StatusesModel statusesModel = StatusesModel();
   SourcesModel sourcesModel = SourcesModel();
+  StaffsModel staffsModel = StaffsModel();
+
+  void handleScroll() async {
+    scrollController.addListener(() {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (showFab) {
+          showFab = false;
+          update();
+        }
+      }
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        if (!showFab) {
+          showFab = true;
+          update();
+        }
+      }
+      if (scrollController.offset >=
+              scrollController.position.maxScrollExtent &&
+          !scrollController.position.outOfRange) {
+        // Load more data when the user reaches the bottom of the list
+        if (hasMoreData) {
+          loadLeads(page: ++page);
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    scrollController.removeListener(() {});
+    super.dispose();
+  }
 
   Future<void> initialData({bool shouldLoad = true}) async {
     isLoading = shouldLoad ? true : false;
     update();
-
+    leads.clear();
+    page = 0;
+    hasMoreData = true;
     await loadLeads();
     isLoading = false;
     update();
   }
 
-  Future<void> loadLeads() async {
-    ResponseModel responseModel = await leadRepo.getAllLeads();
+  Future<void> loadLeads({int page = 0}) async {
+    ResponseModel responseModel = await leadRepo.getAllLeads(
+      page: page,
+      sort: sortBy,
+      source: source,
+      status: status,
+    );
+    leadsModel = LeadsModel.fromJson(jsonDecode(responseModel.responseJson));
     if (responseModel.status) {
-      leadsModel = LeadsModel.fromJson(jsonDecode(responseModel.responseJson));
+      leads.addAll(leadsModel.data ?? []);
+      if ((leadsModel.data?.length ?? 0) < int.parse(UrlContainer.limit)) {
+        hasMoreData = false;
+      }
     } else {
-      CustomSnackBar.error(errorList: [responseModel.message.tr]);
+      hasMoreData = false;
     }
     isLoading = false;
     update();
   }
 
-  Future<void> loadLeadDetails(leadId) async {
-    ResponseModel responseModel = await leadRepo.getLeadDetails(leadId);
+  Future<void> loadKanbanLeads() async {
+    ResponseModel responseModel = await leadRepo.getKanbanLeads();
     if (responseModel.status) {
-      leadDetailsModel =
-          LeadDetailsModel.fromJson(jsonDecode(responseModel.responseJson));
-    } else {
-      CustomSnackBar.error(errorList: [responseModel.message.tr]);
-    }
-
-    isLoading = false;
-    update();
-  }
-
-  bool downloadLoading = false;
-  Future<void> downloadAttachment(
-      String attachmentType, String attachmentKey) async {
-    downloadLoading = true;
-    update();
-
-    ResponseModel responseModel =
-        await leadRepo.attachmentDownload(attachmentKey);
-    if (responseModel.status) {
-      showDialog(
-        context: Get.context!,
-        builder: (context) => DownloadingDialog(
-            isImage: true,
-            isPdf: false,
-            url: attachmentType,
-            fileName: attachmentKey),
+      kanbanLeadModel = KanbanLeadModel.fromJson(
+        jsonDecode(responseModel.responseJson),
       );
     } else {
       CustomSnackBar.error(errorList: [responseModel.message.tr]);
     }
-
-    downloadLoading = false;
+    isLoading = false;
     update();
   }
 
   Future<StatusesModel> loadLeadStatuses() async {
     ResponseModel responseModel = await leadRepo.getLeadStatuses();
-    return statusesModel =
-        StatusesModel.fromJson(jsonDecode(responseModel.responseJson));
+    return statusesModel = StatusesModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<SourcesModel> loadLeadSources() async {
     ResponseModel responseModel = await leadRepo.getLeadSources();
-    return sourcesModel =
-        SourcesModel.fromJson(jsonDecode(responseModel.responseJson));
+    return sourcesModel = SourcesModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
+  }
+
+  Future<StaffsModel> loadStaff() async {
+    ResponseModel responseModel = await leadRepo.getStaff();
+    return staffsModel = StaffsModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<void> loadLeadUpdateData(leadId) async {
     ResponseModel responseModel = await leadRepo.getLeadDetails(leadId);
     if (responseModel.status) {
-      leadDetailsModel =
-          LeadDetailsModel.fromJson(jsonDecode(responseModel.responseJson));
+      leadDetailsModel = LeadDetailsModel.fromJson(
+        jsonDecode(responseModel.responseJson),
+      );
       sourceController.text = leadDetailsModel.data?.source ?? '';
       statusController.text = leadDetailsModel.data?.status ?? '';
       nameController.text = leadDetailsModel.data?.name ?? '';
@@ -146,8 +189,6 @@ class LeadController extends GetxController {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController isPublicController = TextEditingController();
 
-  FocusNode sourceFocusNode = FocusNode();
-  FocusNode statusFocusNode = FocusNode();
   FocusNode nameFocusNode = FocusNode();
   FocusNode assignedFocusNode = FocusNode();
   FocusNode tagsFocusNode = FocusNode();
@@ -222,34 +263,21 @@ class LeadController extends GetxController {
       isPublic: isPublic,
     );
 
-    ResponseModel responseModel = await leadRepo.createLead(leadModel,
-        leadId: leadId, isUpdate: isUpdate);
+    ResponseModel responseModel = await leadRepo.createLead(
+      leadModel,
+      leadId: leadId,
+      isUpdate: isUpdate,
+    );
     if (responseModel.status) {
       clearData();
       Get.back();
-      if (isUpdate) await loadLeadDetails(leadId);
-      await initialData();
+      if (isUpdate) {
+        await Get.find<LeadDetailsController>().loadLeadDetails(leadId);
+      }
+      await loadLeads();
       CustomSnackBar.success(successList: [responseModel.message.tr]);
     } else {
       CustomSnackBar.error(errorList: [responseModel.message.tr]);
-    }
-
-    isSubmitLoading = false;
-    update();
-  }
-
-  // Delete Lead
-  Future<void> deleteLead(leadId) async {
-    ResponseModel responseModel = await leadRepo.deleteLead(leadId);
-
-    isSubmitLoading = true;
-    update();
-
-    if (responseModel.status) {
-      await initialData();
-      CustomSnackBar.success(successList: [responseModel.message.tr]);
-    } else {
-      CustomSnackBar.error(errorList: [(responseModel.message.tr)]);
     }
 
     isSubmitLoading = false;
@@ -263,12 +291,9 @@ class LeadController extends GetxController {
   Future<void> searchLead() async {
     keysearch = searchController.text;
     ResponseModel responseModel = await leadRepo.searchLead(keysearch);
-    if (responseModel.status) {
-      leadsModel = LeadsModel.fromJson(jsonDecode(responseModel.responseJson));
-    } else {
-      CustomSnackBar.error(errorList: [responseModel.message.tr]);
-    }
-
+    leadsModel = LeadsModel.fromJson(jsonDecode(responseModel.responseJson));
+    leads.assignAll(leadsModel.data ?? []);
+    hasMoreData = false;
     isLoading = false;
     update();
   }
@@ -280,6 +305,7 @@ class LeadController extends GetxController {
 
     if (!isSearch) {
       searchController.clear();
+      keysearch = "";
       initialData();
     }
   }

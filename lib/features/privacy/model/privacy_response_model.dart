@@ -1,92 +1,124 @@
 class PrivacyResponseModel {
-  PrivacyResponseModel({
-      String? remark, 
-      String? status, 
-      Message? message, 
-      Data? data,}){
-    _remark = remark;
+  PrivacyResponseModel({bool? status, String? message, Data? data}) {
     _status = status;
     _message = message;
     _data = data;
-}
+  }
 
   PrivacyResponseModel.fromJson(dynamic json) {
-    _remark = json['remark'];
     _status = json['status'];
-    _message = json['message'] != null ? Message.fromJson(json['message']) : null;
+    _message = json['message'];
     _data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
-  String? _remark;
-  String? _status;
-  Message? _message;
+
+  bool? _status;
+  String? _message;
   Data? _data;
 
-  String? get remark => _remark;
-  String? get status => _status;
-  Message? get message => _message;
+  bool? get status => _status;
+  String? get message => _message;
   Data? get data => _data;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['remark'] = _remark;
     map['status'] = _status;
-    if (_message != null) {
-      map['message'] = _message?.toJson();
-    }
+    map['message'] = _message;
     if (_data != null) {
       map['data'] = _data?.toJson();
     }
     return map;
   }
-
 }
 
 class Data {
   Data({
-      List<PolicyPages>? policyPages,}){
-    _policyPages = policyPages;
-}
+    String? slug,
+    String? articleId,
+    String? articleGroup,
+    String? subject,
+    String? description,
+    String? activeArticle,
+    String? activeGroup,
+    String? groupName,
+    String? staffArticle,
+  }) {
+    _slug = slug;
+    _articleId = articleId;
+    _articleGroup = articleGroup;
+    _subject = subject;
+    _description = description;
+    _activeArticle = activeArticle;
+    _activeGroup = activeGroup;
+    _groupName = groupName;
+    _staffArticle = staffArticle;
+  }
 
   Data.fromJson(dynamic json) {
-    if (json['policy_pages'] != null) {
-      _policyPages = [];
-      json['policy_pages'].forEach((v) {
-        _policyPages?.add(PolicyPages.fromJson(v));
-      });
-    }
+    _slug = json['slug'];
+    _articleId = json['article_id'];
+    _articleGroup = json['article_group'];
+    _subject = json['subject'];
+    _description = json['description'];
+    _activeArticle = json['active_article'];
+    _activeGroup = json['active_group'];
+    _groupName = json['group_name'];
   }
-  List<PolicyPages>? _policyPages;
+  String? _slug;
+  String? _articleId;
+  String? _articleGroup;
+  String? _subject;
+  String? _description;
+  String? _activeArticle;
+  String? _activeGroup;
+  String? _groupName;
+  String? _staffArticle;
 
-  List<PolicyPages>? get policyPages => _policyPages;
+  String? get slug => _slug;
+  String? get articleId => _articleId;
+  String? get articleGroup => _articleGroup;
+  String? get subject => _subject;
+  String? get description => _description;
+  String? get activeArticle => _activeArticle;
+  String? get activeGroup => _activeGroup;
+  String? get groupName => _groupName;
+  String? get staffArticle => _staffArticle;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    if (_policyPages != null) {
-      map['policy_pages'] = _policyPages?.map((v) => v.toJson()).toList();
-    }
+    map['slug'] = _slug;
+    map['articleid'] = _articleId;
+    map['articlegroup'] = _articleGroup;
+    map['subject'] = _subject;
+    map['description'] = _description;
+    map['active_article'] = _activeArticle;
+    map['active_group'] = _activeGroup;
+    map['group_name'] = _groupName;
+    map['staff_article'] = _staffArticle;
     return map;
   }
-
 }
 
 class PolicyPages {
   PolicyPages({
-      int? id, 
-      String? dataKeys, 
-      DataValues? dataValues, 
-      String? createdAt, 
-      String? updatedAt,}){
+    int? id,
+    String? dataKeys,
+    DataValues? dataValues,
+    String? createdAt,
+    String? updatedAt,
+  }) {
     _id = id;
     _dataKeys = dataKeys;
     _dataValues = dataValues;
     _createdAt = createdAt;
     _updatedAt = updatedAt;
-}
+  }
 
   PolicyPages.fromJson(dynamic json) {
     _id = json['id'];
     _dataKeys = json['data_keys'];
-    _dataValues = json['data_values'] != null ? DataValues.fromJson(json['data_values']) : null;
+    _dataValues = json['data_values'] != null
+        ? DataValues.fromJson(json['data_values'])
+        : null;
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
   }
@@ -113,16 +145,13 @@ class PolicyPages {
     map['updated_at'] = _updatedAt;
     return map;
   }
-
 }
 
 class DataValues {
-  DataValues({
-      String? title, 
-      String? details,}){
+  DataValues({String? title, String? details}) {
     _title = title;
     _details = details;
-}
+  }
 
   DataValues.fromJson(dynamic json) {
     _title = json['title'];
@@ -140,14 +169,12 @@ class DataValues {
     map['details'] = _details;
     return map;
   }
-
 }
 
 class Message {
-  Message({
-      List<String>? success,}){
+  Message({List<String>? success}) {
     _success = success;
-}
+  }
 
   Message.fromJson(dynamic json) {
     _success = json['success'] != null ? json['success'].cast<String>() : [];
@@ -161,5 +188,4 @@ class Message {
     map['success'] = _success;
     return map;
   }
-
 }

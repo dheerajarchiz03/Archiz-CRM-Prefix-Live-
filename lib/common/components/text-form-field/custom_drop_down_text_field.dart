@@ -1,8 +1,8 @@
-import 'package:archiz_prefix_crm/common/components/text/label_text.dart';
+import 'package:archiz_cxm360/common/components/text/label_text.dart';
 import 'package:flutter/material.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
 
 class CustomDropDownTextField extends StatefulWidget {
   final dynamic selectedValue;
@@ -16,20 +16,23 @@ class CustomDropDownTextField extends StatefulWidget {
   final Color? iconColor;
   final double radius;
   final bool needLabel;
+  final FormFieldValidator? validator;
 
-  const CustomDropDownTextField(
-      {super.key,
-      this.labelText,
-      this.hintText,
-      this.selectedValue,
-      required this.onChanged,
-      required this.items,
-      this.fillColor,
-      this.focusColor = ColorResources.colorWhite,
-      this.dropDownColor,
-      this.iconColor,
-      this.radius = Dimensions.defaultRadius,
-      this.needLabel = false});
+  const CustomDropDownTextField({
+    super.key,
+    this.labelText,
+    this.hintText,
+    this.selectedValue,
+    required this.onChanged,
+    required this.items,
+    this.fillColor,
+    this.focusColor,
+    this.dropDownColor,
+    this.iconColor,
+    this.radius = Dimensions.defaultRadius,
+    this.needLabel = false,
+    this.validator,
+  });
 
   @override
   State<CustomDropDownTextField> createState() =>
@@ -48,64 +51,73 @@ class _CustomDropDownTextFieldState extends State<CustomDropDownTextField> {
         widget.needLabel
             ? const SizedBox(height: Dimensions.textToTextSpace)
             : const SizedBox(),
-        SizedBox(
-          height: 50,
-          child: DropdownButtonFormField(
-            value: (widget.selectedValue != '' &&
-                    widget.selectedValue != null &&
-                    widget.selectedValue != '0')
-                ? widget.selectedValue
-                : null,
-            dropdownColor: widget.dropDownColor ?? Theme.of(context).cardColor,
-            focusColor: widget.focusColor,
-            hint: Text(
-              widget.hintText.toString(),
+        DropdownButtonFormField(
+          initialValue:
+              (widget.selectedValue != '' &&
+                  widget.selectedValue != null &&
+                  widget.selectedValue != '0')
+              ? widget.selectedValue
+              : null,
+          dropdownColor: widget.dropDownColor ?? Theme.of(context).cardColor,
+          focusColor: widget.focusColor ?? Theme.of(context).cardColor,
+          hint: Text(widget.hintText.toString()),
+          style: regularDefault,
+          //alignment: Alignment.centerLeft,
+          decoration: InputDecoration(
+            hintText: widget.hintText.toString(),
+            filled: true,
+            fillColor: widget.fillColor ?? Theme.of(context).cardColor,
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 15,
+              horizontal: 20,
             ),
-            style: regularDefault,
-            //alignment: Alignment.centerLeft,
-            decoration: InputDecoration(
-              hintText: widget.hintText.toString(),
-              filled: true,
-              fillColor: widget.fillColor ?? Theme.of(context).cardColor,
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(widget.radius),
-                borderSide: const BorderSide(
-                    color: ColorResources.textFieldDisableBorderColor,
-                    width: 1),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(widget.radius),
-                borderSide: const BorderSide(
-                    color: ColorResources.textFieldDisableBorderColor,
-                    width: 1),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(widget.radius),
-                borderSide: const BorderSide(
-                    color: ColorResources.primaryColor, width: 1),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(widget.radius),
-                borderSide:
-                    const BorderSide(color: ColorResources.colorRed, width: 1),
-              ),
-              focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(widget.radius),
-                borderSide: const BorderSide(
-                    color: ColorResources.textFieldDisableBorderColor,
-                    width: 1),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(widget.radius),
+              borderSide: const BorderSide(
+                color: ColorResources.textFieldDisableBorderColor,
+                width: 1,
               ),
             ),
-            isExpanded: false,
-            onChanged: widget.onChanged,
-            items: widget.items,
-            icon: Icon(Icons.arrow_drop_down,
-                color: widget.iconColor ??
-                    Theme.of(context).textTheme.bodyMedium!.color),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(widget.radius),
+              borderSide: BorderSide(
+                color: ColorResources.getUnselectedIconColor(),
+                width: 1,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(widget.radius),
+              borderSide: const BorderSide(
+                color: ColorResources.primaryColor,
+                width: 1,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(widget.radius),
+              borderSide: const BorderSide(
+                color: ColorResources.colorRed,
+                width: 1,
+              ),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(widget.radius),
+              borderSide: const BorderSide(
+                color: ColorResources.textFieldDisableBorderColor,
+                width: 1,
+              ),
+            ),
           ),
-        )
+          isExpanded: true,
+          validator: widget.validator,
+          onChanged: widget.onChanged,
+          items: widget.items,
+          icon: Icon(
+            Icons.arrow_drop_down,
+            color:
+                widget.iconColor ??
+                Theme.of(context).textTheme.bodyMedium!.color,
+          ),
+        ),
       ],
     );
   }

@@ -1,19 +1,20 @@
 import 'package:async/async.dart';
-import 'package:archiz_prefix_crm/common/components/app-bar/custom_appbar.dart';
-import 'package:archiz_prefix_crm/common/components/buttons/rounded_button.dart';
-import 'package:archiz_prefix_crm/common/components/buttons/rounded_loading_button.dart';
-import 'package:archiz_prefix_crm/common/components/custom_drop_down_button_with_text_field.dart';
-import 'package:archiz_prefix_crm/common/components/custom_loader/custom_loader.dart';
-import 'package:archiz_prefix_crm/common/components/text-form-field/custom_amount_text_field.dart';
-import 'package:archiz_prefix_crm/common/components/text-form-field/custom_drop_down_text_field.dart';
-import 'package:archiz_prefix_crm/common/components/text-form-field/custom_text_field.dart';
-import 'package:archiz_prefix_crm/core/helper/string_format_helper.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
-import 'package:archiz_prefix_crm/features/lead/controller/lead_controller.dart';
-import 'package:archiz_prefix_crm/features/lead/model/sources_model.dart';
-import 'package:archiz_prefix_crm/features/lead/model/statuses_model.dart';
+import 'package:archiz_cxm360/common/components/app-bar/custom_appbar.dart';
+import 'package:archiz_cxm360/common/components/buttons/rounded_button.dart';
+import 'package:archiz_cxm360/common/components/buttons/rounded_loading_button.dart';
+import 'package:archiz_cxm360/common/components/custom_drop_down_button_with_text_field.dart';
+import 'package:archiz_cxm360/common/components/custom_loader/custom_loader.dart';
+import 'package:archiz_cxm360/common/components/text-form-field/custom_amount_text_field.dart';
+import 'package:archiz_cxm360/common/components/text-form-field/custom_drop_down_text_field.dart';
+import 'package:archiz_cxm360/common/components/text-form-field/custom_text_field.dart';
+import 'package:archiz_cxm360/core/helper/string_format_helper.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
+import 'package:archiz_cxm360/features/lead/controller/lead_controller.dart';
+import 'package:archiz_cxm360/features/lead/model/sources_model.dart';
+import 'package:archiz_cxm360/features/lead/model/statuses_model.dart';
+import 'package:archiz_cxm360/features/staff/model/staff_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -27,6 +28,7 @@ class AddLeadScreen extends StatefulWidget {
 class _AddLeadScreenState extends State<AddLeadScreen> {
   final AsyncMemoizer<SourcesModel> sourcesMemoizer = AsyncMemoizer();
   final AsyncMemoizer<StatusesModel> statusesMemoizer = AsyncMemoizer();
+  final AsyncMemoizer<StaffsModel> assigneeMemoizer = AsyncMemoizer();
 
   @override
   void dispose() {
@@ -115,6 +117,39 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
                           return const CustomLoader(isFullScreen: false);
                         }
                       }),
+                  FutureBuilder(
+                      future: assigneeMemoizer.runOnce(controller.loadStaff),
+                      builder: (context, staffList) {
+                        if (staffList.data?.status ?? false) {
+                          return CustomDropDownTextField(
+                            hintText: LocalStrings.selectStaff.tr,
+                            onChanged: (value) {
+                              controller.assignedController.text =
+                                  value.toString();
+                            },
+                            selectedValue: controller.assignedController.text,
+                            items: controller.staffsModel.data!.map((value) {
+                              return DropdownMenuItem(
+                                value: value.id,
+                                child: Text(
+                                  value.fullName ?? '-',
+                                  style: regularDefault.copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .color),
+                                ),
+                              );
+                            }).toList(),
+                          );
+                        } else if (staffList.data?.status == false) {
+                          return CustomDropDownWithTextField(
+                              selectedValue: LocalStrings.noStaffFound.tr,
+                              list: [LocalStrings.noStaffFound.tr]);
+                        } else {
+                          return const CustomLoader(isFullScreen: false);
+                        }
+                      }),
                   CustomTextField(
                     labelText: LocalStrings.name.tr,
                     controller: controller.nameController,
@@ -192,24 +227,20 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
                       return;
                     },
                   ),
+                  const SizedBox(height: Dimensions.space5),
+                  controller.isSubmitLoading
+                      ? const RoundedLoadingBtn()
+                      : RoundedButton(
+                          text: LocalStrings.submit.tr,
+                          press: () {
+                            controller.submitLead();
+                          },
+                        ),
                 ],
               ),
             ),
           );
         },
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Dimensions.space10),
-        child: GetBuilder<LeadController>(builder: (controller) {
-          return controller.isSubmitLoading
-              ? const RoundedLoadingBtn()
-              : RoundedButton(
-                  text: LocalStrings.submit.tr,
-                  press: () {
-                    controller.submitLead();
-                  },
-                );
-        }),
       ),
     );
   }

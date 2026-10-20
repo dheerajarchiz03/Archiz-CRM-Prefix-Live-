@@ -1,8 +1,8 @@
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
 
 class TextIcon extends StatelessWidget {
   final String text;
@@ -26,6 +26,7 @@ class TextIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      spacing: space,
       mainAxisAlignment: alignment,
       children: [
         Icon(
@@ -33,9 +34,9 @@ class TextIcon extends StatelessWidget {
           size: iconSize,
           color: iconColor,
         ),
-        SizedBox(width: space),
         Text(
           text.tr,
+          overflow: TextOverflow.ellipsis,
           style: textStyle ??
               lightDefault.copyWith(color: ColorResources.blueGreyColor),
         ),

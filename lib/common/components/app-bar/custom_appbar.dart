@@ -1,10 +1,10 @@
-import 'package:archiz_prefix_crm/common/components/dialog/exit_dialog.dart';
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
+import 'package:archiz_cxm360/common/components/dialog/exit_dialog.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:archiz_prefix_crm/core/route/route.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
+import 'package:archiz_cxm360/core/route/route.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;

@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/common/controllers/localization_controller.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/common/controllers/localization_controller.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:archiz_prefix_crm/core/helper/shared_preference_helper.dart';
-import 'package:archiz_prefix_crm/core/route/route.dart';
+import 'package:archiz_cxm360/core/helper/shared_preference_helper.dart';
+import 'package:archiz_cxm360/core/route/route.dart';
 
 class SplashController extends GetxController {
   ApiClient apiClient;

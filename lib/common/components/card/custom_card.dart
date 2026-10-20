@@ -1,27 +1,27 @@
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/util.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/util.dart';
 import 'package:flutter/material.dart';
 
 class CustomCard extends StatefulWidget {
-  final double paddingLeft, paddingRight, paddingTop, paddingBottom;
+  final double padding;
+  final EdgeInsets? margin;
   final double? width;
   final double radius;
   final VoidCallback? onPressed;
   final Widget child;
   final bool isPress;
 
-  const CustomCard(
-      {super.key,
-      this.width,
-      this.paddingLeft = Dimensions.space15,
-      this.paddingRight = Dimensions.space15,
-      this.paddingTop = Dimensions.space15,
-      this.paddingBottom = Dimensions.space15,
-      this.radius = Dimensions.cardRadius,
-      this.onPressed,
-      this.isPress = false,
-      required this.child});
+  const CustomCard({
+    super.key,
+    this.width,
+    this.margin,
+    this.padding = Dimensions.space15,
+    this.radius = Dimensions.cardRadius,
+    this.onPressed,
+    this.isPress = false,
+    required this.child,
+  });
 
   @override
   State<CustomCard> createState() => _CustomCardState();
@@ -35,11 +35,8 @@ class _CustomCardState extends State<CustomCard> {
             onTap: widget.onPressed,
             child: Container(
               width: widget.width,
-              padding: EdgeInsets.only(
-                  left: widget.paddingLeft,
-                  right: widget.paddingRight,
-                  top: widget.paddingTop,
-                  bottom: widget.paddingBottom),
+              margin: widget.margin,
+              padding: EdgeInsets.all(widget.padding),
               decoration: BoxDecoration(
                 color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(widget.radius),
@@ -50,14 +47,14 @@ class _CustomCardState extends State<CustomCard> {
           )
         : Container(
             width: widget.width,
-            padding: EdgeInsets.only(
-                left: widget.paddingLeft,
-                right: widget.paddingRight,
-                top: widget.paddingTop,
-                bottom: widget.paddingBottom),
+            margin: widget.margin,
+            padding: EdgeInsets.all(widget.padding),
             decoration: BoxDecoration(
               color: Theme.of(context).cardColor,
-              border: Border.all(color: ColorResources.borderColor, width: 1.0),
+              border: Border.all(
+                color: ColorResources.getUnselectedIconColor(),
+                width: 1.0,
+              ),
               borderRadius: BorderRadius.circular(widget.radius),
               boxShadow: MyUtils.getCardShadow(context),
             ),

@@ -1,16 +1,16 @@
-import 'package:archiz_prefix_crm/common/components/app-bar/custom_appbar.dart';
-import 'package:archiz_prefix_crm/common/components/custom_fab.dart';
-import 'package:archiz_prefix_crm/common/components/custom_loader/custom_loader.dart';
-import 'package:archiz_prefix_crm/common/components/no_data.dart';
-import 'package:archiz_prefix_crm/core/route/route.dart';
-import 'package:archiz_prefix_crm/core/service/api_service.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
-import 'package:archiz_prefix_crm/core/utils/dimensions.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/core/utils/style.dart';
-import 'package:archiz_prefix_crm/features/contract/controller/contract_controller.dart';
-import 'package:archiz_prefix_crm/features/contract/repo/contract_repo.dart';
-import 'package:archiz_prefix_crm/features/contract/widget/contract_card.dart';
+import 'package:archiz_cxm360/common/components/app-bar/custom_appbar.dart';
+import 'package:archiz_cxm360/common/components/custom_fab.dart';
+import 'package:archiz_cxm360/common/components/custom_loader/custom_loader.dart';
+import 'package:archiz_cxm360/common/components/no_data.dart';
+import 'package:archiz_cxm360/common/components/text/text_icon.dart';
+import 'package:archiz_cxm360/core/route/route.dart';
+import 'package:archiz_cxm360/core/service/api_service.dart';
+import 'package:archiz_cxm360/core/utils/dimensions.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
+import 'package:archiz_cxm360/features/contract/controller/contract_controller.dart';
+import 'package:archiz_cxm360/features/contract/repo/contract_repo.dart';
+import 'package:archiz_cxm360/features/contract/widget/contract_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -96,6 +96,7 @@ class _ContractsScreenState extends State<ContractsScreen> {
                         Padding(
                           padding: const EdgeInsets.all(Dimensions.space15),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 LocalStrings.contracts.tr,
@@ -105,25 +106,12 @@ class _ContractsScreenState extends State<ContractsScreen> {
                                         .bodyMedium!
                                         .color),
                               ),
-                              const Spacer(),
                               InkWell(
                                 onTap: () {},
-                                child: Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.sort_outlined,
-                                      size: Dimensions.space15,
-                                      color: ColorResources.blueGreyColor,
-                                    ),
-                                    const SizedBox(width: Dimensions.space5),
-                                    Text(
-                                      LocalStrings.filter.tr,
-                                      style: lightSmall.copyWith(
-                                          color: ColorResources.blueGreyColor),
-                                    )
-                                  ],
-                                ),
-                              )
+                                child: TextIcon(
+                                    text: LocalStrings.filter.tr,
+                                    icon: Icons.sort_outlined),
+                              ),
                             ],
                           ),
                         ),

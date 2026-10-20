@@ -1,23 +1,25 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:archiz_prefix_crm/common/components/snack_bar/show_custom_snackbar.dart';
-import 'package:archiz_prefix_crm/core/helper/string_format_helper.dart'
+import 'package:archiz_cxm360/common/components/snack_bar/show_custom_snackbar.dart';
+import 'package:archiz_cxm360/core/helper/string_format_helper.dart'
     as formatter;
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/common/models/response_model.dart';
-import 'package:archiz_prefix_crm/features/contract/model/contract_model.dart';
-import 'package:archiz_prefix_crm/features/customer/model/customer_model.dart';
-import 'package:archiz_prefix_crm/features/estimate/model/estimate_model.dart';
-import 'package:archiz_prefix_crm/features/invoice/model/invoice_model.dart';
-import 'package:archiz_prefix_crm/features/lead/model/lead_model.dart';
-import 'package:archiz_prefix_crm/features/project/model/project_model.dart';
-import 'package:archiz_prefix_crm/features/proposal/model/proposal_model.dart';
-import 'package:archiz_prefix_crm/features/task/model/task_create_model.dart';
-import 'package:archiz_prefix_crm/features/task/model/task_details_model.dart';
-import 'package:archiz_prefix_crm/features/task/model/tasks_model.dart';
-import 'package:archiz_prefix_crm/features/task/repo/task_repo.dart';
-import 'package:archiz_prefix_crm/features/ticket/model/ticket_model.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/common/models/response_model.dart';
+import 'package:archiz_cxm360/core/utils/url_container.dart';
+import 'package:archiz_cxm360/features/contract/model/contract_model.dart';
+import 'package:archiz_cxm360/features/customer/model/customer_model.dart';
+import 'package:archiz_cxm360/features/estimate/model/estimate_model.dart';
+import 'package:archiz_cxm360/features/invoice/model/invoice_model.dart';
+import 'package:archiz_cxm360/features/lead/model/lead_model.dart';
+import 'package:archiz_cxm360/features/project/model/project_model.dart';
+import 'package:archiz_cxm360/features/proposal/model/proposal_model.dart';
+import 'package:archiz_cxm360/features/task/model/task_create_model.dart';
+import 'package:archiz_cxm360/features/task/model/task_details_model.dart';
+import 'package:archiz_cxm360/features/task/model/tasks_model.dart';
+import 'package:archiz_cxm360/features/task/repo/task_repo.dart';
+import 'package:archiz_cxm360/features/ticket/model/ticket_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
 class TaskController extends GetxController {
@@ -28,7 +30,15 @@ class TaskController extends GetxController {
   bool isSubmitLoading = false;
   bool isPublic = false;
   bool billable = false;
+  bool showFab = true;
+  ScrollController scrollController = ScrollController();
   TasksModel tasksModel = TasksModel();
+  final tasks = <Task>[].obs;
+  int page = 0;
+  String? sortBy;
+  String? priority;
+  String? status;
+  bool hasMoreData = true;
   TaskDetailsModel taskDetailsModel = TaskDetailsModel();
   CustomersModel customersModel = CustomersModel();
   ProjectsModel projectsModel = ProjectsModel();
@@ -44,6 +54,14 @@ class TaskController extends GetxController {
     '2': LocalStrings.priorityMedium.tr,
     '3': LocalStrings.priorityHigh.tr,
     '4': LocalStrings.priorityUrgent.tr,
+  };
+
+  final Map<String, String> taskStatus = {
+    '1': LocalStrings.notStarted.tr,
+    '2': LocalStrings.awaitingFeedback.tr,
+    '3': LocalStrings.testing.tr,
+    '4': LocalStrings.inProgress.tr,
+    '5': LocalStrings.completed.tr,
   };
 
   final Map<String, String> taskRelated = {
@@ -76,21 +94,65 @@ class TaskController extends GetxController {
     'year': LocalStrings.years.tr,
   };
 
+  void handleScroll() async {
+    scrollController.addListener(() {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (showFab) {
+          showFab = false;
+          update();
+        }
+      }
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        if (!showFab) {
+          showFab = true;
+          update();
+        }
+      }
+      if (scrollController.offset >=
+              scrollController.position.maxScrollExtent &&
+          !scrollController.position.outOfRange) {
+        // Load more data when the user reaches the bottom of the list
+        if (hasMoreData) {
+          loadTasks(page: ++page);
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    scrollController.removeListener(() {});
+    super.dispose();
+  }
+
   Future<void> initialData({bool shouldLoad = true}) async {
     isLoading = shouldLoad ? true : false;
     update();
-
+    tasks.clear();
+    page = 0;
+    hasMoreData = true;
     await loadTasks();
     isLoading = false;
     update();
   }
 
-  Future<void> loadTasks() async {
-    ResponseModel responseModel = await taskRepo.getAllTasks();
+  Future<void> loadTasks({int page = 0}) async {
+    ResponseModel responseModel = await taskRepo.getAllTasks(
+      page: page,
+      sort: sortBy,
+      priority: priority,
+      status: status,
+    );
+    tasksModel = TasksModel.fromJson(jsonDecode(responseModel.responseJson));
     if (responseModel.status) {
-      tasksModel = TasksModel.fromJson(jsonDecode(responseModel.responseJson));
+      tasks.addAll(tasksModel.data ?? []);
+      if ((tasksModel.data?.length ?? 0) < int.parse(UrlContainer.limit)) {
+        hasMoreData = false;
+      }
     } else {
-      CustomSnackBar.error(errorList: [responseModel.message.tr]);
+      hasMoreData = false;
     }
     isLoading = false;
     update();
@@ -99,8 +161,9 @@ class TaskController extends GetxController {
   Future<void> loadTaskDetails(taskId) async {
     ResponseModel responseModel = await taskRepo.getTaskDetails(taskId);
     if (responseModel.status) {
-      taskDetailsModel =
-          TaskDetailsModel.fromJson(jsonDecode(responseModel.responseJson));
+      taskDetailsModel = TaskDetailsModel.fromJson(
+        jsonDecode(responseModel.responseJson),
+      );
     } else {
       CustomSnackBar.error(errorList: [responseModel.message.tr]);
     }
@@ -121,51 +184,59 @@ class TaskController extends GetxController {
 
   Future<CustomersModel> loadCustomers() async {
     ResponseModel responseModel = await taskRepo.getAllCustomers();
-    return customersModel =
-        CustomersModel.fromJson(jsonDecode(responseModel.responseJson));
+    return customersModel = CustomersModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<ProjectsModel> loadProjects() async {
     ResponseModel responseModel = await taskRepo.getAllProjects();
-    return projectsModel =
-        ProjectsModel.fromJson(jsonDecode(responseModel.responseJson));
+    return projectsModel = ProjectsModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<InvoicesModel> loadInvoices() async {
     ResponseModel responseModel = await taskRepo.getAllInvoices();
-    return invoicesModel =
-        InvoicesModel.fromJson(jsonDecode(responseModel.responseJson));
+    return invoicesModel = InvoicesModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<LeadsModel> loadLeads() async {
     ResponseModel responseModel = await taskRepo.getAllLeads();
-    return leadsModel =
-        LeadsModel.fromJson(jsonDecode(responseModel.responseJson));
+    return leadsModel = LeadsModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<ContractsModel> loadContracts() async {
     ResponseModel responseModel = await taskRepo.getAllContracts();
-    return contractsModel =
-        ContractsModel.fromJson(jsonDecode(responseModel.responseJson));
+    return contractsModel = ContractsModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<EstimatesModel> loadEstimates() async {
     ResponseModel responseModel = await taskRepo.getAllEstimates();
-    return estimatesModel =
-        EstimatesModel.fromJson(jsonDecode(responseModel.responseJson));
+    return estimatesModel = EstimatesModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<ProposalsModel> loadProposals() async {
     ResponseModel responseModel = await taskRepo.getAllProposals();
-    return proposalsModel =
-        ProposalsModel.fromJson(jsonDecode(responseModel.responseJson));
+    return proposalsModel = ProposalsModel.fromJson(
+      jsonDecode(responseModel.responseJson),
+    );
   }
 
   Future<void> loadTaskUpdateData(taskId) async {
     ResponseModel responseModel = await taskRepo.getTaskDetails(taskId);
     if (responseModel.status) {
-      taskDetailsModel =
-          TaskDetailsModel.fromJson(jsonDecode(responseModel.responseJson));
+      taskDetailsModel = TaskDetailsModel.fromJson(
+        jsonDecode(responseModel.responseJson),
+      );
       subjectController.text = taskDetailsModel.data?.name ?? '';
       rateController.text = taskDetailsModel.data?.hourlyRate ?? '';
       startDateController.text = taskDetailsModel.data?.startDate ?? '';
@@ -174,7 +245,8 @@ class TaskController extends GetxController {
       taskRelatedController.text = taskDetailsModel.data?.relType ?? '';
       relationIdController.text = taskDetailsModel.data?.relId ?? '';
       descriptionController.text = formatter.Converter.parseHtmlString(
-          taskDetailsModel.data?.description ?? '');
+        taskDetailsModel.data?.description ?? '',
+      );
     } else {
       CustomSnackBar.error(errorList: [responseModel.message.tr]);
     }
@@ -247,8 +319,11 @@ class TaskController extends GetxController {
       description: description,
     );
 
-    ResponseModel responseModel = await taskRepo.createTask(taskModel,
-        taskId: taskId, isUpdate: isUpdate);
+    ResponseModel responseModel = await taskRepo.createTask(
+      taskModel,
+      taskId: taskId,
+      isUpdate: isUpdate,
+    );
     if (responseModel.status) {
       Get.back();
       if (isUpdate) await loadTaskDetails(taskId);

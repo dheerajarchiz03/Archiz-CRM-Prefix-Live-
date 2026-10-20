@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:archiz_prefix_crm/common/components/dialog/exit_dialog.dart';
+import 'package:archiz_cxm360/common/components/dialog/exit_dialog.dart';
 
 class WillPopWidget extends StatelessWidget {
   final Widget child;

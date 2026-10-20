@@ -1,7 +1,7 @@
-import 'package:archiz_prefix_crm/core/utils/style.dart';
+import 'package:archiz_cxm360/core/utils/style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:archiz_prefix_crm/core/utils/color_resources.dart';
+import 'package:archiz_cxm360/core/utils/color_resources.dart';
 
 class RoundedButton extends StatelessWidget {
   final bool isColorChange;
@@ -27,7 +27,7 @@ class RoundedButton extends StatelessWidget {
     this.isOutlined = false,
     this.horizontalPadding = 35,
     this.verticalPadding = 18,
-    this.color = ColorResources.primaryColor,
+    this.color = ColorResources.secondaryColor,
     this.textColor = ColorResources.colorWhite,
   });
 
@@ -39,65 +39,77 @@ class RoundedButton extends StatelessWidget {
             onTap: press,
             splashColor: ColorResources.getScreenBgColor(),
             child: Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: horizontalPadding, vertical: verticalPadding),
-                width: size.width * width,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(cornerRadius),
+              padding: EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
+                vertical: verticalPadding,
+              ),
+              width: size.width * width,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(cornerRadius),
+                color: isColorChange
+                    ? color
+                    : ColorResources.getPrimaryButtonColor(),
+              ),
+              child: Center(
+                child: Text(
+                  text.tr,
+                  style: regularDefault.copyWith(
                     color: isColorChange
-                        ? color
-                        : ColorResources.getPrimaryButtonColor()),
-                child: Center(
-                    child: Text(text.tr,
-                        style: regularDefault.copyWith(
-                            color: isColorChange
-                                ? textColor
-                                : ColorResources
-                                    .getPrimaryButtonTextColor())))),
+                        ? textColor
+                        : ColorResources.getPrimaryButtonTextColor(),
+                  ),
+                ),
+              ),
+            ),
           )
         : isOutlined
-            ? Material(
-                child: InkWell(
-                  onTap: press,
-                  splashColor: ColorResources.getScreenBgColor(),
-                  child: Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: horizontalPadding,
-                          vertical: verticalPadding),
-                      width: size.width * width,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(cornerRadius),
-                          color: isColorChange
-                              ? color
-                              : ColorResources.getPrimaryButtonColor()),
-                      child: Center(
-                          child: Text(text.tr,
-                              style: regularDefault.copyWith(
-                                  color: isColorChange
-                                      ? textColor
-                                      : ColorResources
-                                          .getPrimaryButtonTextColor())))),
+        ? Material(
+            child: InkWell(
+              onTap: press,
+              splashColor: ColorResources.getScreenBgColor(),
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: horizontalPadding,
+                  vertical: verticalPadding,
                 ),
-              )
-            : SizedBox(
                 width: size.width * width,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(1.0),
-                  child: ElevatedButton(
-                    onPressed: press,
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: color,
-                        shadowColor: ColorResources.transparentColor,
-                        padding: EdgeInsets.symmetric(
-                            horizontal: horizontalPadding,
-                            vertical: verticalPadding),
-                        textStyle: regularDefault.copyWith(color: textColor)),
-                    child: Text(
-                      text.tr,
-                      style: TextStyle(color: textColor),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(cornerRadius),
+                  color: isColorChange
+                      ? color
+                      : ColorResources.getPrimaryButtonColor(),
+                ),
+                child: Center(
+                  child: Text(
+                    text.tr,
+                    style: regularDefault.copyWith(
+                      color: isColorChange
+                          ? textColor
+                          : ColorResources.getPrimaryButtonTextColor(),
                     ),
                   ),
                 ),
-              );
+              ),
+            ),
+          )
+        : SizedBox(
+            width: size.width * width,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(1.0),
+              child: ElevatedButton(
+                onPressed: press,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: color,
+                  shadowColor: ColorResources.transparentColor,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: horizontalPadding,
+                    vertical: verticalPadding,
+                  ),
+                  textStyle: regularDefault.copyWith(color: textColor),
+                ),
+                child: Text(text.tr, style: TextStyle(color: textColor)),
+              ),
+            ),
+          );
   }
 }

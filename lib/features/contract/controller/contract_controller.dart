@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:archiz_prefix_crm/common/components/snack_bar/show_custom_snackbar.dart';
-import 'package:archiz_prefix_crm/core/utils/local_strings.dart';
-import 'package:archiz_prefix_crm/common/models/response_model.dart';
-import 'package:archiz_prefix_crm/features/contract/model/contract_details_model.dart';
-import 'package:archiz_prefix_crm/features/contract/model/contract_model.dart';
-import 'package:archiz_prefix_crm/features/contract/model/contract_post_model.dart';
-import 'package:archiz_prefix_crm/features/contract/repo/contract_repo.dart';
-import 'package:archiz_prefix_crm/features/customer/model/customer_model.dart';
+import 'package:archiz_cxm360/common/components/snack_bar/show_custom_snackbar.dart';
+import 'package:archiz_cxm360/core/utils/local_strings.dart';
+import 'package:archiz_cxm360/common/models/response_model.dart';
+import 'package:archiz_cxm360/features/contract/model/contract_details_model.dart';
+import 'package:archiz_cxm360/features/contract/model/contract_model.dart';
+import 'package:archiz_cxm360/features/contract/model/contract_post_model.dart';
+import 'package:archiz_cxm360/features/contract/repo/contract_repo.dart';
+import 'package:archiz_cxm360/features/customer/model/customer_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

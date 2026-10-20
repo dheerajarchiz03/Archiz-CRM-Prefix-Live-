@@ -1,15 +1,10 @@
-import 'package:archiz_prefix_crm/features/invoice/model/invoice_item_model.dart';
+import 'package:archiz_cxm360/features/invoice/model/invoice_item_model.dart';
 
 class InvoicePostModel {
   final String clientId;
   final String number;
   final String date;
   final String currency;
-  final String firstItemName;
-  final String? firstItemDescription;
-  final String firstItemQty;
-  final String firstItemRate;
-  final String? firstItemUnit;
   final List<InvoiceItemModel> newItems;
   final String subtotal;
   final String total;
@@ -45,11 +40,6 @@ class InvoicePostModel {
     required this.number,
     required this.date,
     required this.currency,
-    required this.firstItemName,
-    this.firstItemDescription,
-    required this.firstItemQty,
-    required this.firstItemRate,
-    this.firstItemUnit,
     required this.newItems,
     required this.subtotal,
     required this.total,
